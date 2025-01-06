@@ -1,0 +1,6 @@
+@CodeStash.API_HostAddress = http://localhost:5249
+
+GET {{CodeStash.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
