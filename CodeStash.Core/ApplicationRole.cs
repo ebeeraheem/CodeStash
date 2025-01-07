@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CodeStash.Core.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace CodeStash.Core;
-public class ApplicationRole : IdentityRole
+public class ApplicationRole : IdentityRole, IAuditableEntity
 {
+    public string CreatedBy { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public string? ModifiedBy { get; set; }
+    public DateTime? ModifiedAt { get; set; }
 }
