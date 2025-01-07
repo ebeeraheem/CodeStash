@@ -11,6 +11,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddApiServices(this IServiceCollection services,
                                                     ConfigureHostBuilder host)
     {
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
         host.UseSerilog((context, configuration) =>
         {
             configuration.WriteTo.Console();

@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddApiServices(builder.Host);
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -26,6 +27,7 @@ app.MapScalarApiReference(options =>
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();
