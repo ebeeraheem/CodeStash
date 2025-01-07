@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Scalar.AspNetCore;
+﻿using CodeStash.Core;
+using CodeStash.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 namespace CodeStash.API;
@@ -32,17 +33,14 @@ public static class ServiceExtensions
             });
 
         services.AddAuthorization();
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequiredLength = 8;
+        })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         return services;
-    }
-
-    public static void MapApiServices(this WebApplication app)
-    {
-        app.MapScalarApiReference(options =>
-        {
-            options
-                .WithTitle("CodeStash")
-                .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-        });
     }
 }
