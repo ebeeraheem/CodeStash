@@ -2,10 +2,14 @@
 using CodeStash.Core;
 using CodeStash.Application.Models;
 using CodeStash.Application.Errors;
+using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeStash.Application.Services;
-public class AuthService(UserManager<ApplicationUser> userManager,
-                         SignInManager<ApplicationUser> signInManager) : IAuthService
+public partial class AuthService(UserManager<ApplicationUser> userManager,
+                         SignInManager<ApplicationUser> signInManager,
+                         ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result> LoginAsync(LoginModel request)
     {
@@ -28,4 +32,52 @@ public class AuthService(UserManager<ApplicationUser> userManager,
 
         return Result.Failure(AuthErrors.LoginFailed);
     }
+
+    public async Task<Result> RegisterAsync(RegisterModel request)
+    {
+        var isValidUserName = ValidateUserName(request.UserName);
+
+        if (!isValidUserName)
+        {
+            return Result.Failure(AuthErrors.InvalidUserName);
+        }
+
+        var isUserNameAvailable = await userManager.Users
+            .AnyAsync(a => a.UserName != null &&
+            a.UserName.Equals(request.UserName));
+
+        if (!isUserNameAvailable)
+        {
+            return Result.Failure(AuthErrors.UserNameExist);
+        }
+
+        var user = new ApplicationUser()
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            UserName = request.UserName,
+            LastLoginDate = DateTime.UtcNow
+        };
+
+        var result = await userManager.CreateAsync(user, request.Password);
+
+        if (result.Succeeded)
+        {
+            await signInManager.SignInAsync(user, isPersistent: false);
+            return Result.Success();
+        }
+
+        logger.LogError("User creation failed. Errors: {@Errors}", result.Errors);
+        return Result.Failure(AuthErrors.RegistrationFailed);
+    }
+
+    private bool ValidateUserName(string userName)
+    {
+        var regex = AlphanumericUnderscoreRegex();
+        return regex.IsMatch(userName);
+    }
+
+    [GeneratedRegex(@"^[a-zA-Z0-9_]+$")]
+    private static partial Regex AlphanumericUnderscoreRegex();
 }

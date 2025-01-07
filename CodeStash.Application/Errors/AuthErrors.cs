@@ -6,11 +6,20 @@ public static class AuthErrors
     public static readonly Error UserNotFound = new Error(
         "Auth.UserNotFound", "The user could not be found.");
 
+    public static readonly Error RegistrationFailed = new Error(
+        "Auth.RegistrationFailed", "Error creating user.");
+
     public static readonly Error LoginFailed = new Error(
         "Auth.LoginFailed", "Invalid credentials provided.");
 
     public static readonly Error EmailExist = new Error(
         "Auth.EmailExist", "Email address already exists.");
+
+    public static readonly Error UserNameExist = new Error(
+        "Auth.UserNameExist", "Username is taken.");
+
+    public static readonly Error InvalidUserName = new Error(
+        "Auth.InvalidUserName", "Username can only contain alphanumeric characters and an underscore.");
 
     public static readonly Error InvalidRole = new Error(
         "Auth.InvalidRole", "Role does not exist.");

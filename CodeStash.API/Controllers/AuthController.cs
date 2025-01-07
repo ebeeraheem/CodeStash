@@ -7,6 +7,14 @@ namespace CodeStash.API.Controllers;
 [ApiController]
 public class AuthController(IAuthService authService) : ControllerBase
 {
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterModel request)
+    {
+        var result = await authService.RegisterAsync(request);
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel request)
     {

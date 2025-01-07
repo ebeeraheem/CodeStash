@@ -6,10 +6,10 @@ namespace CodeStash.Core;
 public class ApplicationUser : IdentityUser, IAuditableEntity
 {
     [MaxLength(100)]
-    public string FirstName { get; set; } = string.Empty;
+    public string? FirstName { get; set; }
 
     [MaxLength(100)]
-    public string LastName { get; set; } = string.Empty;
+    public string? LastName { get; set; }
     public DateTime LastLoginDate { get; set; }
 
     public string CreatedBy { get; set; } = string.Empty;
