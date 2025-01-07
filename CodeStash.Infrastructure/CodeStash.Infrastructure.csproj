@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CodeStash.Core\CodeStash.Core.csproj" />
+  </ItemGroup>
+
 </Project>
