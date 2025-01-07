@@ -1,5 +1,6 @@
+using CodeStash.API;
 using CodeStash.Infrastructure;
-using Scalar.AspNetCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,18 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddApiServices(builder.Host);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
-app.MapScalarApiReference(options =>
-{
-    options
-        .WithTitle("CodeStash")
-        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-});
+app.MapApiServices();
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
