@@ -33,6 +33,12 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         return Result.Failure(AuthErrors.LoginFailed);
     }
 
+    public async Task<Result> LogoutAsync()
+    {
+        await signInManager.SignOutAsync();
+        return Result.Success();
+    }
+
     public async Task<Result> RegisterAsync(RegisterModel request)
     {
         var isValidUserName = ValidateUserName(request.UserName);

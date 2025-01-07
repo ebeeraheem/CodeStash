@@ -22,4 +22,12 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var result = await authService.LogoutAsync();
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
 }
