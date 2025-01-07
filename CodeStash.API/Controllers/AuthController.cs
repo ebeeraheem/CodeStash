@@ -1,5 +1,6 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeStash.API.Controllers;
@@ -23,6 +24,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
