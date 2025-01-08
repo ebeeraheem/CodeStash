@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace CodeStash.Core;
+namespace CodeStash.Core.Entities;
 public class ApplicationUser : IdentityUser, IAuditableEntity
 {
     [MaxLength(100)]

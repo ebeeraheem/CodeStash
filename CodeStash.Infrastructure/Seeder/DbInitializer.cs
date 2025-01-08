@@ -1,4 +1,4 @@
-﻿using CodeStash.Core;
+﻿using CodeStash.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

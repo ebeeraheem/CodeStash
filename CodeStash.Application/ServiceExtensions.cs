@@ -1,6 +1,6 @@
 ﻿using CodeStash.Application.Services;
 using CodeStash.Application.Utilities;
-using CodeStash.Core;
+using CodeStash.Core.Entities;
 using CodeStash.Infrastructure;
 using CodeStash.Infrastructure.Persistence;
 using CodeStash.Infrastructure.Seeder;

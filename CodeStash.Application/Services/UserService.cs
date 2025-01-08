@@ -1,7 +1,7 @@
 ﻿using CodeStash.Application.Errors;
 using CodeStash.Application.Models;
 using CodeStash.Application.Utilities;
-using CodeStash.Core;
+using CodeStash.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 

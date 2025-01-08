@@ -1,4 +1,4 @@
-﻿using CodeStash.Core;
+﻿using CodeStash.Core.Entities;
 using CodeStash.Core.Interfaces;
 using CodeStash.Infrastructure.Audit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

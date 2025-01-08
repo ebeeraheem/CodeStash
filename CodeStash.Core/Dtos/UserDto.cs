@@ -1,4 +1,4 @@
-﻿namespace CodeStash.Core;
+﻿namespace CodeStash.Core.Dtos;
 public class UserDto
 {
     public string? Email { get; set; }

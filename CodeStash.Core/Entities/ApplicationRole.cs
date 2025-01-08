@@ -1,7 +1,7 @@
 ﻿using CodeStash.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace CodeStash.Core;
+namespace CodeStash.Core.Entities;
 public class ApplicationRole : IdentityRole, IAuditableEntity
 {
     public string CreatedBy { get; set; } = string.Empty;

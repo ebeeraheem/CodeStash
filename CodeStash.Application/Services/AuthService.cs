@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using CodeStash.Core;
 using CodeStash.Application.Models;
 using CodeStash.Application.Errors;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using CodeStash.Core.Entities;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
