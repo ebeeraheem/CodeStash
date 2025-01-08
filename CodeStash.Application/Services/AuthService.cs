@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
                          SignInManager<ApplicationUser> signInManager,
+                         RoleManager<ApplicationUser> roleManager,
                          ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result> LoginAsync(LoginModel request)
@@ -68,14 +69,17 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         var result = await userManager.CreateAsync(user, request.Password);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            await signInManager.SignInAsync(user, isPersistent: false);
-            return Result.Success();
+            logger.LogError("User creation failed. Errors: {@Errors}", result.Errors);
+            return Result.Failure(AuthErrors.RegistrationFailed);
         }
 
-        logger.LogError("User creation failed. Errors: {@Errors}", result.Errors);
-        return Result.Failure(AuthErrors.RegistrationFailed);
+        // Add user to default user role
+        await userManager.AddToRoleAsync(user, Roles.User);
+
+        await signInManager.SignInAsync(user, isPersistent: false);
+        return Result.Success();
     }
 
     private bool ValidateUserName(string userName)

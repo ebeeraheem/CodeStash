@@ -35,4 +35,9 @@ public class UserService(UserManager<ApplicationUser> userManager,
         logger.LogError("Profile update failed. Errors: {@Errors}", result.Errors);
         return Result.Failure(UserErrors.ProfileUpdateFailed);
     }
+
+    //public async Task<Result> GetUsersAsync()
+    //{
+
+    //}
 }
