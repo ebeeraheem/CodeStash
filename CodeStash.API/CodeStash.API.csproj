@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeStash.Application\CodeStash.Application.csproj" />
-    <ProjectReference Include="..\CodeStash.Infrastructure\CodeStash.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

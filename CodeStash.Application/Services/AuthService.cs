@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
                          SignInManager<ApplicationUser> signInManager,
-                         RoleManager<ApplicationUser> roleManager,
                          ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result> LoginAsync(LoginModel request)
@@ -22,7 +21,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         }
 
         var result = await signInManager.PasswordSignInAsync(
-            request.Email, request.Password, isPersistent: false, lockoutOnFailure: false);
+            user, request.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
         {

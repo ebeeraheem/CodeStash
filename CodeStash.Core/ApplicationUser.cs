@@ -10,6 +10,9 @@ public class ApplicationUser : IdentityUser, IAuditableEntity
 
     [MaxLength(100)]
     public string? LastName { get; set; }
+
+    [MaxLength(50)]
+    public string Role { get; set; } = string.Empty;
     public DateTime LastLoginDate { get; set; }
 
     public string CreatedBy { get; set; } = string.Empty;

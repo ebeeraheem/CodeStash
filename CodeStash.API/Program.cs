@@ -1,6 +1,5 @@
 using CodeStash.API;
 using CodeStash.Application;
-using CodeStash.Infrastructure;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -12,10 +11,25 @@ builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddApiServices(builder.Host);
-builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
+
+// Seed data
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+
+    try
+    {
+        await serviceProvider.SeedDataAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 app.MapOpenApi();

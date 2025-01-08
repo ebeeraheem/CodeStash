@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeStash.Core\CodeStash.Core.csproj" />
+    <ProjectReference Include="..\CodeStash.Infrastructure\CodeStash.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
