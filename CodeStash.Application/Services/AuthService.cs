@@ -23,14 +23,14 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         var result = await signInManager.PasswordSignInAsync(
             user, request.Password, isPersistent: false, lockoutOnFailure: false);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            user.LastLoginDate = DateTime.UtcNow;
-            await userManager.UpdateAsync(user);
-            return Result.Success();
+            return Result.Failure(AuthErrors.LoginFailed);
         }
 
-        return Result.Failure(AuthErrors.LoginFailed);
+        user.LastLoginDate = DateTime.UtcNow;
+        await userManager.UpdateAsync(user);
+        return Result.Success();
     }
 
     public async Task<Result> LogoutAsync()
