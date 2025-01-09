@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using CodeStash.Core.Entities;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
@@ -38,19 +37,9 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         };
 
         var claimsIdentity = new ClaimsIdentity(claims);
-        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-        var authProperties = new AuthenticationProperties()
-        {
-            AllowRefresh = true,
-            IsPersistent = request.RememberMe,
-            IssuedUtc = DateTime.UtcNow,
-            ExpiresUtc = request.RememberMe
-                ? DateTime.UtcNow.AddDays(14)
-                : DateTime.UtcNow.AddHours(8),
-        };
 
         await userManager.AddClaimsAsync(user, claims);
-        await signInManager.SignInWithClaimsAsync(user, authProperties, claims);
+        await signInManager.SignInWithClaimsAsync(user, isPersistent: false, claims);
 
         user.LastLoginDate = DateTime.UtcNow;
         await userManager.UpdateAsync(user);
@@ -99,7 +88,6 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         }
 
         // Add user to default user role
-        await userManager.AddToRoleAsync(user, Roles.User);
 
         await signInManager.SignInAsync(user, isPersistent: false);
         return Result.Success();
