@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using CodeStash.Core.Entities;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
@@ -20,13 +22,35 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
             return Result.Failure(AuthErrors.UserNotFound);
         }
 
-        var result = await signInManager.PasswordSignInAsync(
-            user, request.Password, isPersistent: false, lockoutOnFailure: false);
+        var result = await signInManager
+            .CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
 
         if (!result.Succeeded)
         {
             return Result.Failure(AuthErrors.LoginFailed);
         }
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Name, user.Email ?? string.Empty),
+            new(ClaimTypes.Role, user.Role),
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims);
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+        var authProperties = new AuthenticationProperties()
+        {
+            AllowRefresh = true,
+            IsPersistent = request.RememberMe,
+            IssuedUtc = DateTime.UtcNow,
+            ExpiresUtc = request.RememberMe
+                ? DateTime.UtcNow.AddDays(14)
+                : DateTime.UtcNow.AddHours(8),
+        };
+
+        await userManager.AddClaimsAsync(user, claims);
+        await signInManager.SignInWithClaimsAsync(user, authProperties, claims);
 
         user.LastLoginDate = DateTime.UtcNow;
         await userManager.UpdateAsync(user);
