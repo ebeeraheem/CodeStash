@@ -16,6 +16,7 @@ public static class ServiceExtensions
         options.UseSqlServer(configuration.GetConnectionString("Default")));
 
         services.AddHttpContextAccessor();
+        services.AddHttpClient();
 
         services.Configure<EmailSettings>(configuration.GetSection("SmtpSettings"));
         services.AddTransient<IEmailService, EmailService>();

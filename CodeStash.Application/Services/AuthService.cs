@@ -146,7 +146,9 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         ArgumentNullException.ThrowIfNull(httpContext);
 
         var emailVerificationPath = linkGenerator.GetPathByAction(
-            httpContext, values: new { userId, token = encodedToken });
+            action: "ConfirmEmail",
+            controller: "Auth",
+            values: new { userId, token = encodedToken });
 
         if (string.IsNullOrWhiteSpace(emailVerificationPath))
             throw new InvalidOperationException("Failed to generate email verification link");

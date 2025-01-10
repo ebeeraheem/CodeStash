@@ -32,4 +32,12 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
+
+    [HttpGet("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    {
+        // Your email confirmation logic here
+
+        return Ok();
+    }
 }
