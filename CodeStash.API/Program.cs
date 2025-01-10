@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddApiServices(builder.Host);
+builder.Services.AddApiServices(builder.Configuration, builder.Host);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();

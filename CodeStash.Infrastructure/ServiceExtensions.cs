@@ -1,5 +1,7 @@
-﻿using CodeStash.Core.Interfaces;
+﻿using CodeStash.Application.Services;
+using CodeStash.Core.Interfaces;
 using CodeStash.Infrastructure.Audit;
+using CodeStash.Infrastructure.EmailModule;
 using CodeStash.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +16,9 @@ public static class ServiceExtensions
         options.UseSqlServer(configuration.GetConnectionString("Default")));
 
         services.AddHttpContextAccessor();
+
+        services.Configure<EmailSettings>(configuration.GetSection("SmtpSettings"));
+        services.AddTransient<IEmailService, EmailService>();
 
         services.AddScoped<IAuditService, AuditService>();
 
