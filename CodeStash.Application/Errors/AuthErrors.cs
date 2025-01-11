@@ -12,6 +12,9 @@ public static class AuthErrors
     public static readonly Error LoginFailed = new Error(
         "Auth.LoginFailed", "Invalid credentials provided.");
 
+    public static readonly Error PasswordResetFailed = new Error(
+        "Auth.PasswordResetFailed", "Invalid or expired token provided.");
+
     public static readonly Error EmailExist = new Error(
         "Auth.EmailExist", "Email address already exists.");
 

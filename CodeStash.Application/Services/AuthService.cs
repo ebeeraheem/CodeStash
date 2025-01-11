@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using CodeStash.Application.Interfaces;
 using CodeStash.Application.Utilities;
+using CodeStash.Core.Dtos;
+using Newtonsoft.Json.Linq;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
@@ -73,16 +75,16 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
                 return Result.Failure(AuthErrors.CannotAddToRole);
             }
 
-            var verificationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var verificationLink = GenerateEmailVerificationLink(
-                user.Id, verificationToken, config, linkGenerator, httpContextAccessor);
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var link = GenerateLink(
+                user.Id, token, "ConfirmEmail", config, linkGenerator, httpContextAccessor);
 
             var emailBody = $@"
     <html>
     <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
         <h1 style='color: #444;'>Welcome to CodeStash!</h1>
         <p>Please verify your email:</p>
-        <p><a href='{verificationLink}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm your email</a></p>
+        <p><a href='{link}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm your email</a></p>
         <br>
         <p>Happy stashing,</p>
         <p>The CodeStash Team</p>
@@ -138,6 +140,67 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         return Result.Success();
     }
 
+    public async Task<Result> ForgotPasswordAsync(EmailDto request)
+    {
+        var user = await userManager.FindByEmailAsync(request.Email);
+
+        if (user is null)
+        {
+            return Result.Failure(AuthErrors.UserNotFound);
+        }
+
+        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var link = GenerateLink(
+            user.Id, token, "ResetPassword", config, linkGenerator, httpContextAccessor);
+
+        var emailBody = $@"
+    <html>
+    <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
+        <h1 style='color: #444;'>Password Reset Request</h1>
+        <p>We received a request to reset the password for your CodeStash account. If this was you, click the button below to create a new password:</p>
+        <p><a href='{link}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Reset your password</a></p>
+        <br>
+        <p>If you didn’t request a password reset, you can safely ignore this email. Your account will remain secure.</p>
+        <br>
+        <p>Happy stashing,</p>
+        <p>The CodeStash Team</p>
+    </body>
+    </html>";
+
+        BackgroundJob.Enqueue(() => emailService.SendEmailAsync(
+            user.UserName ?? string.Empty,
+            user.Email ?? string.Empty,
+            "Password Reset Request",
+            emailBody));
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ResetPasswordAsync(ResetPasswordModel request)
+    {
+        var user = await userManager.FindByIdAsync(request.UserId);
+
+        if (user is null)
+        {
+            return Result.Failure(AuthErrors.UserNotFound);
+        }
+
+        var decodedToken = Encoding.UTF8.GetString(
+            WebEncoders.Base64UrlDecode(request.Token));
+
+        var result = await userManager.ResetPasswordAsync(
+            user, decodedToken, request.ConfirmPassword);
+
+        if (!result.Succeeded)
+        {
+            logger.LogError("Failed to reset user password. User ID: {Id} Errors: {@Errors}",
+                user.Id, result.Errors);
+            return Result.Failure(AuthErrors.PasswordResetFailed);
+        }
+
+        return Result.Success();
+    }
+
     public async Task<Result> SendEmailConfirmationLink()
     {
         var userId = userHelper.GetUserId();
@@ -153,16 +216,16 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
             return Result.Failure(AuthErrors.EmailAlreadyConfirmed);
         }
 
-        var verificationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-        var verificationLink = GenerateEmailVerificationLink(
-            user.Id, verificationToken, config, linkGenerator, httpContextAccessor);
+        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        var link = GenerateLink(
+            user.Id, token, "ConfirmEmail", config, linkGenerator, httpContextAccessor);
 
         var emailBody = $@"
     <html>
     <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
         <h1 style='color: #444;'>Verify your email</h1>
         <p>Please verify your email:</p>
-        <p><a href='{verificationLink}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm your email</a></p>
+        <p><a href='{link}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm your email</a></p>
         <br>
         <p>Happy stashing,</p>
         <p>The CodeStash Team</p>
@@ -216,9 +279,10 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
     [GeneratedRegex(@"^[a-zA-Z0-9_]+$")]
     private static partial Regex AlphanumericUnderscoreRegex();
 
-    private static string GenerateEmailVerificationLink(
+    private static string GenerateLink(
         string userId,
         string token,
+        string action,
         IConfiguration config,
         LinkGenerator linkGenerator,
         IHttpContextAccessor httpContextAccessor)
@@ -230,14 +294,14 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         ArgumentNullException.ThrowIfNull(baseUrl);
         ArgumentNullException.ThrowIfNull(httpContext);
 
-        var emailVerificationPath = linkGenerator.GetPathByAction(
-            action: "ConfirmEmail",
+        var path = linkGenerator.GetPathByAction(
+            action: action,
             controller: "Auth",
             values: new { userId, token = encodedToken });
 
-        if (string.IsNullOrWhiteSpace(emailVerificationPath))
-            throw new InvalidOperationException("Failed to generate email verification link");
+        if (string.IsNullOrWhiteSpace(path))
+            throw new InvalidOperationException("Failed to generate link");
 
-        return $"{baseUrl}{emailVerificationPath}";
+        return $"{baseUrl}{path}";
     }
 }

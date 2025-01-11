@@ -1,5 +1,6 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Application.Services;
+using CodeStash.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,24 @@ public class AuthController(IAuthService authService) : ControllerBase
     public async Task<IActionResult> Logout()
     {
         var result = await authService.LogoutAsync();
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(EmailDto request)
+    {
+        var result = await authService.ForgotPasswordAsync(request);
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordModel request)
+    {
+        var result = await authService.ResetPasswordAsync(request);
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
