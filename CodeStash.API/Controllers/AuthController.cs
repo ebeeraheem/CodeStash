@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeStash.API.Controllers;
+
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController(IAuthService authService) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel request)
     {
@@ -16,6 +19,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel request)
     {
@@ -24,7 +28,6 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
-    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
@@ -33,11 +36,12 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail(string userId, string token)
     {
-        // Your email confirmation logic here
+        var result = await authService.ConfirmEmailAsync(userId, token);
 
-        return Ok();
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 }

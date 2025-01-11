@@ -46,6 +46,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
             LastName = request.LastName,
             Email = request.Email,
             UserName = request.UserName,
+            Role = Roles.User,
             LastLoginDate = DateTime.UtcNow
         };
 
@@ -57,7 +58,14 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
             return Result.Failure(AuthErrors.RegistrationFailed);
         }
 
-        await userManager.AddToRoleAsync(user, Roles.User);
+        var roleResult = await userManager.AddToRoleAsync(user, Roles.User);
+
+        if (!roleResult.Succeeded)
+        {
+            logger.LogError("Failed to add user to role: {Role} Errors: {@Errors}",
+                Roles.User, roleResult.Errors);
+            return Result.Failure(AuthErrors.CannotAddToRole);
+        }
 
         var verificationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
         var verificationLink = GenerateEmailVerificationLink(
@@ -121,6 +129,35 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
     {
         await signInManager.SignOutAsync();
         return Result.Success();
+    }
+
+    public async Task<Result> ConfirmEmailAsync(string userId, string token)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
+        {
+            return Result.Failure(AuthErrors.UserNotFound);
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return Result.Failure(AuthErrors.EmailAlreadyConfirmed);
+        }
+
+        var decodedToken = Encoding.UTF8.GetString(
+            WebEncoders.Base64UrlDecode(token));
+
+        var result = await userManager.ConfirmEmailAsync(user, decodedToken);
+
+        if (result.Succeeded)
+        {
+            return Result.Success();
+        }
+
+        logger.LogError("Email confirmation failed. User ID: {Id} Errors: {@Errors}",
+            userId, result.Errors);
+        return Result.Failure(AuthErrors.EmailConfirmationFailed);
     }
 
     private bool ValidateUserName(string userName)

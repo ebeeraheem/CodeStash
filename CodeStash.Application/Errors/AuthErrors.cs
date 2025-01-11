@@ -15,6 +15,12 @@ public static class AuthErrors
     public static readonly Error EmailExist = new Error(
         "Auth.EmailExist", "Email address already exists.");
 
+    public static readonly Error EmailAlreadyConfirmed = new Error(
+        "Auth.EmailAlreadyConfirmed", "The email address has already been confirmed.");
+
+    public static readonly Error EmailConfirmationFailed = new Error(
+        "Auth.EmailConfirmationFailed", "Invalid or expired token provided.");
+
     public static readonly Error UserNameExist = new Error(
         "Auth.UserNameExist", "Username is taken.");
 
