@@ -1,4 +1,5 @@
-﻿using CodeStash.Application.Services;
+﻿using CodeStash.Application.Interfaces;
+using CodeStash.Application.Services;
 using CodeStash.Core.Interfaces;
 using CodeStash.Infrastructure.Audit;
 using CodeStash.Infrastructure.EmailModule;
@@ -27,6 +28,7 @@ public static class ServiceExtensions
         services.AddTransient<IEmailService, EmailService>();
 
         services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<ITransactionManager, TransactionManager>();
 
         return services;
     }

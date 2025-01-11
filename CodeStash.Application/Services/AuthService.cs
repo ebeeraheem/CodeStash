@@ -12,11 +12,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
+using CodeStash.Application.Interfaces;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
                                  SignInManager<ApplicationUser> signInManager,
                                  IEmailService emailService,
+                                 ITransactionManager transactionManager,
                                  IConfiguration config,
                                  LinkGenerator linkGenerator,
                                  IHttpContextAccessor httpContextAccessor,
@@ -50,28 +52,30 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
             LastLoginDate = DateTime.UtcNow
         };
 
-        var result = await userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
+        return await transactionManager.ExecuteInTransactionAsync(async () =>
         {
-            logger.LogError("User creation failed. Errors: {@Errors}", result.Errors);
-            return Result.Failure(AuthErrors.RegistrationFailed);
-        }
+            var result = await userManager.CreateAsync(user, request.Password);
 
-        var roleResult = await userManager.AddToRoleAsync(user, Roles.User);
+            if (!result.Succeeded)
+            {
+                logger.LogError("User creation failed. Errors: {@Errors}", result.Errors);
+                return Result.Failure(AuthErrors.RegistrationFailed);
+            }
 
-        if (!roleResult.Succeeded)
-        {
-            logger.LogError("Failed to add user to role: {Role} Errors: {@Errors}",
-                Roles.User, roleResult.Errors);
-            return Result.Failure(AuthErrors.CannotAddToRole);
-        }
+            var roleResult = await userManager.AddToRoleAsync(user, Roles.User);
 
-        var verificationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-        var verificationLink = GenerateEmailVerificationLink(
-            user.Id, verificationToken, config, linkGenerator, httpContextAccessor);
+            if (!roleResult.Succeeded)
+            {
+                logger.LogError("Failed to add user to role: {Role} Errors: {@Errors}",
+                    Roles.User, roleResult.Errors);
+                return Result.Failure(AuthErrors.CannotAddToRole);
+            }
 
-        var emailBody = $@"
+            var verificationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var verificationLink = GenerateEmailVerificationLink(
+                user.Id, verificationToken, config, linkGenerator, httpContextAccessor);
+
+            var emailBody = $@"
     <html>
     <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
         <h1 style='color: #444;'>Welcome to CodeStash!</h1>
@@ -83,14 +87,15 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
     </body>
     </html>";
 
-        BackgroundJob.Enqueue(() => emailService.SendEmailAsync(
-            request.UserName,
-            request.Email,
-            "Welcome to CodeStash: Please confirm your email address",
-            emailBody));
+            BackgroundJob.Enqueue(() => emailService.SendEmailAsync(
+                request.UserName,
+                request.Email,
+                "Welcome to CodeStash: Please confirm your email address",
+                emailBody));
 
-        await signInManager.SignInAsync(user, isPersistent: false);
-        return Result.Success();
+            await signInManager.SignInAsync(user, isPersistent: false);
+            return Result.Success();
+        });
     }
 
     public async Task<Result> LoginAsync(LoginModel request)
