@@ -1,5 +1,6 @@
 using CodeStash.API;
 using CodeStash.Application;
+using Hangfire;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -47,5 +48,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHangfireDashboard();
 
 app.Run();

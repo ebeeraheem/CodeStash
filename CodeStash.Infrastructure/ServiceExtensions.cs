@@ -3,6 +3,7 @@ using CodeStash.Core.Interfaces;
 using CodeStash.Infrastructure.Audit;
 using CodeStash.Infrastructure.EmailModule;
 using CodeStash.Infrastructure.Persistence;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,10 @@ public static class ServiceExtensions
     {
         services.AddDbContext<ApplicationDbContext>(options => 
         options.UseSqlServer(configuration.GetConnectionString("Default")));
+
+        services.AddHangfire(x => x.UseSqlServerStorage(
+            configuration.GetConnectionString("Default")));
+        services.AddHangfireServer();
 
         services.AddHttpContextAccessor();
         services.AddHttpClient();

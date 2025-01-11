@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using CodeStash.Core.Entities;
+using Hangfire;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -74,11 +75,11 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
     </body>
     </html>";
 
-        await emailService.SendEmailAsync(
+        BackgroundJob.Enqueue(() => emailService.SendEmailAsync(
             request.UserName,
             request.Email,
-            subject: "Welcome to CodeStash: Please confirm your email address",
-            emailBody);
+            "Welcome to CodeStash: Please confirm your email address",
+            emailBody));
 
         await signInManager.SignInAsync(user, isPersistent: false);
         return Result.Success();
