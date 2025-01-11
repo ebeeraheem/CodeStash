@@ -1,11 +1,11 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using CodeStash.Application.Services;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using CodeStash.Application.Interfaces;
 
 namespace CodeStash.Infrastructure.EmailModule;
 internal class EmailService(

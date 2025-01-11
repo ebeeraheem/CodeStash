@@ -1,5 +1,4 @@
 ﻿using CodeStash.Application.Interfaces;
-using CodeStash.Application.Services;
 using CodeStash.Core.Interfaces;
 using CodeStash.Infrastructure.Audit;
 using CodeStash.Infrastructure.EmailModule;
