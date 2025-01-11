@@ -36,6 +36,14 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [HttpPost("email-confirmation")]
+    public async Task<IActionResult> SendConfirmationEmail()
+    {
+        var result = await authService.SendEmailConfirmationLink();
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
     [AllowAnonymous]
     [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail(string userId, string token)

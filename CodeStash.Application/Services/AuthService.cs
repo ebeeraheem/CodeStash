@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using CodeStash.Application.Interfaces;
+using CodeStash.Application.Utilities;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
@@ -20,6 +21,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
                                  IEmailService emailService,
                                  ITransactionManager transactionManager,
                                  IConfiguration config,
+                                 UserHelper userHelper,
                                  LinkGenerator linkGenerator,
                                  IHttpContextAccessor httpContextAccessor,
                                  ILogger<AuthService> logger) : IAuthService
@@ -133,6 +135,46 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
     public async Task<Result> LogoutAsync()
     {
         await signInManager.SignOutAsync();
+        return Result.Success();
+    }
+
+    public async Task<Result> SendEmailConfirmationLink()
+    {
+        var userId = userHelper.GetUserId();
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
+        {
+            return Result.Failure(AuthErrors.UserNotFound);
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return Result.Failure(AuthErrors.EmailAlreadyConfirmed);
+        }
+
+        var verificationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        var verificationLink = GenerateEmailVerificationLink(
+            user.Id, verificationToken, config, linkGenerator, httpContextAccessor);
+
+        var emailBody = $@"
+    <html>
+    <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
+        <h1 style='color: #444;'>Verify your email</h1>
+        <p>Please verify your email:</p>
+        <p><a href='{verificationLink}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm your email</a></p>
+        <br>
+        <p>Happy stashing,</p>
+        <p>The CodeStash Team</p>
+    </body>
+    </html>";
+
+        BackgroundJob.Enqueue(() => emailService.SendEmailAsync(
+            user.UserName ?? string.Empty,
+            user.Email ?? string.Empty,
+            "CodeStash Email Verification: Please confirm your email address",
+            emailBody));
+
         return Result.Success();
     }
 
