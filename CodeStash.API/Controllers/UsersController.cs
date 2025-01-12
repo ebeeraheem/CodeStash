@@ -11,8 +11,8 @@ namespace CodeStash.API.Controllers;
 [ApiController]
 public class UsersController(IUserService userService) : ControllerBase
 {
-    [HttpPost("profile/update")]
-    public async Task<IActionResult> UpdateProfile([FromBody] ProfileModel request)
+    [HttpPut("profile/update")]
+    public async Task<IActionResult> UpdateProfile(ProfileModel request)
     {
         var result = await userService.UpdateProfileAsync(request);
 
@@ -36,7 +36,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
-    [HttpPost("email/update")]
+    [HttpPut("email/update")]
     public async Task<IActionResult> UpdateEmail(EmailDto request)
     {
         var result = await userService.InitiateEmailChangeAsync(request);
@@ -49,6 +49,14 @@ public class UsersController(IUserService userService) : ControllerBase
     public async Task<IActionResult> ConfirmEmailUpdate(UpdateEmailModel request)
     {
         var result = await userService.ConfirmEmailUpdateAsync(request);
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPut("password/update")]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordModel request)
+    {
+        var result = await userService.UpdatePasswordAsync(request);
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }

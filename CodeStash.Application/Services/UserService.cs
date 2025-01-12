@@ -145,4 +145,33 @@ public class UserService(UserManager<ApplicationUser> userManager,
         await signInManager.SignOutAsync();
         return Result.Success();
     }
+
+    public async Task<Result> UpdatePasswordAsync(UpdatePasswordModel request)
+    {
+        var userId = userHelper.GetUserId();
+
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
+        {
+            return Result.Failure(UserErrors.UserNotFound);
+        }
+
+        if (request.CurrentPassword == request.NewPassword)
+        {
+            return Result.Failure(UserErrors.SamePassword);
+        }
+
+        var result = await userManager.ChangePasswordAsync(
+            user, request.CurrentPassword, request.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            logger.LogError("Failed to update user password. User ID: {Id} Errors: {@Errors}",
+            user.Id, result.Errors);
+            return Result.Failure(UserErrors.PasswordUpdateFailed);
+        }
+
+        return Result.Success();
+    }
 }
