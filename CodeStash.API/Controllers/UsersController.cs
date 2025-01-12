@@ -25,4 +25,13 @@ public class UsersController(IUserService userService) : ControllerBase
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
+
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUser(string userId)
+    {
+        var result = await userService.GetUserAsync(userId);
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
 }

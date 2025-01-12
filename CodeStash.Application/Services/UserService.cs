@@ -53,6 +53,20 @@ public class UserService(UserManager<ApplicationUser> userManager,
         return Result<UserProfileDto>.Success(profile);
     }
 
+    public async Task<Result> GetUserAsync(string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
+        {
+            return Result.Failure(UserErrors.UserNotFound);
+        }
+
+        var profile = user.ToUserDto();
+
+        return Result<UserDto>.Success(profile);
+    }
+
     //public async Task<Result> GetUsersAsync()
     //{
 
