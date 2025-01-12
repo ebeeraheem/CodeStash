@@ -23,7 +23,14 @@ public static class ServiceExtensions
             configuration.ReadFrom.Configuration(context.Configuration);
         });
 
-        services.AddInfrastructureServices(configuration);
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequiredLength = 8;
+        })
+            .AddRoles<ApplicationRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         // Configure cookie authentication
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -35,20 +42,26 @@ public static class ServiceExtensions
                 options.ExpireTimeSpan = TimeSpan.FromDays(14);
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
-                options.LoginPath = "/api/auth/login";
-                options.LogoutPath = "/api/auth/logout";
-                options.AccessDeniedPath = "/api/auth/access-denied";
             });
 
         services.AddAuthorization();
-        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+
+        // Suppress Redirects Globally for the API
+        services.ConfigureApplicationCookie(options =>
         {
-            options.User.RequireUniqueEmail = true;
-            options.Password.RequiredLength = 8;
-        })
-            .AddRoles<ApplicationRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            options.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            };
+            options.Events.OnRedirectToAccessDenied = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            };
+        });
+
+        services.AddInfrastructureServices(configuration);
 
         return services;
     }
