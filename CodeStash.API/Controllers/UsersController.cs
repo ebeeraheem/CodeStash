@@ -1,5 +1,6 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Application.Services;
+using CodeStash.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,23 @@ public class UsersController(IUserService userService) : ControllerBase
     public async Task<IActionResult> GetUser(string userId)
     {
         var result = await userService.GetUserAsync(userId);
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPost("email/update")]
+    public async Task<IActionResult> UpdateEmail(EmailDto request)
+    {
+        var result = await userService.InitiateEmailChangeAsync(request);
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("email/confirm-update")]
+    public async Task<IActionResult> ConfirmEmailUpdate(UpdateEmailModel request)
+    {
+        var result = await userService.ConfirmEmailUpdateAsync(request);
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }

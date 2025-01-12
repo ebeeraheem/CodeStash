@@ -15,7 +15,6 @@ using System.Text;
 using CodeStash.Application.Interfaces;
 using CodeStash.Application.Utilities;
 using CodeStash.Core.Dtos;
-using Newtonsoft.Json.Linq;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
@@ -76,8 +75,8 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var link = GenerateLink(
-                user.Id, token, "ConfirmEmail", config, linkGenerator, httpContextAccessor);
+            var link = UrlHelper.GenerateLink(
+                user.Id, token, "ConfirmEmail", "Auth", config, linkGenerator, httpContextAccessor);
 
             var emailBody = $@"
     <html>
@@ -150,8 +149,8 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         }
 
         var token = await userManager.GeneratePasswordResetTokenAsync(user);
-        var link = GenerateLink(
-            user.Id, token, "ResetPassword", config, linkGenerator, httpContextAccessor);
+        var link = UrlHelper.GenerateLink(
+            user.Id, token, "ResetPassword", "Auth", config, linkGenerator, httpContextAccessor);
 
         var emailBody = $@"
     <html>
@@ -217,8 +216,8 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         }
 
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-        var link = GenerateLink(
-            user.Id, token, "ConfirmEmail", config, linkGenerator, httpContextAccessor);
+        var link = UrlHelper.GenerateLink(
+            user.Id, token, "ConfirmEmail", "Auth", config, linkGenerator, httpContextAccessor);
 
         var emailBody = $@"
     <html>
@@ -278,30 +277,4 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
     [GeneratedRegex(@"^[a-zA-Z0-9_]+$")]
     private static partial Regex AlphanumericUnderscoreRegex();
-
-    private static string GenerateLink(
-        string userId,
-        string token,
-        string action,
-        IConfiguration config,
-        LinkGenerator linkGenerator,
-        IHttpContextAccessor httpContextAccessor)
-    {
-        var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-        var baseUrl = config["CodeStash:BaseUrl"];
-        var httpContext = httpContextAccessor.HttpContext;
-
-        ArgumentNullException.ThrowIfNull(baseUrl);
-        ArgumentNullException.ThrowIfNull(httpContext);
-
-        var path = linkGenerator.GetPathByAction(
-            action: action,
-            controller: "Auth",
-            values: new { userId, token = encodedToken });
-
-        if (string.IsNullOrWhiteSpace(path))
-            throw new InvalidOperationException("Failed to generate link");
-
-        return $"{baseUrl}{path}";
-    }
 }

@@ -12,6 +12,9 @@ public static class UserErrors
     public static readonly Error PasswordResetFailed = new Error(
         "User.PasswordResetFailed", "An error occurred while resetting user password.");
 
+    public static readonly Error EmailUpdateFailed = new Error(
+        "User.EmailUpdateFailed", "An error occurred while updating the user email.");
+
     public static readonly Error SamePassword = new Error(
         "User.SamePassword", "New password cannot be the same as old password.");
 
