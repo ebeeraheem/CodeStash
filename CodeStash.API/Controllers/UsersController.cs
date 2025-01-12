@@ -17,4 +17,12 @@ public class UsersController(IUserService userService) : ControllerBase
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
+
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        var result = await userService.GetUserProfileAsync();
+
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
 }

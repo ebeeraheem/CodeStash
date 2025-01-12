@@ -1,6 +1,8 @@
 ﻿using CodeStash.Application.Errors;
+using CodeStash.Application.Mappings;
 using CodeStash.Application.Models;
 using CodeStash.Application.Utilities;
+using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -34,6 +36,21 @@ public class UserService(UserManager<ApplicationUser> userManager,
 
         logger.LogError("Profile update failed. Errors: {@Errors}", result.Errors);
         return Result.Failure(UserErrors.ProfileUpdateFailed);
+    }
+
+    public async Task<Result> GetUserProfileAsync()
+    {
+        var userId = userHelper.GetUserId();
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
+        {
+            return Result.Failure(UserErrors.UserNotFound);
+        }
+
+        var profile = user.ToUserProfile();
+
+        return Result<UserProfileDto>.Success(profile);
     }
 
     //public async Task<Result> GetUsersAsync()
