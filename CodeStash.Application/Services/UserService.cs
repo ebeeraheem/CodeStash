@@ -163,7 +163,7 @@ public class UserService(UserManager<ApplicationUser> userManager,
         }
 
         var result = await userManager.ChangePasswordAsync(
-            user, request.CurrentPassword, request.NewPassword);
+            user, request.CurrentPassword, request.ConfirmPassword);
 
         if (!result.Succeeded)
         {
