@@ -36,6 +36,15 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet]
+    public async Task<IActionResult> GetUsers(int pageNumber = 1, int pageSize = 20)
+    {
+        var result = await userService.GetUsersAsync(pageNumber, pageSize);
+
+        return Ok(result);
+    }
+
     [HttpPut("email/update")]
     public async Task<IActionResult> UpdateEmail(EmailDto request)
     {

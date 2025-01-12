@@ -3,6 +3,7 @@ using CodeStash.Application.Interfaces;
 using CodeStash.Application.Mappings;
 using CodeStash.Application.Models;
 using CodeStash.Application.Utilities;
+using CodeStash.Application.Utilities.Pagination;
 using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
 using Hangfire;
@@ -19,6 +20,7 @@ public class UserService(UserManager<ApplicationUser> userManager,
                          SignInManager<ApplicationUser> signInManager,
                          IEmailService emailService,
                          UserHelper userHelper,
+                         IPagedResultService pagedResultService,
                          IConfiguration config,
                          LinkGenerator linkGenerator,
                          IHttpContextAccessor httpContextAccessor,
@@ -79,10 +81,16 @@ public class UserService(UserManager<ApplicationUser> userManager,
         return Result<UserDto>.Success(profile);
     }
 
-    //public async Task<Result> GetUsersAsync()
-    //{
+    public async Task<Result> GetUsersAsync(int pageNumber, int pageSize)
+    {
+        var users = userManager.Users;
+        var ordered = users.OrderByDescending(a => a.CreatedAt);
+        var userDtos = ordered.Select(a => a.ToUserDto());
+        var paged = await pagedResultService
+            .GetPagedResultAsync(userDtos, pageNumber, pageSize);
 
-    //}
+        return Result<PagedResult<UserDto>>.Success(paged);
+    }
 
     public async Task<Result> InitiateEmailChangeAsync(EmailDto request)
     {

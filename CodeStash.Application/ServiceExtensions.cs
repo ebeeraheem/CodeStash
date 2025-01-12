@@ -1,5 +1,6 @@
 ﻿using CodeStash.Application.Services;
 using CodeStash.Application.Utilities;
+using CodeStash.Application.Utilities.Pagination;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,8 @@ public static class ServiceExtensions
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<IPagedResultService, PagedResultService>();
 
         services.AddScoped<UserHelper>();
 
