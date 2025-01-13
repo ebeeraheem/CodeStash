@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStash.UI", "CodeStash.UI\CodeStash.UI.csproj", "{3C92B2BC-A303-43F9-92EC-46052EB310FF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStash.API", "CodeStash.API\CodeStash.API.csproj", "{E6FFC75B-97EF-424F-8961-BF5F49D991B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStash.Infrastructure", "CodeStash.Infrastructure\CodeStash.Infrastructure.csproj", "{8FD35F0E-3C01-4204-A765-809161E4DFD4}"
@@ -13,16 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStash.Application", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStash.Core", "CodeStash.Core\CodeStash.Core.csproj", "{60B2B84E-E3FA-4E5A-A6CC-8E701564B5FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStash.UI", "CodeStash.UI\CodeStash.UI.csproj", "{721774DD-BF3C-483B-8B13-51F59C77949A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C92B2BC-A303-43F9-92EC-46052EB310FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C92B2BC-A303-43F9-92EC-46052EB310FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C92B2BC-A303-43F9-92EC-46052EB310FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C92B2BC-A303-43F9-92EC-46052EB310FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6FFC75B-97EF-424F-8961-BF5F49D991B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6FFC75B-97EF-424F-8961-BF5F49D991B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6FFC75B-97EF-424F-8961-BF5F49D991B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{60B2B84E-E3FA-4E5A-A6CC-8E701564B5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60B2B84E-E3FA-4E5A-A6CC-8E701564B5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60B2B84E-E3FA-4E5A-A6CC-8E701564B5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{721774DD-BF3C-483B-8B13-51F59C77949A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{721774DD-BF3C-483B-8B13-51F59C77949A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{721774DD-BF3C-483B-8B13-51F59C77949A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{721774DD-BF3C-483B-8B13-51F59C77949A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
