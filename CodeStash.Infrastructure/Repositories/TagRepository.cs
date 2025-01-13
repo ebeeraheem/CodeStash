@@ -17,12 +17,12 @@ internal class TagRepository(ApplicationDbContext context) : ITagRepository
         return await context.SaveChangesAsync();
     }
 
-    public IQueryable<Tag> GetAll()
+    public IQueryable<Tag> GetAllTags()
     {
         return context.Tags;
     }
 
-    public async Task<Tag?> GetByIdAsync(int id)
+    public async Task<Tag?> GetByIdAsync(Guid id)
     {
         return await context.Tags.FindAsync(id);
     }

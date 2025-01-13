@@ -25,6 +25,7 @@ public static class ServiceExtensions
         services.AddHttpContextAccessor();
         services.AddHttpClient();
 
+        services.AddScoped<ISnippetRepository, SnippetRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
 
         services.Configure<EmailSettings>(configuration.GetSection("SmtpSettings"));
