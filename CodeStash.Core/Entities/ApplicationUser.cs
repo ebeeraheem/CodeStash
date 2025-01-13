@@ -15,6 +15,8 @@ public class ApplicationUser : IdentityUser, IAuditableEntity
     public string Role { get; set; } = string.Empty;
     public DateTime LastLoginDate { get; set; }
 
+    public List<Snippet> Snippets { get; set; } = [];
+
     public string CreatedBy { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public string? ModifiedBy { get; set; }

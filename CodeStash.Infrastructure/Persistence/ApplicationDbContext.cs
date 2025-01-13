@@ -9,6 +9,8 @@ public class ApplicationDbContext(DbContextOptions options, IAuditService auditS
 {
     public required DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public required DbSet<ApplicationRole> ApplicationRoles { get; set; }
+    public required DbSet<Snippet> Snippets { get; set; }
+    public required DbSet<Tag> Tags { get; set; }
 
     public required DbSet<AuditLog> AuditLogs { get; set; }
 
