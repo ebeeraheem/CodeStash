@@ -12,6 +12,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ISnippetService, SnippetService>();
         services.AddScoped<ITagService, TagService>();
 
         services.AddScoped<IPagedResultService, PagedResultService>();
