@@ -1,8 +1,10 @@
 ﻿using CodeStash.Application.Interfaces;
+using CodeStash.Application.Repositories;
 using CodeStash.Core.Interfaces;
 using CodeStash.Infrastructure.Audit;
 using CodeStash.Infrastructure.EmailModule;
 using CodeStash.Infrastructure.Persistence;
+using CodeStash.Infrastructure.Repositories;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +24,8 @@ public static class ServiceExtensions
 
         services.AddHttpContextAccessor();
         services.AddHttpClient();
+
+        services.AddScoped<ITagRepository, TagRepository>();
 
         services.Configure<EmailSettings>(configuration.GetSection("SmtpSettings"));
         services.AddTransient<IEmailService, EmailService>();
