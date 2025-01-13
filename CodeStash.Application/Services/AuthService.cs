@@ -101,13 +101,13 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         });
     }
 
-    public async Task<Result> LoginAsync(LoginModel request)
+    public async Task<Result<ApplicationUser>> AuthenticateUserAsync(LoginModel request)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
         {
-            return Result.Failure(AuthErrors.UserNotFound);
+            return Result<ApplicationUser>.Failure(AuthErrors.UserNotFound);
         }
 
         var result = await signInManager
@@ -115,39 +115,59 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (!result.Succeeded)
         {
-            return Result.Failure(AuthErrors.LoginFailed);
+            return Result<ApplicationUser>.Failure(AuthErrors.LoginFailed);
         }
 
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Name, user.Email ?? string.Empty),
-            new(ClaimTypes.Role, user.Role),
-        };
-
-        await userManager.AddClaimsAsync(user, claims);
-        await signInManager.SignInWithClaimsAsync(user, isPersistent: true, claims);
-
-        signInManager.Context.Response.Cookies.Append(".AspNetCore.Cookies", string.Empty, new CookieOptions
-        {
-            Secure = true,
-            HttpOnly = true,
-            IsEssential = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(14)
-        });
-
-        user.LastLoginDate = DateTime.UtcNow;
-        await userManager.UpdateAsync(user);
-        return Result.Success();
+        return Result<ApplicationUser>.Success(user);
     }
 
-    public async Task<Result> LogoutAsync()
-    {
-        await signInManager.SignOutAsync();
-        signInManager.Context.Response.Cookies.Delete(".AspNetCore.Cookies");
-        return Result.Success();
-    }
+    //public async Task<Result> LoginAsync(LoginModel request)
+    //{
+    //    var user = await userManager.FindByEmailAsync(request.Email);
+
+    //    if (user is null)
+    //    {
+    //        return Result.Failure(AuthErrors.UserNotFound);
+    //    }
+
+    //    var result = await signInManager
+    //        .CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+
+    //    if (!result.Succeeded)
+    //    {
+    //        return Result.Failure(AuthErrors.LoginFailed);
+    //    }
+
+    //    var claims = new List<Claim>
+    //    {
+    //        new(ClaimTypes.NameIdentifier, user.Id),
+    //        new(ClaimTypes.Name, user.Email ?? string.Empty),
+    //        new(ClaimTypes.Role, user.Role),
+    //    };
+
+    //    await userManager.AddClaimsAsync(user, claims);
+    //    await signInManager.SignInWithClaimsAsync(user, isPersistent: true, claims);
+
+    //    signInManager.Context.Response.Cookies.Append(".AspNetCore.Cookies", string.Empty, new CookieOptions
+    //    {
+    //        Secure = true,
+    //        HttpOnly = true,
+    //        IsEssential = true,
+    //        SameSite = SameSiteMode.Strict,
+    //        Expires = DateTime.UtcNow.AddDays(14)
+    //    });
+
+    //    user.LastLoginDate = DateTime.UtcNow;
+    //    await userManager.UpdateAsync(user);
+    //    return Result.Success();
+    //}
+
+    //public async Task<Result> LogoutAsync()
+    //{
+    //    await signInManager.SignOutAsync();
+    //    signInManager.Context.Response.Cookies.Delete(".AspNetCore.Cookies");
+    //    return Result.Success();
+    //}
 
     public async Task<Result> ForgotPasswordAsync(EmailDto request)
     {

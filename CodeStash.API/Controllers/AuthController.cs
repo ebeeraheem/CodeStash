@@ -1,8 +1,11 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Application.Services;
 using CodeStash.Core.Dtos;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CodeStash.API.Controllers;
 
@@ -24,17 +27,50 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel request)
     {
-        var result = await authService.LoginAsync(request);
+        var result = await authService.AuthenticateUserAsync(request);
 
-        return result.IsSuccess ? Ok(result) : BadRequest(result);
+        if (!result.IsSuccess)
+        {
+            return Unauthorized(result);
+        }
+
+        var user = result.Data;
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Name, user.Email ?? string.Empty),
+            new(ClaimTypes.Role, user.Role),
+        };
+
+        var claimsIdentity = new ClaimsIdentity(
+            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            IsPersistent = true,
+        };
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity),
+            authProperties);
+
+        return Ok();
+
+        //var result = await authService.LoginAsync(request);
+        //return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        var result = await authService.LogoutAsync();
+        await HttpContext.SignOutAsync(
+        CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok();
 
-        return result.IsSuccess ? Ok(result) : BadRequest(result);
+        //var result = await authService.LogoutAsync();
+        //return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
     [AllowAnonymous]
