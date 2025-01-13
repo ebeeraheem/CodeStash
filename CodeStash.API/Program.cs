@@ -8,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddApiServices(builder.Configuration, builder.Host);
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -33,10 +34,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-app.MapOpenApi();
+app.UseSwagger();
 app.MapScalarApiReference(options =>
 {
     options.WithTitle("CodeStash");
+    options.OpenApiRoutePattern = "/swagger/v1/swagger.json";
 });
 
 app.UseSerilogRequestLogging();
@@ -51,4 +53,4 @@ app.MapControllers();
 
 app.UseHangfireDashboard();
 
-app.Run();
+await app.RunAsync();

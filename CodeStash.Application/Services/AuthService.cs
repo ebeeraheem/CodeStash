@@ -126,7 +126,16 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         };
 
         await userManager.AddClaimsAsync(user, claims);
-        await signInManager.SignInWithClaimsAsync(user, isPersistent: false, claims);
+        await signInManager.SignInWithClaimsAsync(user, isPersistent: true, claims);
+
+        signInManager.Context.Response.Cookies.Append(".AspNetCore.Cookies", string.Empty, new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = true,
+            IsEssential = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(14)
+        });
 
         user.LastLoginDate = DateTime.UtcNow;
         await userManager.UpdateAsync(user);
@@ -136,6 +145,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
     public async Task<Result> LogoutAsync()
     {
         await signInManager.SignOutAsync();
+        signInManager.Context.Response.Cookies.Delete(".AspNetCore.Cookies");
         return Result.Success();
     }
 
