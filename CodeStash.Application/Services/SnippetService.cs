@@ -19,7 +19,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
         if (request.Tags.Count > MaxTags)
         {
-            return Result.Failure(SnippetErrors.MaximumExceeded);
+            return Result.Failure(SnippetErrors.MaximumTagsExceeded);
         }
 
         var userId = userHelper.GetUserId();
@@ -60,5 +60,55 @@ public class SnippetService(ISnippetRepository snippetRepository,
         var languages = SnippetLanguage.GetAll();
 
         return Result<List<string?>>.Success(languages);
+    }
+
+    public async Task<Result> UpdateSnippetAsync(Guid snippetId, UpdateSnippetDto request)
+    {
+        const int MaxTags = 5;
+
+        var snippet = await snippetRepository.GetByIdAsync(snippetId);
+
+        if (snippet is null)
+        {
+            return Result.Failure(SnippetErrors.SnippetNotFound);
+        }
+
+        snippet.Title = !string.IsNullOrWhiteSpace(request.Title)
+            ? request.Title
+            : snippet.Title;
+
+        snippet.Content = !string.IsNullOrWhiteSpace(request.Content)
+            ? Markdown.ToHtml(request.Content)
+            : snippet.Content;
+
+        if (!string.IsNullOrWhiteSpace(request.Language))
+        {
+            if (!SnippetLanguage.IsValid(request.Language))
+            {
+                return Result.Failure(SnippetErrors.InvalidLanguage);
+            }
+
+            snippet.Language = request.Language;
+        }
+
+        // Only update tags if flag is true
+        if (request.UpdateTags)
+        {
+            if (request.Tags?.Count > MaxTags)
+            {
+                return Result.Failure(SnippetErrors.MaximumTagsExceeded);
+            }
+
+            snippet.Tags = request.Tags ?? [];
+        }
+
+        var result = await snippetRepository.UpdateAsync(snippet);
+
+        if (result <= 0)
+        {
+            return Result.Failure(SnippetErrors.UpdateFailed);
+        }
+
+        return Result.Success();
     }
 }
