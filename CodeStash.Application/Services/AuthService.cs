@@ -107,7 +107,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (user is null)
         {
-            return Result<ApplicationUser>.Failure(AuthErrors.UserNotFound);
+            return Result<ApplicationUser>.Failure(UserErrors.UserNotFound);
         }
 
         var result = await signInManager
@@ -127,7 +127,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
     //    if (user is null)
     //    {
-    //        return Result.Failure(AuthErrors.UserNotFound);
+    //        return Result.Failure(UserErrors.UserNotFound);
     //    }
 
     //    var result = await signInManager
@@ -175,7 +175,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (user is null)
         {
-            return Result.Failure(AuthErrors.UserNotFound);
+            return Result.Failure(UserErrors.UserNotFound);
         }
 
         var token = await userManager.GeneratePasswordResetTokenAsync(user);
@@ -211,7 +211,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (user is null)
         {
-            return Result.Failure(AuthErrors.UserNotFound);
+            return Result.Failure(UserErrors.UserNotFound);
         }
 
         var decodedToken = Encoding.UTF8.GetString(
@@ -237,7 +237,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (user is null)
         {
-            return Result.Failure(AuthErrors.UserNotFound);
+            return Result.Failure(UserErrors.UserNotFound);
         }
 
         if (user.EmailConfirmed)
@@ -276,7 +276,7 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (user is null)
         {
-            return Result.Failure(AuthErrors.UserNotFound);
+            return Result.Failure(UserErrors.UserNotFound);
         }
 
         if (user.EmailConfirmed)

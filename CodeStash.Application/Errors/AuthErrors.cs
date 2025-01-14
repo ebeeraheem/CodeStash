@@ -3,9 +3,6 @@
 namespace CodeStash.Application.Errors;
 public static class AuthErrors
 {
-    public static readonly Error UserNotFound = new Error(
-        "Auth.UserNotFound", "The user could not be found.");
-
     public static readonly Error RegistrationFailed = new Error(
         "Auth.RegistrationFailed", "Error creating user.");
 
