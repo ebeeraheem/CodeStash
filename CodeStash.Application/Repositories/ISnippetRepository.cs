@@ -8,4 +8,5 @@ public interface ISnippetRepository
     Task<int> DeleteAsync(Snippet snippet);
     Task<Snippet?> GetByIdAsync(Guid id);
     IQueryable<Snippet> GetAllSnippets();
+    IQueryable<Snippet> GetSnippetsWithAuthor();
 }

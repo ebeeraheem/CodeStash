@@ -1,7 +1,9 @@
 ﻿using CodeStash.Application.Errors;
+using CodeStash.Application.Filters;
 using CodeStash.Application.Models;
 using CodeStash.Application.Repositories;
 using CodeStash.Application.Utilities;
+using CodeStash.Application.Utilities.Pagination;
 using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
 using CodeStash.Core.Models;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 namespace CodeStash.Application.Services;
 public class SnippetService(ISnippetRepository snippetRepository,
                             UserManager<ApplicationUser> userManager,
+                            IPagedResultService pagedResultService,
                             UserHelper userHelper) : ISnippetService
 {
     public async Task<Result> AddSnippetAsync(SnippetDto request)
@@ -143,5 +146,52 @@ public class SnippetService(ISnippetRepository snippetRepository,
         }
 
         return Result.Success();
+    }
+
+    public async Task<Result> GetSnippets(int pageNumber, int pageSize, SnippetsFilter filter)
+    {
+        var snippets = snippetRepository.GetSnippetsWithAuthor();
+        var filtered = ApplyFilter(snippets, filter);
+        var ordered = filtered.OrderBy(s => s.ViewCount);
+        var paginated = await pagedResultService
+            .GetPagedResultAsync(ordered, pageNumber, pageSize);
+
+        return Result<PagedResult<Snippet>>.Success(paginated);
+    }
+
+    private static IQueryable<Snippet> ApplyFilter(IQueryable<Snippet> snippets, SnippetsFilter filter)
+    {
+        if (!string.IsNullOrEmpty(filter.Title))
+        {
+            snippets = snippets.Where(s => s.Title.Contains(filter.Title));
+        }
+
+        if (!string.IsNullOrEmpty(filter.Language))
+        {
+            snippets = snippets.Where(s => s.Language.Contains(filter.Language));
+        }
+
+        if (filter.Tags?.Count > 0)
+        {
+            snippets = snippets.Where(s => s.Tags.Any(tag => filter.Tags.Contains(tag)));
+        }
+
+        if (!string.IsNullOrEmpty(filter.AuthorUserName))
+        {
+            snippets = snippets.Where(s => s.User.UserName!= null &&
+                s.User.UserName.Contains(filter.AuthorUserName));
+        }
+
+        if (filter.StartDate.HasValue)
+        {
+            snippets = snippets.Where(s => s.CreatedAt >= filter.StartDate.Value);
+        }
+
+        if (filter.EndDate.HasValue)
+        {
+            snippets = snippets.Where(s => s.CreatedAt <= filter.EndDate.Value);
+        }
+
+        return snippets;
     }
 }

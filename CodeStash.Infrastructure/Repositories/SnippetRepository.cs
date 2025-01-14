@@ -1,6 +1,7 @@
 ﻿using CodeStash.Application.Repositories;
 using CodeStash.Core.Entities;
 using CodeStash.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeStash.Infrastructure.Repositories;
 internal class SnippetRepository(ApplicationDbContext context) : ISnippetRepository
@@ -20,6 +21,13 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
     public IQueryable<Snippet> GetAllSnippets()
     {
         return context.Snippets;
+    }
+
+    public IQueryable<Snippet> GetSnippetsWithAuthor()
+    {
+        return context.Snippets
+            .Include(s => s.User)
+            .AsQueryable();
     }
 
     public async Task<Snippet?> GetByIdAsync(Guid id)
