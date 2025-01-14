@@ -12,6 +12,9 @@ public static class SnippetErrors
     public static readonly Error UpdateFailed = new Error(
         "Snippet.UpdateFailed", "An error occurred while updating the snippet.");
 
+    public static readonly Error DeleteFailed = new Error(
+        "Snippet.DeleteFailed", "An error occurred while deleting the snippet.");
+
     public static readonly Error InvalidLanguage = new Error(
         "Snippet.InvalidLanguage", "Invalid language selected.");
 

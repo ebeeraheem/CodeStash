@@ -118,4 +118,30 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
         return Result.Success();
     }
+
+    public async Task<Result> DeleteSnippetAsync(Guid snippetId)
+    {
+        var snippet = await snippetRepository.GetByIdAsync(snippetId);
+
+        if (snippet is null)
+        {
+            return Result.Failure(SnippetErrors.SnippetNotFound);
+        }
+
+        var userId = userHelper.GetUserId();
+
+        if (snippet.UserId != userId)
+        {
+            return Result.Failure(SnippetErrors.CannotModify);
+        }
+
+        var result = await snippetRepository.DeleteAsync(snippet);
+
+        if (result <= 0)
+        {
+            return Result.Failure(SnippetErrors.DeleteFailed);
+        }
+
+        return Result.Success();
+    }
 }
