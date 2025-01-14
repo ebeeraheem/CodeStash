@@ -10,9 +10,6 @@ public class SnippetDto
 
     [MaxLength(4000)]
     public required string Content { get; set; }
-
-    // Restrict the allowed values to those in SnippetLanguage
-    // Find a way to display just the values in SnippetLanguage when creating a snippet
     public required string Language { get; set; } = SnippetLanguage.None;
     public List<Tag> Tags { get; set; } = [];
 }

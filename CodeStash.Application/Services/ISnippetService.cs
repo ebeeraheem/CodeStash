@@ -5,4 +5,5 @@ namespace CodeStash.Application.Services;
 public interface ISnippetService
 {
     Task<Result> AddSnippetAsync(SnippetDto request);
+    Result GetAllSnippetLanguages();
 }

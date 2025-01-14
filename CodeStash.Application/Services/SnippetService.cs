@@ -4,6 +4,7 @@ using CodeStash.Application.Repositories;
 using CodeStash.Application.Utilities;
 using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
+using CodeStash.Core.Models;
 using Markdig;
 using Microsoft.AspNetCore.Identity;
 
@@ -29,6 +30,11 @@ public class SnippetService(ISnippetRepository snippetRepository,
             return Result.Failure(UserErrors.UserNotFound);
         }
 
+        if (!SnippetLanguage.IsValid(request.Language))
+        {
+            return Result.Failure(SnippetErrors.InvalidLanguage);
+        }
+
         var snippet = new Snippet()
         {
             Title = request.Title,
@@ -47,5 +53,12 @@ public class SnippetService(ISnippetRepository snippetRepository,
         }
 
         return Result.Success();
+    }
+
+    public Result GetAllSnippetLanguages()
+    {
+        var languages = SnippetLanguage.GetAll();
+
+        return Result<List<string?>>.Success(languages);
     }
 }
