@@ -73,6 +73,13 @@ public class SnippetService(ISnippetRepository snippetRepository,
             return Result.Failure(SnippetErrors.SnippetNotFound);
         }
 
+        var userId = userHelper.GetUserId();
+
+        if (snippet.UserId != userId)
+        {
+            return Result.Failure(SnippetErrors.CannotModify);
+        }
+
         snippet.Title = !string.IsNullOrWhiteSpace(request.Title)
             ? request.Title
             : snippet.Title;

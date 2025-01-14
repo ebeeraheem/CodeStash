@@ -17,4 +17,7 @@ public static class SnippetErrors
 
     public static readonly Error SnippetNotFound = new Error(
         "Snippet.SnippetNotFound", "The snippet could not be found.");
+
+    public static readonly Error CannotModify = new Error(
+        "Snippet.CannotModify", "Cannot modify another user's snippet.");
 }
