@@ -6,6 +6,9 @@ public static class SnippetErrors
     public static readonly Error MaximumTagsExceeded = new Error(
         "Snippet.MaximumTagsExceeded", "Maximum number of tags exceeded.");
 
+    public static readonly Error InvalidTags = new Error(
+        "Snippet.InvalidTags", "Invalid tags selected.");
+
     public static readonly Error CannotCreate = new Error(
         "Snippet.CannotCreate", "An error occurred while creating snippet.");
 

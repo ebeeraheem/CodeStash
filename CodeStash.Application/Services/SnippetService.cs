@@ -22,18 +22,32 @@ public class SnippetService(ISnippetRepository snippetRepository,
     public async Task<Result> AddSnippetAsync(AddSnippetDto request)
     {
         const int MaxTags = 5;
-
-        if (request.Tags.Count > MaxTags)
-        {
-            return Result.Failure(SnippetErrors.MaximumTagsExceeded);
-        }
-
         var userId = userHelper.GetUserId();
+
         var user = await userManager.FindByIdAsync(userId);
 
         if (user is null)
         {
             return Result.Failure(UserErrors.UserNotFound);
+        }
+
+        if (request.TagIds.Count > MaxTags)
+        {
+            return Result.Failure(SnippetErrors.MaximumTagsExceeded);
+        }
+
+        var tags = await tagRepository.GetAllTags()
+            .Where(t => request.TagIds.Contains(t.Id))
+            .ToListAsync();
+
+        var invalidTags = tags
+            .Where(tag => !request.TagIds.Contains(tag.Id))
+            .Select(t => t.Id)
+            .ToList();
+
+        if (invalidTags.Count != 0)
+        {
+            return Result.Failure(SnippetErrors.InvalidTags);
         }
 
         if (!SnippetLanguage.IsValid(request.Language))
@@ -48,7 +62,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
             Language = request.Language,
             UserId = userId,
             User = user,
-            Tags = request.Tags
+            Tags = tags
         };
 
         var result = await snippetRepository.AddAsync(snippet);
