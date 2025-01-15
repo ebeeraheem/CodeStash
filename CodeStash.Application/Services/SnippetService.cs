@@ -10,6 +10,7 @@ using CodeStash.Core.Entities;
 using CodeStash.Core.Models;
 using Markdig;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeStash.Application.Services;
 public class SnippetService(ISnippetRepository snippetRepository,
@@ -163,6 +164,16 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<PagedResult<SnippetDto>>.Success(paginated);
     }
 
+    public async Task<Result> GetMySnippets()
+    {
+        var userId = userHelper.GetUserId();
+        var snippets = await snippetRepository.GetByUserAsync(userId)
+            .Select(s => s.ToSnippetDto())
+            .ToListAsync();
+
+        return Result<List<SnippetDto>>.Success(snippets);
+    }
+
     public async Task<Result> GetSnippetById(Guid snippetId)
     {
         var snippet = await snippetRepository.GetByIdAsync(snippetId);
@@ -170,6 +181,16 @@ public class SnippetService(ISnippetRepository snippetRepository,
         if (snippet is null)
         {
             return Result.Failure(SnippetErrors.SnippetNotFound);
+        }
+
+        if (snippet.IsPrivate)
+        {
+            var userId = userHelper.GetUserId();
+
+            if (snippet.UserId != userId)
+            {
+                return Result.Failure(SnippetErrors.ViewRestricted);
+            }
         }
 
         return Result<SnippetDto>.Success(snippet.ToSnippetDto());

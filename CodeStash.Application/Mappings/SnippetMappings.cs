@@ -15,7 +15,7 @@ public static class SnippetMappings
             Tags = snippet.Tags,
             ViewCount = snippet.ViewCount,
             IsPrivate = snippet.IsPrivate,
-            CreatedBy = snippet.CreatedBy
+            AuthorUserName = snippet.User.UserName ?? string.Empty
         };
     }
 }

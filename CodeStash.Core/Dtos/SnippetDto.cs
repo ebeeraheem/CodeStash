@@ -10,5 +10,5 @@ public class SnippetDto
     public List<Tag> Tags { get; set; } = [];
     public bool IsPrivate { get; set; } = false;
     public int ViewCount { get; set; }
-    public string CreatedBy { get; set; } = string.Empty;
+    public string AuthorUserName { get; set; } = string.Empty;
 }

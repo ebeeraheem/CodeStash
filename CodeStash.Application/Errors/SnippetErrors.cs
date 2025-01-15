@@ -9,6 +9,9 @@ public static class SnippetErrors
     public static readonly Error CannotCreate = new Error(
         "Snippet.CannotCreate", "An error occurred while creating snippet.");
 
+    public static readonly Error ViewRestricted = new Error(
+        "Snippet.ViewRestricted", "Cannot view another user's private snippet.");
+
     public static readonly Error UpdateFailed = new Error(
         "Snippet.UpdateFailed", "An error occurred while updating the snippet.");
 
