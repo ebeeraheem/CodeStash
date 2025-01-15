@@ -11,5 +11,6 @@ public interface ISnippetService
     Task<Result> GetMySnippets();
     Task<Result> GetSnippetById(Guid snippetId);
     Task<Result> GetSnippets(int pageNumber, int pageSize, SnippetsFilter filter);
+    Task<Result> GetSnippetsByAuthorUserName(string userName);
     Task<Result> UpdateSnippetAsync(Guid snippetId, UpdateSnippetDto request);
 }
