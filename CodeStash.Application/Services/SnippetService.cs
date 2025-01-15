@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CodeStash.Application.Services;
 public class SnippetService(ISnippetRepository snippetRepository,
                             UserManager<ApplicationUser> userManager,
+                            ITagRepository tagRepository,
                             IPagedResultService pagedResultService,
                             UserHelper userHelper) : ISnippetService
 {
@@ -178,6 +179,23 @@ public class SnippetService(ISnippetRepository snippetRepository,
     {
         var snippets = await snippetRepository.GetSnippetsWithAuthor()
             .Where(s => !s.IsPrivate && s.User.UserName == userName)
+            .Select(s => s.ToSnippetDto())
+            .ToListAsync();
+
+        return Result<List<SnippetDto>>.Success(snippets);
+    }
+
+    public async Task<Result> GetSnippetsByTag(Guid tagId)
+    {
+        var tag = await tagRepository.GetByIdAsync(tagId);
+
+        if (tag is null)
+        {
+            return Result.Failure(TagErrors.TagNotFound);
+        }
+
+        var snippets = await snippetRepository.GetAllSnippets()
+            .Where(s => !s.IsPrivate && s.Tags.Contains(tag))
             .Select(s => s.ToSnippetDto())
             .ToListAsync();
 

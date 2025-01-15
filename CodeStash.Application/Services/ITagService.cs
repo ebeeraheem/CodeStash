@@ -5,7 +5,7 @@ namespace CodeStash.Application.Services;
 public interface ITagService
 {
     Task<Result> AddTagAsync(TagDto request);
-    Task<Result> DeleteTagAsync(Guid id);
+    Task<Result> DeleteTagAsync(Guid tagId);
     Task<Result> GetAllTags();
-    Task<Result> UpdateTagAsync(Guid id, TagDto request);
+    Task<Result> UpdateTagAsync(Guid tagId, TagDto request);
 }

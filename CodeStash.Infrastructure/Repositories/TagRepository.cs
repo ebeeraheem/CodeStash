@@ -22,9 +22,9 @@ internal class TagRepository(ApplicationDbContext context) : ITagRepository
         return context.Tags;
     }
 
-    public async Task<Tag?> GetByIdAsync(Guid id)
+    public async Task<Tag?> GetByIdAsync(Guid tagId)
     {
-        return await context.Tags.FindAsync(id);
+        return await context.Tags.FindAsync(tagId);
     }
 
     public async Task<int> UpdateAsync(Tag tag)

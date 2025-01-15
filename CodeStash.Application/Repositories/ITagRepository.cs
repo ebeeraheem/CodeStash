@@ -6,6 +6,6 @@ public interface ITagRepository
     Task<int> AddAsync(Tag tag);
     Task<int> UpdateAsync(Tag tag);
     Task<int> DeleteAsync(Tag tag);
-    Task<Tag?> GetByIdAsync(Guid id);
+    Task<Tag?> GetByIdAsync(Guid tagId);
     IQueryable<Tag> GetAllTags();
 }

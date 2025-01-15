@@ -21,9 +21,9 @@ public class TagService(ITagRepository tagRepository) : ITagService
         return Result.Success();
     }
 
-    public async Task<Result> UpdateTagAsync(Guid id, TagDto request)
+    public async Task<Result> UpdateTagAsync(Guid tagId, TagDto request)
     {
-        var tag = await tagRepository.GetByIdAsync(id);
+        var tag = await tagRepository.GetByIdAsync(tagId);
 
         if (tag is null)
         {
@@ -42,9 +42,9 @@ public class TagService(ITagRepository tagRepository) : ITagService
         return Result.Success();
     }
 
-    public async Task<Result> DeleteTagAsync(Guid id)
+    public async Task<Result> DeleteTagAsync(Guid tagId)
     {
-        var tag = await tagRepository.GetByIdAsync(id);
+        var tag = await tagRepository.GetByIdAsync(tagId);
 
         if (tag is null)
         {
