@@ -35,6 +35,7 @@ public class TagsController(ITagService tagService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetTags()
     {

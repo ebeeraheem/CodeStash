@@ -1,6 +1,7 @@
 ﻿namespace CodeStash.Core.Dtos;
 public class UserDto
 {
+    public string Id { get; set; } = string.Empty;
     public string? Email { get; set; }
     public bool EmailConfirmed { get; set; }
     public string? UserName { get; set; }

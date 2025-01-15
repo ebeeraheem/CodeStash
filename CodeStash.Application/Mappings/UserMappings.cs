@@ -8,6 +8,7 @@ public static class UserMappings
     {
         return new UserProfileDto()
         {
+            Id = user.Id,
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
             UserName = user.UserName,
@@ -21,6 +22,7 @@ public static class UserMappings
     {
         return new UserDto()
         {
+            Id = user.Id,
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
             UserName = user.UserName,
