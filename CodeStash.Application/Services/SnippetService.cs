@@ -1,5 +1,6 @@
 ﻿using CodeStash.Application.Errors;
 using CodeStash.Application.Filters;
+using CodeStash.Application.Mappings;
 using CodeStash.Application.Models;
 using CodeStash.Application.Repositories;
 using CodeStash.Application.Utilities;
@@ -16,7 +17,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
                             IPagedResultService pagedResultService,
                             UserHelper userHelper) : ISnippetService
 {
-    public async Task<Result> AddSnippetAsync(SnippetDto request)
+    public async Task<Result> AddSnippetAsync(AddSnippetDto request)
     {
         const int MaxTags = 5;
 
@@ -153,13 +154,29 @@ public class SnippetService(ISnippetRepository snippetRepository,
         var snippets = snippetRepository.GetSnippetsWithAuthor();
         var filtered = ApplyFilter(snippets, filter);
         var ordered = filtered.OrderBy(s => s.ViewCount);
-        var paginated = await pagedResultService
-            .GetPagedResultAsync(ordered, pageNumber, pageSize);
+        var snippetDtos = ordered.Select(s => s.ToSnippetDto());
 
-        return Result<PagedResult<Snippet>>.Success(paginated);
+        var paginated = await pagedResultService
+            .GetPagedResultAsync(snippetDtos, pageNumber, pageSize);
+
+        return Result<PagedResult<SnippetDto>>.Success(paginated);
     }
 
-    private static IQueryable<Snippet> ApplyFilter(IQueryable<Snippet> snippets, SnippetsFilter filter)
+    public async Task<Result> GetSnippetById(Guid snippetId)
+    {
+        var snippet = await snippetRepository.GetByIdAsync(snippetId);
+
+        if (snippet is null)
+        {
+            return Result.Failure(SnippetErrors.SnippetNotFound);
+        }
+
+        return Result<SnippetDto>.Success(snippet.ToSnippetDto());
+    }
+
+    private static IQueryable<Snippet> ApplyFilter(
+        IQueryable<Snippet> snippets,
+        SnippetsFilter filter)
     {
         if (!string.IsNullOrEmpty(filter.Title))
         {
