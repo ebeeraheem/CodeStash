@@ -86,6 +86,11 @@ public class SnippetService(ISnippetRepository snippetRepository,
     {
         const int MaxTags = 5;
 
+        if (request.TagIds.Count > MaxTags)
+        {
+            return Result.Failure(SnippetErrors.MaximumTagsExceeded);
+        }
+
         var snippet = await snippetRepository.GetByIdAsync(snippetId);
 
         if (snippet is null)
@@ -118,16 +123,21 @@ public class SnippetService(ISnippetRepository snippetRepository,
             snippet.Language = request.Language;
         }
 
-        // Only update tags if flag is true
-        if (request.UpdateTags)
-        {
-            if (request.Tags?.Count > MaxTags)
-            {
-                return Result.Failure(SnippetErrors.MaximumTagsExceeded);
-            }
+        var tags = await tagRepository.GetAllTags()
+            .Where(t => request.TagIds.Contains(t.Id))
+            .ToListAsync();
 
-            snippet.Tags = request.Tags ?? [];
+        var invalidTags = tags
+            .Where(tag => !request.TagIds.Contains(tag.Id))
+            .Select(t => t.Id)
+            .ToList();
+
+        if (invalidTags.Count != 0)
+        {
+            return Result.Failure(SnippetErrors.InvalidTags);
         }
+
+        snippet.Tags = tags;
 
         var result = await snippetRepository.UpdateAsync(snippet);
 
@@ -250,11 +260,6 @@ public class SnippetService(ISnippetRepository snippetRepository,
         if (!string.IsNullOrEmpty(filter.Language))
         {
             snippets = snippets.Where(s => s.Language.Contains(filter.Language));
-        }
-
-        if (filter.Tags?.Count > 0)
-        {
-            snippets = snippets.Where(s => s.Tags.Any(tag => filter.Tags.Contains(tag)));
         }
 
         if (!string.IsNullOrEmpty(filter.AuthorUserName))
