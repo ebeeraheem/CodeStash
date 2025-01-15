@@ -72,7 +72,6 @@ public static class ServiceExtensions
 
     public static async Task SeedDataAsync(this IServiceProvider serviceProvider)
     {
-        await serviceProvider.SeedRoles();
-        await serviceProvider.SeedUsers();
+        await DbInitializer.InitializeAsync(serviceProvider);
     }
 }
