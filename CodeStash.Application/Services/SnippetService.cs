@@ -152,7 +152,8 @@ public class SnippetService(ISnippetRepository snippetRepository,
     public async Task<Result> GetSnippets(int pageNumber, int pageSize, SnippetsFilter filter)
     {
         var snippets = snippetRepository.GetSnippetsWithAuthor();
-        var filtered = ApplyFilter(snippets, filter);
+        var publicSnippets = snippets.Where(s => !s.IsPrivate);
+        var filtered = ApplyFilter(publicSnippets, filter);
         var ordered = filtered.OrderBy(s => s.ViewCount);
         var snippetDtos = ordered.Select(s => s.ToSnippetDto());
 
