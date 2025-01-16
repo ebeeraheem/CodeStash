@@ -31,17 +31,17 @@ public class SnippetService(ISnippetRepository snippetRepository,
             return Result.Failure(UserErrors.UserNotFound);
         }
 
-        if (request.TagIds.Count > MaxTags)
+        if (request.TagIds?.Count > MaxTags)
         {
             return Result.Failure(SnippetErrors.MaximumTagsExceeded);
         }
 
         var tags = await tagRepository.GetAllTags()
-            .Where(t => request.TagIds.Contains(t.Id))
+            .Where(t => request.TagIds != null && request.TagIds.Contains(t.Id))
             .ToListAsync();
 
         var invalidTags = tags
-            .Where(tag => !request.TagIds.Contains(tag.Id))
+            .Where(tag => request.TagIds != null && !request.TagIds.Contains(tag.Id))
             .Select(t => t.Id)
             .ToList();
 

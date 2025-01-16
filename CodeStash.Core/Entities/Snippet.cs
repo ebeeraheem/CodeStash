@@ -11,7 +11,7 @@ public class Snippet : IAuditableEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    [MaxLength(100)]
+    [MaxLength(200)]
     public required string Title { get; set; }
 
     [MaxLength(4000)]
@@ -19,7 +19,7 @@ public class Snippet : IAuditableEntity
 
     [MaxLength(100)]
     public required string Language { get; set; } = SnippetLanguage.None;
-    public List<Tag> Tags { get; set; } = [];
+    public List<Tag>? Tags { get; set; } = [];
     public bool IsPrivate { get; set; } = false;
     public int ViewCount { get; set; }
 

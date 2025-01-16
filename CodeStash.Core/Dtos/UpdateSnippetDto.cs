@@ -4,7 +4,7 @@ namespace CodeStash.Core.Dtos;
 
 public class UpdateSnippetDto
 {
-    [MaxLength(100)]
+    [MaxLength(200)]
     public string? Title { get; set; }
 
     [MaxLength(4000)]

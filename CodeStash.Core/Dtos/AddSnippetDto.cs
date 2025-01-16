@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 namespace CodeStash.Core.Dtos;
 public class AddSnippetDto
 {
-    [MaxLength(100)]
+    [MaxLength(200)]
     public required string Title { get; set; }
 
     [MaxLength(4000)]
     public required string Content { get; set; }
     public required string Language { get; set; } = SnippetLanguage.None;
-    public List<Guid> TagIds { get; set; } = [];
+    public List<Guid>? TagIds { get; set; } = [];
 }
