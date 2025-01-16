@@ -20,7 +20,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
     }
 
     [HttpPut("{snippetId}")]
-    public async Task<IActionResult> UpdateSnippet(Guid snippetId, UpdateSnippetDto request)
+    public async Task<IActionResult> UpdateSnippet(string snippetId, UpdateSnippetDto request)
     {
         var result = await snippetService.UpdateSnippetAsync(snippetId, request);
 
@@ -28,7 +28,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
     }
 
     [HttpDelete("{snippetId}")]
-    public async Task<IActionResult> DeleteSnippet(Guid snippetId)
+    public async Task<IActionResult> DeleteSnippet(string snippetId)
     {
         var result = await snippetService.DeleteSnippetAsync(snippetId);
 
@@ -75,7 +75,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("tags/{tagId}")]
-    public async Task<IActionResult> GetSnippetsByTag(Guid tagId)
+    public async Task<IActionResult> GetSnippetsByTag(string tagId)
     {
         var result = await snippetService.GetSnippetsByTag(tagId);
 
@@ -84,7 +84,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("{snippetId}")]
-    public async Task<IActionResult> GetSnippetById(Guid snippetId)
+    public async Task<IActionResult> GetSnippetById(string snippetId)
     {
         var result = await snippetService.GetSnippetById(snippetId);
 

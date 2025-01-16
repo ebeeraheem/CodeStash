@@ -24,9 +24,8 @@ namespace CodeStash.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CodeStash.Core.Entities.Snippet", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -79,9 +78,8 @@ namespace CodeStash.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CodeStash.Core.Entities.Tag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -359,11 +357,11 @@ namespace CodeStash.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SnippetTag", b =>
                 {
-                    b.Property<Guid>("SnippetsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SnippetsId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TagsId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("SnippetsId", "TagsId");
 

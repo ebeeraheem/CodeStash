@@ -9,7 +9,7 @@ namespace CodeStash.Core.Entities;
 [Index(nameof(Language))]
 public class Snippet : IAuditableEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [MaxLength(200)]
     public required string Title { get; set; }

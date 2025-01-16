@@ -23,17 +23,17 @@ internal class TagRepository(ApplicationDbContext context) : ITagRepository
         return context.Tags;
     }
 
-    public async Task<Tag?> GetByIdAsync(Guid tagId)
+    public async Task<Tag?> GetByIdAsync(string tagId)
     {
         return await context.Tags.FindAsync(tagId);
     }
 
-    public async Task<bool> IsValidTag(Guid tagId)
+    public async Task<bool> IsValidTag(string tagId)
     {
         return await context.Tags.AnyAsync(t => t.Id == tagId);
     }
 
-    public async Task<Tag?> GetTagWithSnippets(Guid tagId)
+    public async Task<Tag?> GetTagWithSnippets(string tagId)
     {
         return await context.Tags
             .Include(t => t.Snippets)

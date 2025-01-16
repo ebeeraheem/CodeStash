@@ -20,7 +20,7 @@ public class TagsController(ITagService tagService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTag(Guid id, TagModel request)
+    public async Task<IActionResult> UpdateTag(string id, TagModel request)
     {
         var result = await tagService.UpdateTagAsync(id, request);
 
@@ -28,7 +28,7 @@ public class TagsController(ITagService tagService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTag(Guid id)
+    public async Task<IActionResult> DeleteTag(string id)
     {
         var result = await tagService.DeleteTagAsync(id);
 

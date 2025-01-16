@@ -36,6 +36,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
             return Result.Failure(SnippetErrors.MaximumTagsExceeded);
         }
 
+        // THIS DOESN'T PROPERLY FILTER INVALID TAGS
         var tags = await tagRepository.GetAllTags()
             .Where(t => request.TagIds != null && request.TagIds.Contains(t.Id))
             .ToListAsync();
@@ -82,7 +83,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<string?>>.Success(languages);
     }
 
-    public async Task<Result> UpdateSnippetAsync(Guid snippetId, UpdateSnippetDto request)
+    public async Task<Result> UpdateSnippetAsync(string snippetId, UpdateSnippetDto request)
     {
         const int MaxTags = 5;
 
@@ -149,7 +150,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result.Success();
     }
 
-    public async Task<Result> DeleteSnippetAsync(Guid snippetId)
+    public async Task<Result> DeleteSnippetAsync(string snippetId)
     {
         var snippet = await snippetRepository.GetByIdAsync(snippetId);
 
@@ -209,7 +210,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<SnippetDto>>.Success(snippets);
     }
 
-    public async Task<Result> GetSnippetsByTag(Guid tagId)
+    public async Task<Result> GetSnippetsByTag(string tagId)
     {
         var isValidTag = await tagRepository.IsValidTag(tagId);
 
@@ -226,7 +227,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<SnippetDto>>.Success(snippets);
     }
 
-    public async Task<Result> GetSnippetById(Guid snippetId)
+    public async Task<Result> GetSnippetById(string snippetId)
     {
         var snippet = await snippetRepository.GetByIdAsync(snippetId);
 

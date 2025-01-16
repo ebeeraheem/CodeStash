@@ -1,7 +1,6 @@
 ﻿using CodeStash.Application.Errors;
 using CodeStash.Application.Models;
 using CodeStash.Application.Repositories;
-using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +20,7 @@ public class TagService(ITagRepository tagRepository) : ITagService
         return Result.Success();
     }
 
-    public async Task<Result> UpdateTagAsync(Guid tagId, TagModel request)
+    public async Task<Result> UpdateTagAsync(string tagId, TagModel request)
     {
         var tag = await tagRepository.GetByIdAsync(tagId);
 
@@ -42,7 +41,7 @@ public class TagService(ITagRepository tagRepository) : ITagService
         return Result.Success();
     }
 
-    public async Task<Result> DeleteTagAsync(Guid tagId)
+    public async Task<Result> DeleteTagAsync(string tagId)
     {
         var tag = await tagRepository.GetByIdAsync(tagId);
 

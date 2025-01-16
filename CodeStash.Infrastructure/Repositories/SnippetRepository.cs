@@ -30,7 +30,7 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
             .AsQueryable();
     }
 
-    public async Task<Snippet?> GetByIdAsync(Guid snippetId)
+    public async Task<Snippet?> GetByIdAsync(string snippetId)
     {
         return await context.Snippets
             .Include(s => s.User)

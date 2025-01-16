@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeStash.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250116210816_IncreaseSnippetTitleMaxLength")]
-    partial class IncreaseSnippetTitleMaxLength
+    [Migration("20250116221333_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,8 @@ namespace CodeStash.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CodeStash.Core.Entities.Snippet", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -82,9 +81,8 @@ namespace CodeStash.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CodeStash.Core.Entities.Tag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -362,11 +360,11 @@ namespace CodeStash.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SnippetTag", b =>
                 {
-                    b.Property<Guid>("SnippetsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SnippetsId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TagsId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("SnippetsId", "TagsId");
 
