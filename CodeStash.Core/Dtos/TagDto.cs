@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CodeStash.Core.Dtos;
+﻿namespace CodeStash.Core.Dtos;
 public class TagDto
 {
-    [MaxLength(50)]
-    public required string Name { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

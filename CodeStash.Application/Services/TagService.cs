@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CodeStash.Application.Services;
 public class TagService(ITagRepository tagRepository) : ITagService
 {
-    public async Task<Result> AddTagAsync(TagDto request)
+    public async Task<Result> AddTagAsync(TagModel request)
     {
         var tag = new Tag { Name = request.Name };
         var result = await tagRepository.AddAsync(tag);
@@ -21,7 +21,7 @@ public class TagService(ITagRepository tagRepository) : ITagService
         return Result.Success();
     }
 
-    public async Task<Result> UpdateTagAsync(Guid tagId, TagDto request)
+    public async Task<Result> UpdateTagAsync(Guid tagId, TagModel request)
     {
         var tag = await tagRepository.GetByIdAsync(tagId);
 

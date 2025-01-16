@@ -211,15 +211,15 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
     public async Task<Result> GetSnippetsByTag(Guid tagId)
     {
-        var tag = await tagRepository.GetByIdAsync(tagId);
+        var isValidTag = await tagRepository.IsValidTag(tagId);
 
-        if (tag is null)
+        if (!isValidTag)
         {
             return Result.Failure(TagErrors.TagNotFound);
         }
 
         var snippets = await snippetRepository.GetAllSnippets()
-            .Where(s => !s.IsPrivate && s.Tags.Contains(tag))
+            .Where(s => !s.IsPrivate && s.Tags.Any(t => t.Id == tagId))
             .Select(s => s.ToSnippetDto())
             .ToListAsync();
 

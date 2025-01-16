@@ -12,10 +12,10 @@ public static class SnippetMappings
             Title = snippet.Title,
             Content = snippet.Content,
             Language = snippet.Language,
-            Tags = snippet.Tags,
+            Tags = snippet.Tags.Select(t => new TagDto { Id=t.Id, Name=t.Name}).ToList(),
             ViewCount = snippet.ViewCount,
             IsPrivate = snippet.IsPrivate,
-            AuthorUserName = snippet.User.UserName ?? string.Empty
+            AuthorUserName = snippet.User?.UserName ?? string.Empty
         };
     }
 }

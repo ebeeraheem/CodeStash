@@ -12,7 +12,7 @@ namespace CodeStash.API.Controllers;
 public class TagsController(ITagService tagService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> AddTag(TagDto request)
+    public async Task<IActionResult> AddTag(TagModel request)
     {
         var result = await tagService.AddTagAsync(request);
 
@@ -20,7 +20,7 @@ public class TagsController(ITagService tagService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTag(Guid id, TagDto request)
+    public async Task<IActionResult> UpdateTag(Guid id, TagModel request)
     {
         var result = await tagService.UpdateTagAsync(id, request);
 
