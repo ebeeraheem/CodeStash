@@ -24,6 +24,9 @@ public static class SnippetErrors
     public static readonly Error InvalidLanguage = new Error(
         "Snippet.InvalidLanguage", "Invalid language selected.");
 
+    public static readonly Error InvalidTitleOrContent = new Error(
+        "Snippet.InvalidTitleOrContent", "Title and content are required.");
+
     public static readonly Error SnippetNotFound = new Error(
         "Snippet.SnippetNotFound", "The snippet could not be found.");
 
