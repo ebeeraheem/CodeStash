@@ -10,5 +10,5 @@ public class UpdateSnippetDto
     [MaxLength(4000)]
     public string? Content { get; set; }
     public string? Language { get; set; }
-    public List<string> TagIds { get; set; } = [];
+    public List<string>? TagIds { get; set; } = [];
 }

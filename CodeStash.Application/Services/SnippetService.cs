@@ -110,10 +110,13 @@ public class SnippetService(ISnippetRepository snippetRepository,
     public async Task<Result> UpdateSnippetAsync(string snippetId, UpdateSnippetDto request)
     {
         const int MaxTags = 5;
+        var userId = userHelper.GetUserId();
 
-        if (request.TagIds.Count > MaxTags)
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
         {
-            return Result.Failure(SnippetErrors.MaximumTagsExceeded);
+            return Result.Failure(UserErrors.UserNotFound);
         }
 
         var snippet = await snippetRepository.GetByIdAsync(snippetId);
@@ -123,11 +126,14 @@ public class SnippetService(ISnippetRepository snippetRepository,
             return Result.Failure(SnippetErrors.SnippetNotFound);
         }
 
-        var userId = userHelper.GetUserId();
-
         if (snippet.UserId != userId)
         {
             return Result.Failure(SnippetErrors.CannotModify);
+        }
+
+        if (request.TagIds?.Count > MaxTags)
+        {
+            return Result.Failure(SnippetErrors.MaximumTagsExceeded);
         }
 
         snippet.Title = !string.IsNullOrWhiteSpace(request.Title)
@@ -148,18 +154,39 @@ public class SnippetService(ISnippetRepository snippetRepository,
             snippet.Language = request.Language;
         }
 
-        var tags = await tagRepository.GetAllTags()
-            .Where(t => request.TagIds.Contains(t.Id))
-            .ToListAsync();
-
-        var invalidTags = tags
-            .Where(tag => !request.TagIds.Contains(tag.Id))
-            .Select(t => t.Id)
-            .ToList();
-
-        if (invalidTags.Count != 0)
+        // ALWAYS INCLUDE A SNIPPET'S TAG IDS DURING UPDATES
+        // TO AVOID ACCIDENTALLY REMOVING THEM!!!
+        // check if request.TagIds is null: valid
+        if (request.TagIds is null)
+        {
+            request.TagIds = [];
+        }
+        // check if request.TagIds.Count is 1 and the value is an empty string: valid
+        else if (request.TagIds.Count == 1 && request.TagIds.Single() == string.Empty)
+        {
+            request.TagIds = [];
+        }
+        // check if request.TagIds contains an empty string when there are other values: invalid
+        else if (request.TagIds.Any(tagId => string.IsNullOrEmpty(tagId)))
         {
             return Result.Failure(SnippetErrors.InvalidTags);
+        }
+
+        var tags = await tagRepository.GetAllTags()
+            .Where(tag => request.TagIds != null && request.TagIds.Contains(tag.Id))
+            .ToListAsync();
+
+        // check if all provided tag IDs exist in the repository
+        if (request.TagIds.Any())
+        {
+            var invalidTagIds = request.TagIds
+                .Except(tags.Select(tag => tag.Id))
+                .ToList();
+
+            if (invalidTagIds.Any())
+            {
+                return Result.Failure(SnippetErrors.InvalidTags);
+            }
         }
 
         snippet.Tags = tags;
