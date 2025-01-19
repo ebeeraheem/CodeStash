@@ -293,6 +293,9 @@ public class SnippetService(ISnippetRepository snippetRepository,
             }
         }
 
+        snippet.ViewCount++;
+        await snippetRepository.UpdateAsync(snippet);
+
         return Result<SnippetDto>.Success(snippet.ToSnippetDto());
     }
 
