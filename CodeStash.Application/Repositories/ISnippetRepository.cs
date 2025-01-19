@@ -9,5 +9,5 @@ public interface ISnippetRepository
     Task<Snippet?> GetByIdAsync(string snippetId);
     IQueryable<Snippet> GetAllSnippets();
     IQueryable<Snippet> GetSnippetsWithAuthor();
-    IQueryable<Snippet> GetByUserAsync(string userId);
+    IQueryable<Snippet> GetUserSnippets(string userId);
 }

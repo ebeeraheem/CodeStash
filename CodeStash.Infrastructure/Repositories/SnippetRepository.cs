@@ -12,6 +12,24 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
         return await context.SaveChangesAsync();
     }
 
+    public async Task<int> UpdateAsync(Snippet snippet)
+    {
+        context.Snippets.Update(snippet);
+        return await context.SaveChangesAsync();
+    }
+
+    public IQueryable<Snippet> GetUserSnippets(string userId)
+    {
+        return context.Snippets
+            .Include(s => s.Tags)
+            .Include(s => s.User)
+            .Where(s => s.UserId == userId)
+            .AsQueryable();
+    }
+
+
+
+
     public async Task<int> DeleteAsync(Snippet snippet)
     {
         context.Snippets.Remove(snippet);
@@ -35,19 +53,5 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
         return await context.Snippets
             .Include(s => s.User)
             .FirstOrDefaultAsync(s => s.Id == snippetId);
-    }
-
-    public IQueryable<Snippet> GetByUserAsync(string userId)
-    {
-        return context.Snippets
-            .Include(s => s.User)
-            .Where(s => s.UserId == userId)
-            .AsQueryable();
-    }
-
-    public async Task<int> UpdateAsync(Snippet snippet)
-    {
-        context.Snippets.Update(snippet);
-        return await context.SaveChangesAsync();
     }
 }

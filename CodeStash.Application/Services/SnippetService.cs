@@ -244,7 +244,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
     public async Task<Result> GetMySnippets()
     {
         var userId = userHelper.GetUserId();
-        var snippets = await snippetRepository.GetByUserAsync(userId)
+        var snippets = await snippetRepository.GetUserSnippets(userId)
             .Select(s => s.ToSnippetDto())
             .ToListAsync();
 
