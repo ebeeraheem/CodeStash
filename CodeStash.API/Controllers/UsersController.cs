@@ -3,6 +3,7 @@ using CodeStash.Application.Services;
 using CodeStash.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CodeStash.API.Controllers;
 
@@ -11,6 +12,7 @@ namespace CodeStash.API.Controllers;
 [ApiController]
 public class UsersController(IUserService userService) : ControllerBase
 {
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPut("profile/update")]
     public async Task<IActionResult> UpdateProfile(ProfileModel request)
     {
@@ -19,6 +21,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfile()
     {
@@ -27,6 +30,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [Authorize(Roles = Roles.Admin)]
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(string userId)
@@ -36,6 +40,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [Authorize(Roles = Roles.Admin)]
     [HttpGet]
     public async Task<IActionResult> GetUsers(int pageNumber = 1, int pageSize = 20)
@@ -45,6 +50,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPut("email/update")]
     public async Task<IActionResult> UpdateEmail(EmailDto request)
     {
@@ -53,6 +59,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpPost("email/confirm-update")]
     public async Task<IActionResult> ConfirmEmailUpdate(UpdateEmailModel request)
@@ -62,6 +69,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPut("password/update")]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordModel request)
     {

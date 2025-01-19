@@ -1,8 +1,10 @@
 ﻿using CodeStash.Application.Filters;
+using CodeStash.Application.Models;
 using CodeStash.Application.Services;
 using CodeStash.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CodeStash.API.Controllers;
 
@@ -11,6 +13,7 @@ namespace CodeStash.API.Controllers;
 [ApiController]
 public class SnippetsController(ISnippetService snippetService) : ControllerBase
 {
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPost]
     public async Task<IActionResult> AddSnippet(AddSnippetDto request)
     {
@@ -19,6 +22,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPut("{snippetId}")]
     public async Task<IActionResult> UpdateSnippet(string snippetId, UpdateSnippetDto request)
     {
@@ -35,6 +39,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAllSnippets(
@@ -47,6 +52,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet("languages")]
     public IActionResult GetSnippetLanguages()
@@ -56,6 +62,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpGet("personal-stash")]
     public async Task<IActionResult> GetMySnippets()
     {
@@ -64,6 +71,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet("authors/{authorId}")]
     public async Task<IActionResult> GetAuthorSnippets(string authorId)
@@ -73,6 +81,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet("tags/{tagId}")]
     public async Task<IActionResult> GetSnippetsByTag(string tagId)
@@ -82,6 +91,7 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet("{snippetId}")]
     public async Task<IActionResult> GetSnippetById(string snippetId)

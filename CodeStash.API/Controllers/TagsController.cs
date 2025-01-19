@@ -3,6 +3,7 @@ using CodeStash.Application.Services;
 using CodeStash.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CodeStash.API.Controllers;
 
@@ -11,6 +12,7 @@ namespace CodeStash.API.Controllers;
 [ApiController]
 public class TagsController(ITagService tagService) : ControllerBase
 {
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPost]
     public async Task<IActionResult> AddTag(TagModel request)
     {
@@ -19,6 +21,7 @@ public class TagsController(ITagService tagService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTag(string id, TagModel request)
     {
@@ -35,6 +38,7 @@ public class TagsController(ITagService tagService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetTags()

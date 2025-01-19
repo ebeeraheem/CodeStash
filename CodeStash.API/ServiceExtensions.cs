@@ -7,6 +7,8 @@ using Serilog;
 using CodeStash.Infrastructure.Seeder;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Threading.RateLimiting;
+using CodeStash.Application.Models;
 
 namespace CodeStash.API;
 
@@ -113,6 +115,24 @@ public static class ServiceExtensions
             });
 
         services.AddAuthorization();
+
+        var rateLimitOptions = new RateLimitModel();
+        configuration.GetSection(RateLimitModel.FixedLimit)
+            .Bind(rateLimitOptions);
+
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+            options.AddPolicy("fixed", httpContext => 
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = rateLimitOptions.PermitLimit,
+                        Window = TimeSpan.FromSeconds(rateLimitOptions.Window)
+                    }));
+        });
 
         services.AddInfrastructureServices(configuration);
 

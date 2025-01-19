@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace CodeStash.API.Controllers;
@@ -14,6 +15,7 @@ namespace CodeStash.API.Controllers;
 [ApiController]
 public class AuthController(IAuthService authService) : ControllerBase
 {
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel request)
@@ -23,6 +25,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel request)
@@ -73,6 +76,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         //return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpPost("forgot-password")]
     public async Task<IActionResult> ForgotPassword(EmailDto request)
@@ -82,6 +86,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword(ResetPasswordModel request)
@@ -91,6 +96,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [HttpPost("email-confirmation")]
     public async Task<IActionResult> SendConfirmationEmail()
     {
@@ -99,6 +105,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
+    [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail(string userId, string token)
