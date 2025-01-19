@@ -107,6 +107,8 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<string?>>.Success(languages);
     }
 
+    // ALWAYS INCLUDE A SNIPPET'S TAG IDS DURING UPDATES
+    // TO AVOID ACCIDENTALLY REMOVING THEM!!!
     public async Task<Result> UpdateSnippetAsync(string snippetId, UpdateSnippetDto request)
     {
         const int MaxTags = 5;
@@ -154,8 +156,6 @@ public class SnippetService(ISnippetRepository snippetRepository,
             snippet.Language = request.Language;
         }
 
-        // ALWAYS INCLUDE A SNIPPET'S TAG IDS DURING UPDATES
-        // TO AVOID ACCIDENTALLY REMOVING THEM!!!
         // check if request.TagIds is null: valid
         if (request.TagIds is null)
         {
@@ -263,19 +263,14 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
     public async Task<Result> GetSnippetsByTag(string tagId)
     {
-        var isValidTag = await tagRepository.IsValidTag(tagId);
-
-        if (!isValidTag)
-        {
-            return Result.Failure(TagErrors.TagNotFound);
-        }
-
         var snippets = await snippetRepository.GetAllSnippets()
             .Where(s => !s.IsPrivate && s.Tags.Any(t => t.Id == tagId))
-            .Select(s => s.ToSnippetDto())
             .ToListAsync();
 
-        return Result<List<SnippetDto>>.Success(snippets);
+        var snippetDtos = snippets.Select(s => s.ToSnippetDto())
+            .ToList();
+
+        return Result<List<SnippetDto>>.Success(snippetDtos);
     }
 
     public async Task<Result> GetSnippetById(string snippetId)

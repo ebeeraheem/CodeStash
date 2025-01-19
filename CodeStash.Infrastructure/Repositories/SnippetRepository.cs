@@ -35,26 +35,14 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
             .AsQueryable();
     }
 
-
-
-
     public async Task<int> DeleteAsync(Snippet snippet)
     {
         context.Snippets.Remove(snippet);
         return await context.SaveChangesAsync();
     }
 
-    public IQueryable<Snippet> GetSnippetsWithAuthor()
-    {
-        return context.Snippets
-            .Include(s => s.User)
-            .AsQueryable();
-    }
-
     public async Task<Snippet?> GetByIdAsync(string snippetId)
     {
-        return await context.Snippets
-            .Include(s => s.User)
-            .FirstOrDefaultAsync(s => s.Id == snippetId);
+        return await context.Snippets.FindAsync(snippetId);
     }
 }

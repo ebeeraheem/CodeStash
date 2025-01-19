@@ -28,19 +28,6 @@ internal class TagRepository(ApplicationDbContext context) : ITagRepository
         return await context.Tags.FindAsync(tagId);
     }
 
-    public async Task<bool> IsValidTag(string tagId)
-    {
-        return await context.Tags.AnyAsync(t => t.Id == tagId);
-    }
-
-    public async Task<Tag?> GetTagWithSnippets(string tagId)
-    {
-        return await context.Tags
-            .Include(t => t.Snippets)
-            .ThenInclude(s => s.User)
-            .FirstOrDefaultAsync(t => t.Id == tagId);
-    }
-
     public async Task<int> UpdateAsync(Tag tag)
     {
         context.Tags.Update(tag);

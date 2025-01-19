@@ -8,6 +8,4 @@ public interface ITagRepository
     Task<int> DeleteAsync(Tag tag);
     Task<Tag?> GetByIdAsync(string tagId);
     IQueryable<Tag> GetAllTags();
-    Task<Tag?> GetTagWithSnippets(string tagId);
-    Task<bool> IsValidTag(string tagId);
 }
