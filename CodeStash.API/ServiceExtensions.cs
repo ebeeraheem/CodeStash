@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using CodeStash.Infrastructure.Seeder;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace CodeStash.API;
 
@@ -21,6 +23,53 @@ public static class ServiceExtensions
             configuration.WriteTo.Console();
             configuration.Enrich.FromLogContext();
             configuration.ReadFrom.Configuration(context.Configuration);
+        });
+
+        services.AddSwaggerGen(options =>
+        {
+            // Add the API info and description
+            options.SwaggerDoc("v1", new OpenApiInfo()
+            {
+                Title = "CodeStash API",
+                Version = "v1",
+                Description = "A secure and organized place to stash, manage, and share your code snippets with ease.",
+                Contact = new OpenApiContact()
+                {
+                    Name = "Ibrahim Suleiman",
+                    Url = new Uri("https://ebeesule.netlify.app")
+                }
+            });
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            {
+                Type = SecuritySchemeType.Http,
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "Enter your token here:",
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            {
+               {
+                   new OpenApiSecurityScheme
+                   {
+                       Reference = new OpenApiReference
+                       {
+                           Type = ReferenceType.SecurityScheme,
+                           Id = "Bearer",
+                       }
+                   },
+
+                   Array.Empty<string>()
+               }
+            });
+
+            // Add XML comments in SwaggerUI
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
         });
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
