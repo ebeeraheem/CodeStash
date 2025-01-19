@@ -8,5 +8,6 @@ public class SnippetDto
     public List<TagDto>? Tags { get; set; } = [];
     public bool IsPrivate { get; set; } = false;
     public int ViewCount { get; set; }
-    public string AuthorUserName { get; set; } = string.Empty;
+    public string AuthorId { get; set; } = string.Empty;
+    public string AuthorDisplayName { get; set; } = string.Empty;
 }

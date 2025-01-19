@@ -65,10 +65,10 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpGet("authors/{userName}")]
-    public async Task<IActionResult> GetAuthorSnippets(string userName)
+    [HttpGet("authors/{authorId}")]
+    public async Task<IActionResult> GetAuthorSnippets(string authorId)
     {
-        var result = await snippetService.GetSnippetsByAuthorUserName(userName);
+        var result = await snippetService.GetSnippetsByAuthorId(authorId);
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }

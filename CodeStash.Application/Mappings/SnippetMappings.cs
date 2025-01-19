@@ -15,7 +15,8 @@ public static class SnippetMappings
             Tags = snippet.Tags?.Select(t => new TagDto { Id=t.Id, Name=t.Name}).ToList(),
             ViewCount = snippet.ViewCount,
             IsPrivate = snippet.IsPrivate,
-            AuthorUserName = snippet.User?.UserName ?? string.Empty
+            AuthorId = snippet.UserId,
+            AuthorDisplayName = snippet.User?.UserName ?? string.Empty
         };
     }
 }
