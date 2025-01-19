@@ -232,7 +232,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         var snippets = snippetRepository.GetAllSnippets();
         var publicSnippets = snippets.Where(s => !s.IsPrivate);
         var filtered = ApplyFilter(publicSnippets, filter);
-        var ordered = filtered.OrderBy(s => s.ViewCount);
+        var ordered = filtered.OrderByDescending(s => s.ViewCount);
         var snippetDtos = ordered.Select(s => s.ToSnippetDto());
 
         var paginated = await pagedResultService
@@ -245,6 +245,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
     {
         var userId = userHelper.GetUserId();
         var snippets = await snippetRepository.GetUserSnippets(userId)
+            .OrderByDescending(s => s.ViewCount)
             .Select(s => s.ToSnippetDto())
             .ToListAsync();
 
@@ -255,6 +256,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
     {
         var snippets = await snippetRepository.GetAllSnippets()
             .Where(s => !s.IsPrivate && s.UserId == authorId)
+            .OrderByDescending(s => s.ViewCount)
             .Select(s => s.ToSnippetDto())
             .ToListAsync();
 
@@ -265,6 +267,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
     {
         var snippets = await snippetRepository.GetAllSnippets()
             .Where(s => !s.IsPrivate && s.Tags.Any(t => t.Id == tagId))
+            .OrderByDescending(s => s.ViewCount)
             .ToListAsync();
 
         var snippetDtos = snippets.Select(s => s.ToSnippetDto())
