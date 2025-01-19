@@ -280,7 +280,8 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
     public async Task<Result> GetSnippetById(string snippetId)
     {
-        var snippet = await snippetRepository.GetByIdAsync(snippetId);
+        var snippet = await snippetRepository.GetAllSnippets()
+            .FirstOrDefaultAsync(s => s.Id == snippetId);
 
         if (snippet is null)
         {
