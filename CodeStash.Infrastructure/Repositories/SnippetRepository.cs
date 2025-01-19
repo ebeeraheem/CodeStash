@@ -27,6 +27,14 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
             .AsQueryable();
     }
 
+    public IQueryable<Snippet> GetAllSnippets()
+    {
+        return context.Snippets
+            .Include(s => s.Tags)
+            .Include(s => s.User)
+            .AsQueryable();
+    }
+
 
 
 
@@ -34,11 +42,6 @@ internal class SnippetRepository(ApplicationDbContext context) : ISnippetReposit
     {
         context.Snippets.Remove(snippet);
         return await context.SaveChangesAsync();
-    }
-
-    public IQueryable<Snippet> GetAllSnippets()
-    {
-        return context.Snippets;
     }
 
     public IQueryable<Snippet> GetSnippetsWithAuthor()

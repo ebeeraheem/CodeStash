@@ -229,7 +229,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
     public async Task<Result> GetSnippets(int pageNumber, int pageSize, SnippetsFilter filter)
     {
-        var snippets = snippetRepository.GetSnippetsWithAuthor();
+        var snippets = snippetRepository.GetAllSnippets();
         var publicSnippets = snippets.Where(s => !s.IsPrivate);
         var filtered = ApplyFilter(publicSnippets, filter);
         var ordered = filtered.OrderBy(s => s.ViewCount);
@@ -311,13 +311,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
         if (!string.IsNullOrEmpty(filter.Language))
         {
-            snippets = snippets.Where(s => s.Language.Contains(filter.Language));
-        }
-
-        if (!string.IsNullOrEmpty(filter.AuthorUserName))
-        {
-            snippets = snippets.Where(s => s.User.UserName!= null &&
-                s.User.UserName.Contains(filter.AuthorUserName));
+            snippets = snippets.Where(s => s.Language.Equals(filter.Language));
         }
 
         if (filter.StartDate.HasValue)
