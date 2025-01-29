@@ -1,11 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CodeStash.Application.Models;
+namespace CodeStash.Core.Models;
 public class Result<T> : Result
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public T Data { get; }
 
+    [JsonConstructor]
     private Result(bool isSuccess, T data, Error error) : base(isSuccess, error)
     {
         Data = data;
@@ -24,6 +25,7 @@ public class Result
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Error Error { get; }
 
+    [JsonConstructor]
     protected Result(bool isSuccess, Error error)
     {
         IsSuccess = isSuccess;

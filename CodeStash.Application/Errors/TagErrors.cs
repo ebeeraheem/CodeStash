@@ -1,4 +1,4 @@
-﻿using CodeStash.Application.Models;
+﻿using CodeStash.Core.Models;
 
 namespace CodeStash.Application.Errors;
 public static class TagErrors

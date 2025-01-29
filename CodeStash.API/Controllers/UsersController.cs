@@ -1,6 +1,7 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Application.Services;
 using CodeStash.Core.Dtos;
+using CodeStash.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;

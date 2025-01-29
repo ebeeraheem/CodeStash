@@ -1,5 +1,6 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Core.Dtos;
+using CodeStash.Core.Models;
 
 namespace CodeStash.Application.Services;
 public interface IUserService

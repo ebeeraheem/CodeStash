@@ -1,4 +1,4 @@
-﻿namespace CodeStash.Application.Models;
+﻿namespace CodeStash.Core.Models;
 public class Error
 {
     public string Code { get; }

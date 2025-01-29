@@ -6,6 +6,7 @@ using CodeStash.Application.Utilities;
 using CodeStash.Application.Utilities.Pagination;
 using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
+using CodeStash.Core.Models;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

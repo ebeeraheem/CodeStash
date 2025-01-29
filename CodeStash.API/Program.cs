@@ -32,15 +32,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+app.UseExceptionHandler();
+app.UseHttpsRedirection();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseSerilogRequestLogging();
 
-app.UseHttpsRedirection();
-app.UseExceptionHandler();
-
 app.UseRateLimiter();
+app.UseCors("WasmUIPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

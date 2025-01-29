@@ -1,4 +1,5 @@
 ﻿using CodeStash.Application.Models;
+using CodeStash.Core.Models;
 
 namespace CodeStash.Application.Services;
 public interface ITagService

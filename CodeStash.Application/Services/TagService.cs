@@ -2,6 +2,7 @@
 using CodeStash.Application.Models;
 using CodeStash.Application.Repositories;
 using CodeStash.Core.Entities;
+using CodeStash.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeStash.Application.Services;

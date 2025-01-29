@@ -1,4 +1,4 @@
-﻿namespace CodeStash.Application.Models;
+﻿namespace CodeStash.Core.Models;
 public static class Roles
 {
     public const string Admin = "Admin";

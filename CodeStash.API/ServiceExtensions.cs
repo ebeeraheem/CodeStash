@@ -27,6 +27,19 @@ public static class ServiceExtensions
             configuration.ReadFrom.Configuration(context.Configuration);
         });
 
+        var wasmUiUrl = configuration["CodeStash:WasmUIUrl"];
+        ArgumentNullException.ThrowIfNull(wasmUiUrl, nameof(wasmUiUrl));
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("WasmUIPolicy",
+                policy =>
+                policy
+                    .WithOrigins(wasmUiUrl)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+        });
+
         services.AddSwaggerGen(options =>
         {
             // Add the API info and description

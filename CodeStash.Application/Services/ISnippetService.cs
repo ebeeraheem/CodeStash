@@ -1,5 +1,5 @@
 ﻿using CodeStash.Application.Filters;
-using CodeStash.Application.Models;
+using CodeStash.Core.Models;
 using CodeStash.Core.Dtos;
 
 namespace CodeStash.Application.Services;

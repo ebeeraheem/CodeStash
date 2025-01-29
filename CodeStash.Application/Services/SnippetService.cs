@@ -1,7 +1,6 @@
 ﻿using CodeStash.Application.Errors;
 using CodeStash.Application.Filters;
 using CodeStash.Application.Mappings;
-using CodeStash.Application.Models;
 using CodeStash.Application.Repositories;
 using CodeStash.Application.Utilities;
 using CodeStash.Application.Utilities.Pagination;

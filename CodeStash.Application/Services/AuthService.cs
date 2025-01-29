@@ -1,20 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
-using CodeStash.Application.Models;
-using CodeStash.Application.Errors;
-using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using CodeStash.Core.Entities;
-using Hangfire;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
+﻿using CodeStash.Application.Errors;
 using CodeStash.Application.Interfaces;
+using CodeStash.Application.Models;
 using CodeStash.Application.Utilities;
 using CodeStash.Core.Dtos;
+using CodeStash.Core.Entities;
+using CodeStash.Core.Models;
+using Hangfire;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CodeStash.Application.Services;
 public partial class AuthService(UserManager<ApplicationUser> userManager,
@@ -120,54 +120,6 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         return Result<ApplicationUser>.Success(user);
     }
-
-    //public async Task<Result> LoginAsync(LoginModel request)
-    //{
-    //    var user = await userManager.FindByEmailAsync(request.Email);
-
-    //    if (user is null)
-    //    {
-    //        return Result.Failure(UserErrors.UserNotFound);
-    //    }
-
-    //    var result = await signInManager
-    //        .CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
-
-    //    if (!result.Succeeded)
-    //    {
-    //        return Result.Failure(AuthErrors.LoginFailed);
-    //    }
-
-    //    var claims = new List<Claim>
-    //    {
-    //        new(ClaimTypes.NameIdentifier, user.Id),
-    //        new(ClaimTypes.Name, user.Email ?? string.Empty),
-    //        new(ClaimTypes.Role, user.Role),
-    //    };
-
-    //    await userManager.AddClaimsAsync(user, claims);
-    //    await signInManager.SignInWithClaimsAsync(user, isPersistent: true, claims);
-
-    //    signInManager.Context.Response.Cookies.Append(".AspNetCore.Cookies", string.Empty, new CookieOptions
-    //    {
-    //        Secure = true,
-    //        HttpOnly = true,
-    //        IsEssential = true,
-    //        SameSite = SameSiteMode.Strict,
-    //        Expires = DateTime.UtcNow.AddDays(14)
-    //    });
-
-    //    user.LastLoginDate = DateTime.UtcNow;
-    //    await userManager.UpdateAsync(user);
-    //    return Result.Success();
-    //}
-
-    //public async Task<Result> LogoutAsync()
-    //{
-    //    await signInManager.SignOutAsync();
-    //    signInManager.Context.Response.Cookies.Delete(".AspNetCore.Cookies");
-    //    return Result.Success();
-    //}
 
     public async Task<Result> ForgotPasswordAsync(EmailDto request)
     {
