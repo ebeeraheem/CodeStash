@@ -10,6 +10,15 @@ public class TagService(ITagRepository tagRepository) : ITagService
 {
     public async Task<Result> AddTagAsync(TagModel request)
     {
+        // Check if tag already exists
+        var existingTag = await tagRepository.GetAllTags()
+            .FirstOrDefaultAsync(t => t.Name.Equals(request.Name));
+
+        if (existingTag is not null)
+        {
+            return Result.Failure(TagErrors.TagAlreadyExists);
+        }
+
         var tag = new Tag { Name = request.Name };
         var result = await tagRepository.AddAsync(tag);
 
