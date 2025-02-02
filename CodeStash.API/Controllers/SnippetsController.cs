@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace CodeStash.API.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class SnippetsController(ISnippetService snippetService) : ControllerBase
 {

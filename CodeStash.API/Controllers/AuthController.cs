@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace CodeStash.API.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class AuthController(IAuthService authService) : ControllerBase
 {

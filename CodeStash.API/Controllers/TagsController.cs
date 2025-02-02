@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace CodeStash.API.Controllers;
 
 [Authorize(Roles = Roles.Admin)]
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class TagsController(ITagService tagService) : ControllerBase
 {
