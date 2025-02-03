@@ -44,26 +44,47 @@ public static class SnippetLanguage
 
     // Programming Languages
     public const string CSharp = "csharp";
+    public const string FSharp = "fsharp";
+    public const string VisualBasic = "visual basic";
+    public const string VBA = "vba";
     public const string Python = "python";
+    public const string MicroPython = "micro-python";
     public const string Java = "java";
     public const string Kotlin = "kotlin";
     public const string Swift = "swift";
     public const string Go = "go";
     public const string Rust = "rust";
     public const string Ruby = "ruby";
+    public const string Solidity = "solidity";
+    public const string Ada = "ada";
     public const string PHP = "php";
     public const string CPlusPlus = "cpp";
     public const string C = "c";
+    public const string Lisp = "lisp";
+    public const string ObjectiveC = "objective-c";
     public const string Dart = "dart";
+    public const string GDScript = "gdscript";
     public const string R = "r";
     public const string Scala = "scala";
     public const string Haskell = "haskell";
+    public const string Elixir = "elixir";
+    public const string Crystal = "crystal";
+    public const string Nim = "nim";
+    public const string Zephyr = "zephyr";
+    public const string Closure = "closure";
+    public const string Delphi = "delphi";
     public const string Lua = "lua";
     public const string Julia = "julia";
+    public const string Zig = "zig";
     public const string Perl = "perl";
+    public const string Erlang = "erlang";
+    public const string Prolog = "prolog";
+    public const string Apex = "apex";
     public const string Assembly = "assembly";
     public const string Matlab = "matlab";
     public const string Fortran = "fortran";
+    public const string Cobol = "cobol";
+    public const string OCaml = "ocaml";
 
     // Shell & Scripting
     public const string PowerShell = "powershell";
@@ -75,9 +96,13 @@ public static class SnippetLanguage
 
     // Database
     public const string SQL = "sql";
+    public const string SQLite = "sqlite";
     public const string MySQL = "mysql";
+    public const string SQLServer = "mssql server";
     public const string PostgreSQL = "postgresql";
     public const string MongoDB = "mongodb";
+    public const string MariaDB = "mariadb";
+    public const string Elasticsearch = "elasticsearch";
     public const string Cassandra = "cassandra";
     public const string Redis = "redis";
     public const string GraphQL = "graphql";
@@ -104,6 +129,7 @@ public static class SnippetLanguage
     // Application Specific
     public const string AppleScript = "applescript";
     public const string VBScript = "vbscript";
+    public const string Groovy = "groovy";
     public const string AutoHotkey = "autohotkey";
     public const string ActionScript = "actionscript";
 
