@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CodeStash.Core\CodeStash.Core.csproj" />
+  </ItemGroup>
+
 </Project>

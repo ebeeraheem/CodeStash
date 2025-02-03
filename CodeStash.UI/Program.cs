@@ -1,10 +1,19 @@
 using CodeStash.UI.Components;
+using CodeStash.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var apiUrl = builder.Configuration["CodeStash:ApiUrl"] ??
+    throw new InvalidOperationException("ApiUrl is not configured");
+
+builder.Services.AddHttpClient<ISnippetsHttpService, SnippetsHttpService>(client =>
+{
+    client.BaseAddress = new Uri(apiUrl);
+});
 
 var app = builder.Build();
 
