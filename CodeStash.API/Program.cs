@@ -41,7 +41,7 @@ app.UseSwaggerUI();
 app.UseSerilogRequestLogging();
 
 app.UseRateLimiter();
-app.UseCors("WasmUIPolicy");
+app.UseCors("UIPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

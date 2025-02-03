@@ -27,15 +27,15 @@ public static class ServiceExtensions
             configuration.ReadFrom.Configuration(context.Configuration);
         });
 
-        var wasmUiUrl = configuration["CodeStash:WasmUIUrl"];
-        ArgumentNullException.ThrowIfNull(wasmUiUrl, nameof(wasmUiUrl));
+        var UIUrl = configuration["CodeStash:UIUrl"];
+        ArgumentNullException.ThrowIfNull(UIUrl, nameof(UIUrl));
 
         services.AddCors(options =>
         {
-            options.AddPolicy("WasmUIPolicy",
+            options.AddPolicy("UIPolicy",
                 policy =>
                 policy
-                    .WithOrigins(wasmUiUrl)
+                    .WithOrigins(UIUrl)
                     .AllowAnyHeader()
                     .AllowAnyMethod());
         });

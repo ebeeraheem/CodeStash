@@ -17,10 +17,10 @@ public static class UrlHelper
         IHttpContextAccessor httpContextAccessor)
     {
         var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-        var baseUrl = config["CodeStash:BaseUrl"];
+        var apiUrl = config["CodeStash:ApiUrl"];
         var httpContext = httpContextAccessor.HttpContext;
 
-        ArgumentNullException.ThrowIfNull(baseUrl);
+        ArgumentNullException.ThrowIfNull(apiUrl);
         ArgumentNullException.ThrowIfNull(httpContext);
 
         var path = linkGenerator.GetPathByAction(
@@ -31,6 +31,6 @@ public static class UrlHelper
         if (string.IsNullOrWhiteSpace(path))
             throw new InvalidOperationException("Failed to generate link");
 
-        return $"{baseUrl}{path}";
+        return $"{apiUrl}{path}";
     }
 }
