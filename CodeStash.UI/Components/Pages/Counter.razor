@@ -10,6 +10,31 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+<ul>
+    @foreach (var category in categoriesWithLanguages)
+    {
+        <li>
+            @category.Key:
+            <ul>
+                @foreach (var language in category.Value)
+                {
+                    <li>@language</li>
+                }
+            </ul>
+        </li>
+    }
+</ul>
+
+
+<hr/>
+
+@foreach (var language in languages)
+{
+    <li>@language</li>
+}
+
+<hr/>
+
 @foreach (var tag in tags)
 {
     <li>@tag.Name</li>
@@ -18,6 +43,8 @@
 @code {
     private int currentCount = 0;
     private List<Tag> tags = [];
+    private List<string?> languages = [];
+    private Dictionary<string, List<string?>> categoriesWithLanguages = [];
 
     private void IncrementCount()
     {
@@ -27,10 +54,14 @@
     protected override async Task OnInitializedAsync()
     {
         var result = await tagService.GetAllTags();
+        var langResult = snippetService.GetLanguages();
+        var catResult = snippetService.GetAllCategoriesWithLanguages();
 
-        if (result.IsSuccess)
+        if (result.IsSuccess && langResult.IsSuccess && catResult.IsSuccess)
         {
             tags = result.Data;
+            languages = langResult.Data;
+            categoriesWithLanguages = catResult.Data;
         }
         else
         {

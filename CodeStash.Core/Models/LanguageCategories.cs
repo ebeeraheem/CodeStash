@@ -178,6 +178,21 @@ public static class LanguageCategories
             .ToList();
     }
 
+    // Method to get a dictionary of all categories and their respective languages
+    public static Dictionary<string, List<string?>> GetAllCategoriesWithLanguages()
+    {
+        return typeof(LanguageCategories)
+            .GetNestedTypes(BindingFlags.Public | BindingFlags.Static) // Get all public static nested types (categories)
+            .ToDictionary(
+                category => category.Name, // Use the category name as the key
+                category => category.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                    .Where(f => f.IsLiteral && !f.IsInitOnly && f.FieldType == typeof(string)) // Filter for string constants
+                    .Select(f => f.GetValue(null)?.ToString()) // Get the actual string values
+                    .Where(value => value != null) // Filter out null values
+                    .ToList()
+            );
+    }
+
     // Helper method to get all languages for a specific category
     public static List<string?> GetCategoryLanguages(string categoryName)
     {

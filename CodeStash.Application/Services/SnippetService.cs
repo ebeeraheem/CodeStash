@@ -99,6 +99,27 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result.Success();
     }
 
+    public Result<List<string?>> GetLanguages()
+    {
+        var languages = LanguageCategories.GetAllLanguages();
+
+        return Result<List<string?>>.Success(languages);
+    }
+
+    public Result<Dictionary<string, List<string?>>> GetAllCategoriesWithLanguages()
+    {
+        var languages = LanguageCategories.GetAllCategoriesWithLanguages();
+
+        return Result<Dictionary<string, List<string?>>>.Success(languages);
+    }
+
+    public Result<List<string?>> GetLanguagesByCategory(string category)
+    {
+        var languages = LanguageCategories.GetCategoryLanguages(category);
+
+        return Result<List<string?>>.Success(languages);
+    }
+
     public Result<List<string?>> GetAllSnippetLanguages()
     {
         var languages = SnippetLanguage.GetAll();

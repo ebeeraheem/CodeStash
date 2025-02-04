@@ -7,7 +7,10 @@ public interface ISnippetService
 {
     Task<Result> AddSnippetAsync(AddSnippetDto request);
     Task<Result> DeleteSnippetAsync(string snippetId);
+    Result<Dictionary<string, List<string?>>> GetAllCategoriesWithLanguages();
     Result<List<string?>> GetAllSnippetLanguages();
+    Result<List<string?>> GetLanguages();
+    Result<List<string?>> GetLanguagesByCategory(string category);
     Task<Result> GetMySnippets();
     Task<Result> GetSnippetById(string snippetId);
     Task<Result> GetSnippets(int pageNumber, int pageSize, SnippetsFilter filter);
