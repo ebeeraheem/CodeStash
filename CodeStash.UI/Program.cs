@@ -1,11 +1,8 @@
 using CodeStash.Application;
-using CodeStash.Application.Services;
 using CodeStash.Infrastructure;
 using CodeStash.Infrastructure.Seeder;
-using CodeStash.UI;
 using CodeStash.UI.Components;
 using CodeStash.UI.Services;
-using Microsoft.Extensions.Configuration;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
