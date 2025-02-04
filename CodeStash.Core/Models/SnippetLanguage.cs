@@ -71,7 +71,7 @@ public static class SnippetLanguage
     public const string Crystal = "crystal";
     public const string Nim = "nim";
     public const string Zephyr = "zephyr";
-    public const string Closure = "closure";
+    public const string Clojure = "clojure";
     public const string Delphi = "delphi";
     public const string Lua = "lua";
     public const string Julia = "julia";
