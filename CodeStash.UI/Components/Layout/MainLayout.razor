@@ -8,16 +8,14 @@
 
 <MudLayout>
     <MudAppBar>
-        <MudIconButton 
-        Icon="@Icons.Material.Filled.Menu" 
-        Color="Color.Inherit" Edge="Edge.Start" 
-        OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" 
+                       Color="Color.Inherit" Edge="Edge.Start" 
+                       OnClick="@((e) => DrawerToggle())" />
         CodeStash
 
-        <MudIconButton 
-        Icon="@modeIcon"
-        Color="Color.Inherit" Edge="Edge.End"
-        OnClick="@((e) => DarkModeToggle())" />
+        <MudIconButton Icon="@modeIcon"
+                       Color="Color.Inherit" Edge="Edge.End"
+                       OnClick="@((e) => DarkModeToggle())" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
         <MyNavMenu/>
@@ -46,6 +44,8 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await _themeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+
         // Check if dark mode preference is stored
         var savedTheme = await JS.InvokeAsync<string>("localStorage.getItem", "darkMode");
 
@@ -59,6 +59,14 @@
             _isDarkMode = await _themeProvider.GetSystemPreference();
             await JS.InvokeVoidAsync("localStorage.setItem", "darkMode", _isDarkMode.ToString().ToLower());
         }
+
+        StateHasChanged();
+    }
+
+    private async Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _isDarkMode = newValue;
+        await JS.InvokeVoidAsync("localStorage.setItem", "darkMode", _isDarkMode.ToString().ToLower());
 
         StateHasChanged();
     }
