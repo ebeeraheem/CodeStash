@@ -6,6 +6,8 @@ using CodeStash.Core.Dtos;
 using CodeStash.Core.Entities;
 using CodeStash.Core.Models;
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -101,13 +104,33 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
         });
     }
 
-    public async Task<Result<ApplicationUser>> AuthenticateUserAsync(LoginModel request)
+    //public async Task<Result<ApplicationUser>> AuthenticateUserAsync(LoginModel request)
+    //{
+    //    var user = await userManager.FindByEmailAsync(request.Email);
+
+    //    if (user is null)
+    //    {
+    //        return Result<ApplicationUser>.Failure(UserErrors.UserNotFound);
+    //    }
+
+    //    var result = await signInManager
+    //        .CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+
+    //    if (!result.Succeeded)
+    //    {
+    //        return Result<ApplicationUser>.Failure(AuthErrors.LoginFailed);
+    //    }
+
+    //    return Result<ApplicationUser>.Success(user);
+    //}
+
+    public async Task<Result> LoginAsync(LoginModel request)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
         {
-            return Result<ApplicationUser>.Failure(UserErrors.UserNotFound);
+            return Result.Failure(UserErrors.UserNotFound);
         }
 
         var result = await signInManager
@@ -115,10 +138,51 @@ public partial class AuthService(UserManager<ApplicationUser> userManager,
 
         if (!result.Succeeded)
         {
-            return Result<ApplicationUser>.Failure(AuthErrors.LoginFailed);
+            return Result.Failure(AuthErrors.LoginFailed);
         }
 
-        return Result<ApplicationUser>.Success(user);
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Name, user.Email ?? string.Empty),
+            new(ClaimTypes.Role, user.Role),
+        };
+
+        var claimsIdentity = new ClaimsIdentity(
+            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            IsPersistent = true,
+        };
+
+        var context = httpContextAccessor.HttpContext;
+
+        if (context is null)
+        {
+            return Result.Failure(AuthErrors.InvalidRequest);
+        }
+
+        await context.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity),
+            authProperties);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> LogoutAsync()
+    {
+        var context = httpContextAccessor.HttpContext;
+
+        if (context is null)
+        {
+            return Result.Failure(AuthErrors.InvalidRequest);
+        }
+
+        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return Result.Success();
     }
 
     public async Task<Result> ForgotPasswordAsync(EmailDto request)

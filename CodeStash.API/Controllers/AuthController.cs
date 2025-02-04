@@ -1,12 +1,9 @@
 ﻿using CodeStash.Application.Models;
 using CodeStash.Application.Services;
 using CodeStash.Core.Dtos;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using System.Security.Claims;
 
 namespace CodeStash.API.Controllers;
 
@@ -30,50 +27,50 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel request)
     {
-        var result = await authService.AuthenticateUserAsync(request);
+        //var result = await authService.AuthenticateUserAsync(request);
 
-        if (!result.IsSuccess)
-        {
-            return Unauthorized(result);
-        }
+        //if (!result.IsSuccess)
+        //{
+        //    return Unauthorized(result);
+        //}
 
-        var user = result.Data;
+        //var user = result.Data;
 
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Name, user.Email ?? string.Empty),
-            new(ClaimTypes.Role, user.Role),
-        };
+        //var claims = new List<Claim>
+        //{
+        //    new(ClaimTypes.NameIdentifier, user.Id),
+        //    new(ClaimTypes.Name, user.Email ?? string.Empty),
+        //    new(ClaimTypes.Role, user.Role),
+        //};
 
-        var claimsIdentity = new ClaimsIdentity(
-            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        //var claimsIdentity = new ClaimsIdentity(
+        //    claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        var authProperties = new AuthenticationProperties
-        {
-            IsPersistent = true,
-        };
+        //var authProperties = new AuthenticationProperties
+        //{
+        //    IsPersistent = true,
+        //};
 
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity),
-            authProperties);
+        //await HttpContext.SignInAsync(
+        //    CookieAuthenticationDefaults.AuthenticationScheme,
+        //    new ClaimsPrincipal(claimsIdentity),
+        //    authProperties);
 
-        return Ok();
+        //return Ok();
 
-        //var result = await authService.LoginAsync(request);
-        //return result.IsSuccess ? Ok(result) : BadRequest(result);
+        var result = await authService.LoginAsync(request);
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync(
-        CookieAuthenticationDefaults.AuthenticationScheme);
-        return Ok();
+        //await HttpContext.SignOutAsync(
+        //CookieAuthenticationDefaults.AuthenticationScheme);
+        //return Ok();
 
-        //var result = await authService.LogoutAsync();
-        //return result.IsSuccess ? Ok(result) : BadRequest(result);
+        var result = await authService.LogoutAsync();
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
     [EnableRateLimiting(RateLimitModel.FixedLimit)]
