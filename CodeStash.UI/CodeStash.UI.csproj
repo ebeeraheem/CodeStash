@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CodeStash.Application\CodeStash.Application.csproj" />
     <ProjectReference Include="..\CodeStash.Core\CodeStash.Core.csproj" />
+    <ProjectReference Include="..\CodeStash.Infrastructure\CodeStash.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

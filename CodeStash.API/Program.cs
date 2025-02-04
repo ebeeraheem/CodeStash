@@ -1,5 +1,6 @@
 using CodeStash.API;
 using CodeStash.Application;
+using CodeStash.Infrastructure.Seeder;
 using Hangfire;
 using Serilog;
 
@@ -11,7 +12,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApiServices(builder.Configuration, builder.Host);
-builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration, builder.Host);
 
 var app = builder.Build();
 
@@ -22,7 +23,7 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        await serviceProvider.SeedDataAsync();
+        await DbInitializer.InitializeAsync(serviceProvider);
     }
     catch (Exception ex)
     {

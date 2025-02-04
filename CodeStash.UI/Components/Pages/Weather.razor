@@ -1,6 +1,5 @@
 ﻿@page "/weather"
-
-@inject ISnippetsHttpService snippetsHttpService
+@inject ISnippetService snippetService
 
 <PageTitle>Languages</PageTitle>
 
@@ -25,7 +24,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await snippetsHttpService.GetAllSnippetLanguages();
+        var result = snippetService.GetAllSnippetLanguages();
 
         if (result.IsSuccess)
         {

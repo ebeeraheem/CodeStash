@@ -1,4 +1,6 @@
 ﻿@page "/counter"
+@inject ISnippetService snippetService
+@inject ITagService tagService
 
 <PageTitle>Counter</PageTitle>
 
@@ -8,11 +10,31 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+@foreach (var tag in tags)
+{
+    <li>@tag.Name</li>
+}
+
 @code {
     private int currentCount = 0;
+    private List<Tag> tags = [];
 
     private void IncrementCount()
     {
         currentCount++;
+        tags.RemoveAt(currentCount);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await tagService.GetAllTags();
+
+        if (result.IsSuccess)
+        {
+            tags = result.Data;
+        }
+        else
+        {
+            Console.WriteLine(result.Error);
+        }
     }
 }

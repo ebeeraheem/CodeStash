@@ -70,7 +70,7 @@ public class TagService(ITagRepository tagRepository) : ITagService
         return Result.Success();
     }
 
-    public async Task<Result> GetAllTags()
+    public async Task<Result<List<Tag>>> GetAllTags()
     {
         var tags = await tagRepository.GetAllTags().ToListAsync();
 

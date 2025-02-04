@@ -99,7 +99,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result.Success();
     }
 
-    public Result GetAllSnippetLanguages()
+    public Result<List<string?>> GetAllSnippetLanguages()
     {
         var languages = SnippetLanguage.GetAll();
 

@@ -1,5 +1,11 @@
+using CodeStash.Application;
+using CodeStash.Application.Services;
+using CodeStash.Infrastructure;
+using CodeStash.Infrastructure.Seeder;
+using CodeStash.UI;
 using CodeStash.UI.Components;
 using CodeStash.UI.Services;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +21,26 @@ builder.Services.AddHttpClient<ISnippetsHttpService, SnippetsHttpService>(client
     client.BaseAddress = new Uri(apiUrl);
 });
 
+builder.Services.AddApplicationServices(builder.Configuration, builder.Host);
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
 var app = builder.Build();
+
+// Seed data
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+
+    try
+    {
+        await DbInitializer.InitializeAsync(serviceProvider);
+    }
+    catch (Exception ex)
+    {
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
