@@ -6,6 +6,7 @@ using CodeStash.UI;
 using CodeStash.UI.Components;
 using CodeStash.UI.Services;
 using Microsoft.Extensions.Configuration;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddHttpClient<ISnippetsHttpService, SnippetsHttpService>(client
 
 builder.Services.AddApplicationServices(builder.Configuration, builder.Host);
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

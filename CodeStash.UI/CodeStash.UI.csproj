@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="8.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CodeStash.Application\CodeStash.Application.csproj" />
     <ProjectReference Include="..\CodeStash.Core\CodeStash.Core.csproj" />
     <ProjectReference Include="..\CodeStash.Infrastructure\CodeStash.Infrastructure.csproj" />
