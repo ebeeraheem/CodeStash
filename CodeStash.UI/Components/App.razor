@@ -18,18 +18,6 @@
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-
-    @* Apply dark mode preference before UI renders *@
-    <script>
-        (function() {
-            let darkMode = localStorage.getItem("darkMode");
-            if (darkMode === "true") {
-                document.body.classList.add("mud-theme-darker");
-            } else {
-                document.body.classList.remove("mud-theme-darker");
-            }
-        })();
-    </script>
 </body>
 
 </html>
