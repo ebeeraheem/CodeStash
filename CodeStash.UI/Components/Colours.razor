@@ -1,0 +1,19 @@
+﻿@page "/colours"
+
+<MudGrid Spacing="@Spacing" Justify="Justify.Center">
+    <MudItem>
+        <MudPaper Height="140px" Width="140px" Style="@($"background:{CodeStashColors.Primary}")"/>
+    </MudItem>
+    <MudItem>
+        <MudPaper Height="140px" Width="140px" Style="@($"background:{CodeStashColors.Secondary}")" />
+    </MudItem>
+    <MudItem>
+        <MudPaper Height="140px" Width="140px" Style="@($"background:{CodeStashColors.Tertiary}")" />
+    </MudItem>
+    <MudItem>
+        <MudPaper Outlined="true" Height="140px" Width="140px" Style="@($"background:{CodeStashColors.Background}")" />
+    </MudItem>
+</MudGrid>
+@code {
+    public int Spacing { get; set; } = 6;
+}
