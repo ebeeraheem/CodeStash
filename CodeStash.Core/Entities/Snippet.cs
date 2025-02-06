@@ -18,7 +18,7 @@ public class Snippet : IAuditableEntity
     public required string Content { get; set; }
 
     [MaxLength(100)]
-    public required string Language { get; set; } = SnippetLanguage.None;
+    public required string Language { get; set; }
     public List<Tag>? Tags { get; set; } = [];
     public bool IsPrivate { get; set; } = false;
     public int ViewCount { get; set; }

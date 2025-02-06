@@ -9,6 +9,6 @@ public class AddSnippetDto
 
     [MaxLength(4000)]
     public required string Content { get; set; }
-    public required string Language { get; set; } = SnippetLanguage.None;
+    public required string Language { get; set; }
     public List<string>? TagIds { get; set; } = [];
 }

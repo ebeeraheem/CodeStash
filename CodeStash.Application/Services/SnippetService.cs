@@ -30,7 +30,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
             return Result.Failure(UserErrors.UserNotFound);
         }
 
-        if (!SnippetLanguage.IsValid(request.Language))
+        if (!LanguageCategories.IsValid(request.Language))
         {
             return Result.Failure(SnippetErrors.InvalidLanguage);
         }
@@ -122,7 +122,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
     public Result<List<string?>> GetAllSnippetLanguages()
     {
-        var languages = SnippetLanguage.GetAll();
+        var languages = LanguageCategories.GetAllLanguages();
 
         return Result<List<string?>>.Success(languages);
     }
@@ -168,7 +168,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
 
         if (!string.IsNullOrWhiteSpace(request.Language))
         {
-            if (!SnippetLanguage.IsValid(request.Language))
+            if (!LanguageCategories.IsValid(request.Language))
             {
                 return Result.Failure(SnippetErrors.InvalidLanguage);
             }

@@ -48,6 +48,8 @@ public static class LanguageCategories
         public const string Csharp = "C#";
         public const string Fsharp = "F#";
         public const string VisualBasic = "Visual Basic";
+        public const string JavaScript = "JavaScript";
+        public const string TypeScript = "TypeScript";
         public const string Python = "Python";
         public const string Java = "Java";
         public const string Kotlin = "Kotlin";
@@ -164,6 +166,9 @@ public static class LanguageCategories
     {
         public const string Jinja = "Jinja";
         public const string IDL = "IDL";
+        public const string None = "None";
+        public const string PlainText = "PlainText";
+        public const string Unknown = "Unknown";
     }
 
     // Helper method to get all available languages
@@ -176,6 +181,12 @@ public static class LanguageCategories
             .Select(f => f.GetValue(null)?.ToString())
             .Where(value => value != null) // Filter out null values just in case
             .ToList();
+    }
+
+    // Helper method to check if a language is valid
+    public static bool IsValid(string language)
+    {
+        return GetAllLanguages().Contains(language.ToLower());
     }
 
     // Method to get a dictionary of all categories and their respective languages

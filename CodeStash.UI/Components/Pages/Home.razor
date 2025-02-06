@@ -1,7 +1,32 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>CodeStash</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudText Typo="Typo.h1" Style="font-size:2.5rem;font-weight:600;line-height:1.5;">
+    Stash. Sync. Share.
+</MudText>
 
-Welcome to your new app.
+
+<MudText Typo="Typo.h2" Style="font-size:1.5rem;font-weight:400;">
+    Discover, share, and reuse quality code snippets from the developer community
+</MudText>
+
+@* Popular Languages *@
+<MudText Typo="Typo.h3" Class="fs-4">
+    Popular Languages
+</MudText>
+
+<MudContainer Class="d-flex justify-content-start ms-0 flex-grow-1 my-3 gap-4" MaxWidth="MaxWidth.Medium">
+    @foreach (var language in PopularLanguages)
+    {
+        <MudLink Href="@($"snippets/{language}")"
+            Class="d-flex py-2 align-center mud-border-tertiary rounded-pill flex-1 cursor-pointer justify-center border"
+            Color="Color.Tertiary">
+            @language
+        </MudLink>
+    }
+</MudContainer>
+
+@code{
+    string[] PopularLanguages = { "JavaScript", "Python", "Java", "TypeScript", "C#", "PHP" };
+}
