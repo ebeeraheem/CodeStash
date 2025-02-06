@@ -56,7 +56,17 @@
                 AppbarBackground = CodeStashColors.AppbarBackground,
                 DrawerBackground = CodeStashColors.DrawerBackground,
             },
-            
+            Typography = new Typography()
+            {
+                Default = new DefaultTypography()
+                {
+                    FontFamily = new[] { "Quicksand", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "1rem",
+                    FontWeight = "400",
+                    LineHeight = "1.43",
+                    LetterSpacing = ".01071em"
+                }
+            }
         };
 
     async Task<IEnumerable<string>> FindSnippets(string value, CancellationToken token)
