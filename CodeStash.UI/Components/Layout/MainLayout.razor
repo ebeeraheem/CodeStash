@@ -18,7 +18,7 @@
         Color="Color.Inherit" Edge="Edge.Start"
         OnClick="@((e) => DrawerToggle())" />
 
-        <MudLink Href="/" Class="fw-bold d-flex align-center" Underline="Underline.None">
+        <MudLink Href="/" Style="font-weight:600;font-size:1.25rem" Class="d-flex align-center" Underline="Underline.None">
             <MudIcon Icon="@logo" Class="z-100" />
             CodeStash
         </MudLink>
@@ -34,7 +34,7 @@
 
         <MudSpacer />
     </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen" Class="border-r" Style="@($"border-color:{CodeStashColors.Primary40}")">
+    <MudDrawer @bind-Open="@_drawerOpen" Class="pt-10 border-r" Style="@($"border-color:{CodeStashColors.Primary40}")">
         <MyNavMenu/>
     </MudDrawer>
     <MudMainContent>
