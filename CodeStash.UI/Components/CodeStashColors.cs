@@ -8,4 +8,9 @@ public static class CodeStashColors
     public const string Background = "#02182B";
     public const string AppbarBackground = "#02182B";
     public const string DrawerBackground = "#02182B";
+
+    // 40% transparency
+    public const string Primary40 = "#B5F8FE66";
+    public const string Secondary40 = "#0081AF66";
+    public const string Tertiary40 = "#34D39966";
 }
