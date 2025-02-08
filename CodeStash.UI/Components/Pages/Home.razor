@@ -22,10 +22,7 @@
     @foreach (var language in PopularLanguages)
     {
         <MudLink Href="@($"snippets/{language}")"
-                 id="@($"link-{language}")"
-                 @onmouseover="() => SetHoverBackground(language, CodeStashColors.Secondary40)"
-                 @onmouseout="() => ResetBackground(language)"
-                Class="d-flex py-2 align-center mud-border-primary rounded-pill popular flex-1 cursor-pointer justify-center border"
+                 Class="d-flex py-2 align-center mud-border-primary rounded-pill popular-languages flex-1 cursor-pointer justify-center border"
                 Underline="Underline.None"
                  Style="transition:background-color 0.1s ease-in-out"
                 Color="Color.Primary">
@@ -35,16 +32,5 @@
 </MudContainer>
 
 @code{
-    private MudTheme Theme = new MudTheme();
     private string[] PopularLanguages = { "JavaScript", "Python", "Java", "TypeScript", "C#", "PHP" };
-    
-    private async Task SetHoverBackground(string language, string color)
-    {
-        await JS.InvokeVoidAsync("setBackground", $"link-{language}", color);
-    }
-
-    private async Task ResetBackground(string language, string color = "transparent")
-    {
-        await JS.InvokeVoidAsync("setBackground", $"link-{language}", color);
-    }
 }
