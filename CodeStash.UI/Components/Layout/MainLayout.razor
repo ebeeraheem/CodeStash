@@ -9,15 +9,13 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <MudAppBar 
-        Class="d-flex justify-space-between"
-               Elevation="0">
-
+    <MudAppBar Class="d-flex justify-space-between" Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
-        Class="d-md-none"
-        Color="Color.Inherit" Edge="Edge.Start"
-        OnClick="@((e) => DrawerToggle())" />
+                Class="d-md-none"
+                Color="Color.Inherit" Edge="Edge.Start"
+                OnClick="@((e) => DrawerToggle())" />
 
+        @* Site Logo *@
         <MudLink Href="/" Style="font-weight:600;font-size:1.25rem" Class="d-flex align-center" Underline="Underline.None">
             <MudIcon Icon="@logo" Class="z-100" />
             CodeStash
@@ -25,14 +23,24 @@
 
         <MudSpacer />
 
+        @* Search input *@
         <MudAutocomplete
-        @bind-Value="_searchTerm" 
-        SearchFunc="@FindSnippets"
-        Placeholder="Find snippets"
-        AdornmentIcon="@Icons.Material.Filled.Search"
-        AdornmentColor="Color.Primary" />
+                @bind-Value="_searchTerm" 
+                SearchFunc="@FindSnippets"
+                Placeholder="Find snippets"
+                AdornmentIcon="@Icons.Material.Filled.Search"
+                AdornmentColor="Color.Primary" />
 
         <MudSpacer />
+
+        @* Sign in link *@
+        <MudLink Href="/account/login" 
+                Underline="Underline.None"
+                Class="rounded-pill sign-in d-block px-4 py-2 border"
+                Color="Color.Primary">
+            Sign In
+        </MudLink>
+
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen" Class="pt-10 border-r" Style="@($"border-color:{CodeStashColors.Primary40}")">
         <MyNavMenu/>

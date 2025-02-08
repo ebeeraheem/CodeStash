@@ -1,7 +1,19 @@
-/* Popular Languages Home.razor */
+/*** Home.razor ***/
+/* Popular Languages  */
+.popular-languages {
+    transition: background-color 0.1s ease-in-out;
+}
 .popular-languages:hover {
     background-color: #0081AF66;
 }
+
+.sign-in {
+    transition: background-color 0.1s ease-in-out;
+}
+.sign-in:hover {
+    background-color: #0081AF66;
+}
+
 
 /* Global error handling */
 .content {
