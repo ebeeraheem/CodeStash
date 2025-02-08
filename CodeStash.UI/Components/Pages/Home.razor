@@ -1,9 +1,10 @@
 ﻿@page "/"
+@inject IJSRuntime JS
 
 <PageTitle>CodeStash</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="my-5">
-    <MudText Typo="Typo.h1" Align="Align.Center">
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-2 mb-8">
+    <MudText Typo="Typo.h1" Align="Align.Center" Style="@($"color:{CodeStashColors.Primary}")">
         Stash. Sync. Share.
     </MudText>
 
@@ -13,7 +14,7 @@
 </MudContainer>
 
 @* Popular Languages *@
-<MudText Typo="Typo.h3">
+<MudText Typo="Typo.h3" Style="font-weight:600">
     Popular Languages
 </MudText>
 
@@ -21,13 +22,29 @@
     @foreach (var language in PopularLanguages)
     {
         <MudLink Href="@($"snippets/{language}")"
-                 Class="d-flex py-2 align-center mud-border-primary rounded-pill flex-1 cursor-pointer justify-center border"
-            Color="Color.Primary">
+                 id="@($"link-{language}")"
+                 @onmouseover="() => SetHoverBackground(language, CodeStashColors.Secondary40)"
+                 @onmouseout="() => ResetBackground(language)"
+                Class="d-flex py-2 align-center mud-border-primary rounded-pill popular flex-1 cursor-pointer justify-center border"
+                Underline="Underline.None"
+                 Style="transition:background-color 0.1s ease-in-out"
+                Color="Color.Primary">
             @language
         </MudLink>
     }
 </MudContainer>
 
 @code{
-    string[] PopularLanguages = { "JavaScript", "Python", "Java", "TypeScript", "C#", "PHP" };
+    private MudTheme Theme = new MudTheme();
+    private string[] PopularLanguages = { "JavaScript", "Python", "Java", "TypeScript", "C#", "PHP" };
+    
+    private async Task SetHoverBackground(string language, string color)
+    {
+        await JS.InvokeVoidAsync("setBackground", $"link-{language}", color);
+    }
+
+    private async Task ResetBackground(string language, string color = "transparent")
+    {
+        await JS.InvokeVoidAsync("setBackground", $"link-{language}", color);
+    }
 }
