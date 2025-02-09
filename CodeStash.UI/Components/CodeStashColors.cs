@@ -10,7 +10,7 @@ public static class CodeStashColors
     public const string DrawerBackground = "#02182B";
 
     // 40% transparency
-    public const string Primary40 = "#00FFFF";
+    public const string Primary40 = "#00FFFF66";
     public const string Secondary40 = "#0081AF66";
     public const string Tertiary40 = "#34D39966";
 }
