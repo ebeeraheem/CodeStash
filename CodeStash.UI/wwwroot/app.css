@@ -28,6 +28,19 @@
     font-weight: 600;
 }
 
+/* PrivacyPolicy.razor and TermsOfService.razor*/
+.full-card{
+    margin: 3rem;
+}
+.full-card h1{
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+.full-card .mud-list-item-clickable:hover{
+    cursor: default;
+    background-color: inherit;
+}
+
 /* Global error handling */
 .content {
     padding-top: 1.1rem;
