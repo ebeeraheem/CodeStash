@@ -2,7 +2,8 @@
 @layout Layout.FullWidthLayout
 @using CodeStash.Application.Models
 
-<h1>Register</h1>
+<Logo/>
+<h1 style="font-size: 1.5rem;">Sign up</h1>
 
 <EditForm Model="@RegisterModel" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -54,6 +55,15 @@
     </MudGrid>
 </EditForm>
 
+<MudText Align="Align.Center" Typo="Typo.subtitle1" Class="mt-3 mb-7">
+    Already have an account? <MudLink Href="/login">Login</MudLink>
+</MudText>
+
+<MudText Align="Align.Center" Typo="Typo.subtitle2">
+    By continuing, you are agreeing to CodeStash's 
+    <MudLink Typo="Typo.subtitle2" Href="#">Terms of Service</MudLink> and 
+    <MudLink Typo="Typo.subtitle2" Href="#">Privacy Policy</MudLink>.
+</MudText>
 
 @code {
     bool isShow;
