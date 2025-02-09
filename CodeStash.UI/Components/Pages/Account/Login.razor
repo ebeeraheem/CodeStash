@@ -1,5 +1,77 @@
 ﻿@page "/login"
 @layout Layout.AuthLayout
+@using CodeStash.Application.Models
 
 <Logo />
-<h1>Login</h1>
+<h1 style="font-size: 1.5rem;">Sign in</h1>
+
+<EditForm Model="@LoginModel" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7" id="auth-form">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Email" Class="mt-3" Required="true" AutoFocus="true"
+                                  RequiredError="Invalid email address"
+                                  @bind-Value="LoginModel.Email" For="@(() => LoginModel.Email)" />
+
+                    <MudTextField Label="Password" Class="mt-3"
+                                  @bind-Value="LoginModel.Password"
+                                  Required="true"
+                                  RequiredError="Password is required"
+                                  For="@(() => LoginModel.Password)"
+                                  Adornment="Adornment.End"
+                                  Immediate="true"
+                                  AdornmentIcon="@PasswordInputIcon"
+                                  OnAdornmentClick="TogglePasswordVisibility"
+                                  AdornmentAriaLabel="Show Password"
+                                  InputType="@PasswordInput" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="ml-auto">Login</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+<MudText Align="Align.Center" Typo="Typo.subtitle1" Class="mt-3 mb-7">
+    Don't have an account? <MudLink Href="/register">Sign up</MudLink>
+</MudText>
+
+@code {
+    bool isShow;
+
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    private LoginModel LoginModel = new LoginModel
+        {
+            Email = string.Empty,
+            Password = string.Empty,
+        };
+
+    private void TogglePasswordVisibility()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        StateHasChanged();
+    }
+}

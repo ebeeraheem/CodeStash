@@ -15,14 +15,14 @@
 }
 
 /*** Register.razor ***/
-#register-form{
+#auth-form{
     flex: 1 1 auto;
     max-width: 100%;
 }
-#register-form .mud-card{
+#auth-form .mud-card{
     background-color: transparent;
 }
-#register-form .mud-button{
+#auth-form .mud-button{
     width: 100%;
     color: black;
     font-weight: 600;
