@@ -2,13 +2,14 @@
 
 <MudThemeProvider Theme="csTheme" @ref="@_themeProvider" @bind-IsDarkMode="@_isDarkMode" />
 
-<div class="full-container">
-    
+<div class="auth-container">
+    <div class="auth-card">
         @Body
+    </div>
 </div>
 
 <style>
-    .full-container {
+    .auth-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -17,14 +18,14 @@
         padding: 1rem;
     }
 
-    .full-card {
+    .auth-card {
         background: #02182B;
-        padding: 2rem;
+        padding: 2rem 1rem;
         border: 1px solid #00FFFF;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 960px;
+        max-width: 400px;
     }
 </style>
 

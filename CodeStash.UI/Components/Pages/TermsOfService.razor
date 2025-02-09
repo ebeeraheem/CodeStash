@@ -1,0 +1,112 @@
+﻿@page "/terms-of-service"
+@layout Layout.FullWidthLayout
+@inject IConfiguration Configuration
+
+<Logo FontSizeText="2" />
+
+<div class="full-card">
+    <article class="my-5 container">
+        <h1>Terms of Service</h1>
+
+        <p>
+            Welcome to <strong>CodeStash</strong> (“we”, “our”, or “the Platform”). CodeStash is a secure and organized place to stash, manage, and share your code snippets with ease. These Terms of Service (“Terms”) govern your use of our website, <a href="@Configuration["CodeStash:UIUrl"]" target="_blank" rel="noopener noreferrer">codestash.ng</a> (the “Site”), and any related services provided by CodeStash.
+        </p>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>
+            By accessing or using CodeStash, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use the Platform.
+        </p>
+
+        <h2>2. Eligibility</h2>
+        <p>
+            You must be at least 13 years old to use CodeStash. By using our services, you represent and warrant that you meet the minimum age requirement.
+        </p>
+
+        <h2>3. User Accounts</h2>
+        <ul>
+            <li>
+                <strong>Registration:</strong> In order to post code snippets, you must create an account. During registration, you will be asked to provide your first name, last name, email address, and a username. You may however copy code snippets and interact with the Platform even without registering.
+            </li>
+            <li>
+                <strong>Account Management:</strong> You are responsible for maintaining the confidentiality of your account information. You may delete your account at any time through the provided account settings or by contacting us.
+            </li>
+            <li>
+                <strong>Accuracy of Information:</strong> You agree to provide accurate, current, and complete information during the registration process and to update such information as needed.
+            </li>
+        </ul>
+
+        <h2>4. User-Generated Content</h2>
+        <ul>
+            <li>
+                <strong>Ownership and License:</strong> By posting a code snippet on CodeStash, you acknowledge and agree that the snippet becomes the property of the Platform. This grants CodeStash the right to use, display, modify, and distribute your code snippets as it sees fit.
+            </li>
+            <li>
+                <strong>Content Restrictions:</strong>
+                <ul>
+                    <li>You may not post copyrighted code snippets unless you possess the appropriate license or authorization to do so.</li>
+                    <li>You may not post malicious code or any content that is illegal or harmful. CodeStash reserves the right to remove any content that violates these rules.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>5. Content Moderation and Reporting</h2>
+        <ul>
+            <li>
+                <strong>Moderation:</strong> We reserve the right to review, moderate, and remove any user-generated content that violates these Terms or is deemed inappropriate at our sole discretion.
+            </li>
+            <li>
+                <strong>Reporting Violations:</strong> While we plan to introduce a formal reporting mechanism in the future, please feel free to contact us at <a href="mailto:@Configuration["CodeStash:Email"]">info@codestash.ng</a> if you encounter content that you believe violates these Terms.
+            </li>
+        </ul>
+
+        <h2>6. Termination Policy</h2>
+        <p>
+            We reserve the right to suspend or terminate user accounts and access to the Platform at our discretion if you:
+        </p>
+        <ul>
+            <li>Share copyrighted content without proper licensing.</li>
+            <li>Share malicious code or any content that is harmful to users or the Platform.</li>
+            <li>Violate any of these Terms or engage in any other activity that, in our sole judgment, is harmful to the Platform or its users.</li>
+        </ul>
+
+        <h2>7. Liability Disclaimer</h2>
+        <p>
+            CodeStash is provided on an “as is” and “as available” basis. We make no warranties regarding the reliability, accuracy, or usefulness of any code snippets shared on the Platform. You assume full responsibility and risk for any use of the content available on CodeStash. In no event shall CodeStash be liable for any damages arising from your use of the Platform.
+        </p>
+
+        <h2>8. Changes to the Terms</h2>
+        <p>
+            We may update these Terms from time to time. Your continued use of CodeStash after any changes constitutes your acceptance of the updated Terms. Please review these Terms periodically for any changes.
+        </p>
+
+        <h2>9. Governing Law</h2>
+        <p>
+            These Terms are governed by and construed in accordance with the laws applicable to the developer’s place of business. Any disputes arising from these Terms shall be resolved in the appropriate courts of that jurisdiction.
+        </p>
+
+        <h2>10. Contact Information</h2>
+        <p>
+            If you have any questions or concerns about these Terms, please contact us at <a href="mailto:@Configuration["CodeStash:Email"]">info@codestash.ng</a>.
+        </p>
+
+        <p><strong>Last updated:</strong> 9th February, 2025</p>
+    </article>
+</div>
+
+@code {
+
+}
+
+<style>
+    .full-card {
+        background: #02182B;
+        padding: 2rem;
+        border: 1px solid #00FFFF;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 960px;
+    }
+</style>
+
+

@@ -1,8 +1,8 @@
 ﻿@page "/register"
-@layout Layout.FullWidthLayout
+@layout Layout.AuthLayout
 @using CodeStash.Application.Models
 
-<Logo/>
+<Logo />
 <h1 style="font-size: 1.5rem;">Sign up</h1>
 
 <EditForm Model="@RegisterModel" OnValidSubmit="OnValidSubmit">
@@ -61,8 +61,8 @@
 
 <MudText Align="Align.Center" Typo="Typo.subtitle2">
     By continuing, you are agreeing to CodeStash's 
-    <MudLink Typo="Typo.subtitle2" Href="#">Terms of Service</MudLink> and 
-    <MudLink Typo="Typo.subtitle2" Href="#">Privacy Policy</MudLink>.
+    <MudLink Typo="Typo.subtitle2" Href="/terms-of-service">Terms of Service</MudLink> and
+    <MudLink Typo="Typo.subtitle2" Href="/privacy-policy">Privacy Policy</MudLink>.
 </MudText>
 
 @code {

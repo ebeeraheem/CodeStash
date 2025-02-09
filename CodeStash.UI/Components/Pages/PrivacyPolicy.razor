@@ -1,0 +1,90 @@
+﻿@page "/privacy-policy"
+@layout Layout.FullWidthLayout
+@inject IConfiguration Configuration
+
+<Logo FontSizeText="2" />
+
+<div class="full-card">
+    <article class="my-5 container">
+        <h1>Privacy Policy</h1>
+
+        <p>
+            This Privacy Policy explains how CodeStash (“we”, “our”, or “the Platform”) collects, uses, and protects your personal information when you use our website, <a href="@Configuration["CodeStash:UIUrl"]" target="_blank" rel="noopener noreferrer">codestash.ng</a> (the “Site”). By using CodeStash, you agree to the practices described in this Privacy Policy.
+        </p>
+
+        <h2>1. Information We Collect</h2>
+        <p>
+            When you register for an account or interact with CodeStash, we collect the following personal information:
+        </p>
+        <ul>
+            <li>First Name and Last Name</li>
+            <li>Email Address</li>
+        </ul>
+
+        <h2>2. How We Use Your Information</h2>
+        <ul>
+            <li>
+                <strong>Authentication:</strong> To verify your identity and provide you with access to your account.
+            </li>
+            <li>
+                <strong>Service Improvement:</strong> To help us improve the Platform and develop new features.
+            </li>
+            <li>
+                <strong>Analytics:</strong> To analyze how CodeStash is used and to monitor and improve the performance of the Site.
+            </li>
+        </ul>
+
+        <h2>3. Third-Party Sharing</h2>
+        <p>
+            <strong>No Third-Party Sharing (For Now):</strong> We do not currently share your personal information with third parties. This may be subject to change in the future; if it does, we will update this Privacy Policy accordingly.
+        </p>
+
+        <h2>4. Security</h2>
+        <p>
+            We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, disclosure, or misuse. While we take reasonable steps to secure your data, no online service is completely secure.
+        </p>
+
+        <h2>5. Cookies and Tracking Technologies</h2>
+        <p>
+            At this time, CodeStash does not collect data via cookies or other tracking technologies. Should this change, we will update our Privacy Policy to reflect those practices.
+        </p>
+
+        <h2>6. Your Rights and Choices</h2>
+        <ul>
+            <li>
+                <strong>Access and Updates:</strong> You can access and update your account information at any time through your account settings.
+            </li>
+            <li>
+                <strong>Data Deletion:</strong> If you wish to delete your account or have any concerns about your personal data, please contact us at <a href="mailto:@Configuration["CodeStash:Email"]">info@codestash.ng</a>. (Note: While we currently do not have a formal process for data deletion requests beyond account deletion, we will consider such requests in accordance with applicable law.)
+            </li>
+        </ul>
+
+        <h2>7. Legal Compliance and Changes</h2>
+        <p>
+            We reserve the right to modify this Privacy Policy at any time. When we do, we will update the “Last updated” date at the bottom of this document and post the revised policy on the Site. Your continued use of CodeStash after such changes constitutes your acceptance of the updated Privacy Policy.
+        </p>
+
+        <h2>8. Contact Information</h2>
+        <p>
+            If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <a href="mailto:@Configuration["CodeStash:Email"]">info@codestash.ng</a>.
+        </p>
+
+        <p><strong>Last updated:</strong> 9th February, 2025</p>
+    </article>
+</div>
+
+@code{
+
+}
+
+<style>
+    .full-card {
+        background: #02182B;
+        padding: 2rem;
+        border: 1px solid #00FFFF;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 960px;
+    }
+</style>
