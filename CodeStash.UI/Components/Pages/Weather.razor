@@ -22,7 +22,7 @@ else
 @code {
     private List<string?>? languages;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         var result = snippetService.GetAllSnippetLanguages();
 

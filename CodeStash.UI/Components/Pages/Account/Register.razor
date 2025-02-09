@@ -1,4 +1,135 @@
 ﻿@page "/register"
 @layout Layout.FullWidthLayout
+@using CodeStash.Application.Models
 
 <h1>Register</h1>
+
+<EditForm Model="@RegisterModel" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7" id="register-form">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="First name" AutoFocus="true"
+                    @bind-Value="RegisterModel.FirstName" For="@(() => RegisterModel.FirstName)" />
+
+                    <MudTextField Label="Last name" Class="mt-3"
+                    @bind-Value="RegisterModel.LastName" For="@(() => RegisterModel.LastName)" />
+
+                    <MudTextField Label="Username" Class="mt-3" Required="true"
+                    RequiredError="Username is required"
+                    @bind-Value="RegisterModel.UserName" For="@(() => RegisterModel.UserName)" />
+
+                    <MudTextField Label="Email" Class="mt-3" Required="true"
+                    RequiredError="Email is required"
+                    @bind-Value="RegisterModel.Email" For="@(() => RegisterModel.Email)" />
+
+                    <MudTextField Label="Password" Class="mt-3"
+                    @bind-Value="RegisterModel.Password"
+                    Required="true"
+                    RequiredError="Password is required"
+                    OnBlur="ValidatePassword" 
+                    Error="PasswordError"
+                    ErrorText="Password must be at least 8 characters long"
+                    For="@(() => RegisterModel.Password)"
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    TextChanged="CheckPasswordStrength"
+                    AdornmentIcon="@PasswordInputIcon"
+                    OnAdornmentClick="TogglePasswordVisibility"
+                    AdornmentAriaLabel="Show Password"
+                    InputType="@PasswordInput" />
+
+                    <MudProgressLinear Value="@PasswordStrength" Color="@PasswordStrengthColor"
+                    Class="mt-2" Height="5px" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" 
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    Class="ml-auto">Register</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+
+@code {
+    bool isShow;
+    bool PasswordError = false;
+
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    private int PasswordStrength = 0;
+    private Color PasswordStrengthColor = Color.Default;
+
+    private RegisterModel RegisterModel = new RegisterModel
+    {
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            UserName = string.Empty,
+            Email = string.Empty,
+            Password = string.Empty,
+    };
+
+    private void TogglePasswordVisibility()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private void ValidatePassword()
+    {
+        PasswordError = string.IsNullOrWhiteSpace(RegisterModel.Password) || RegisterModel.Password.Length < 8;
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        StateHasChanged();
+    }
+
+    private void CheckPasswordStrength()
+    {
+        string password = RegisterModel.Password;
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            PasswordStrength = 0;
+            PasswordStrengthColor = Color.Default;
+            return;
+        }
+
+        int score = 0;
+
+        if (password.Length >= 8) score++;
+        if (password.Any(char.IsUpper)) score++;
+        if (password.Any(char.IsLower)) score++;
+        if (password.Any(char.IsDigit)) score++;
+        if (password.Any(ch => !char.IsLetterOrDigit(ch))) score++;
+
+        PasswordStrength = score * 20; // Convert to percentage
+
+        // Change color based on strength
+        PasswordStrengthColor = score switch
+        {
+            0 => Color.Default,
+            1 => Color.Error,
+            2 => Color.Warning,
+            3 => Color.Warning,
+            4 => Color.Info,
+            5 => Color.Success,
+            _ => Color.Default
+        };
+    }
+}

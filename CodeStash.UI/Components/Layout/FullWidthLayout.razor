@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider Theme="csTheme" @ref="@_themeProvider" @bind-IsDarkMode="@_isDarkMode" />
+
 <div class="auth-container">
     <div class="auth-card">
         @Body
@@ -26,3 +28,9 @@
         max-width: 400px;
     }
 </style>
+
+@code {
+    private MudThemeProvider _themeProvider = new();
+    bool _isDarkMode = true;
+    private MudTheme csTheme = CodeStashThemes.DarkTheme;
+}

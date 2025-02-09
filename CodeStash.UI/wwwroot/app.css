@@ -14,6 +14,19 @@
     background-color: #0081AF66;
 }
 
+/*** Register.razor ***/
+#register-form{
+    flex: 1 1 auto;
+    max-width: 100%;
+}
+#register-form .mud-card{
+    background-color: transparent;
+}
+#register-form .mud-button{
+    width: 100%;
+    color: black;
+    font-weight: 600;
+}
 
 /* Global error handling */
 .content {
