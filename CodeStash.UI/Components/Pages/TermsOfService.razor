@@ -9,7 +9,7 @@
         <MudText Typo="Typo.h1" Align="Align.Center">Terms of Service</MudText>
         <MudText Typo="Typo.body1" GutterBottom="true">
             Welcome to <strong>CodeStash</strong> (“we”, “our”, or “the Platform”). CodeStash is a secure and organized place to stash, manage, and share your code snippets with ease. These Terms of Service (“Terms”) govern your use of our website, 
-            <MudLink Href="@Configuration["CodeStash:UIUrl"]" Target="_blank" rel="noopener noreferrer">codestash.ng</MudLink> (the “Site”), and any related services provided by CodeStash.
+            <MudLink Href="@Configuration["CodeStash:UIUrl"]" Target="_blank" rel="noopener noreferrer">@Configuration["CodeStash:UIUrl"]?.Substring(8)</MudLink> (the “Site”), and any related services provided by CodeStash.
         </MudText>
 
         <MudText Typo="Typo.h2">1. Acceptance of Terms</MudText>
@@ -60,7 +60,7 @@
                 </MudListItem>
             <MudListItem>
                 <strong>Reporting Violations:</strong> While we plan to introduce a formal reporting mechanism in the future, please feel free to contact us at
-                <MudLink Href="@($"mailto:{Configuration["CodeStash:Email"]}")" Color="Color.Primary">info@codestash.ng</MudLink>
+                <MudLink Href="@($"mailto:{Configuration["CodeStash:Email"]}")" Color="Color.Primary">@Configuration["CodeStash:Email"]</MudLink>
                 if you encounter content that you believe violates these Terms.
             </MudListItem>
         </MudList>
@@ -95,16 +95,12 @@
         <MudText Typo="Typo.h2">10. Contact Information</MudText>
         <MudText Typo="Typo.body1" GutterBottom="true">
             If you have any questions or concerns about these Terms, please contact us at 
-            <MudLink Href="@($"mailto:{Configuration["CodeStash:Email"]}")" Color="Color.Primary">info@codestash.ng</MudLink>.
+            <MudLink Href="@($"mailto:{Configuration["CodeStash:Email"]}")" Color="Color.Primary">@Configuration["CodeStash:Email"]</MudLink>.
         </MudText>
         
-        <MudText Typo="Typo.body1"><strong>Last updated:</strong> 9th February, 2025</MudText>
+        <MudText Typo="Typo.body1"><em><strong>Last updated:</strong> 9th February, 2025</em></MudText>
     </article>
 </div>
-
-@code {
-
-}
 
 <style>
     .full-card {

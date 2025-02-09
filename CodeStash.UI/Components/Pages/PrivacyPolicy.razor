@@ -6,76 +6,77 @@
 
 <div class="full-card">
     <article class="container">
-        <h1>Privacy Policy</h1>
+        <MudText Typo="Typo.h1" Align="Align.Center">Privacy Policy</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
+            This Privacy Policy explains how CodeStash (“we”, “our”, or “the Platform”) collects, uses, and protects your personal information when you use our website, <MudLink Href="@Configuration["CodeStash:UIUrl"]" Target="_blank" rel="noopener noreferrer">@Configuration["CodeStash:UIUrl"]?.Substring(8)</MudLink> (the “Site”). By using CodeStash, you agree to the practices described in this Privacy Policy.
+        </MudText>
 
-        <p>
-            This Privacy Policy explains how CodeStash (“we”, “our”, or “the Platform”) collects, uses, and protects your personal information when you use our website, <a href="@Configuration["CodeStash:UIUrl"]" target="_blank" rel="noopener noreferrer">codestash.ng</a> (the “Site”). By using CodeStash, you agree to the practices described in this Privacy Policy.
-        </p>
-
-        <h2>1. Information We Collect</h2>
-        <p>
+        <MudText Typo="Typo.h2">1. Information We Collect</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
             When you register for an account or interact with CodeStash, we collect the following personal information:
-        </p>
-        <ul>
-            <li>First Name and Last Name</li>
-            <li>Email Address</li>
-        </ul>
+        </MudText>
 
-        <h2>2. How We Use Your Information</h2>
-        <ul>
-            <li>
+        <MudList T="string">
+            <MudListItem>First Name and Last Name</MudListItem>
+            <MudListItem>Email Address</MudListItem>
+        </MudList>
+
+
+        <MudText Typo="Typo.h2">2. How We Use Your Information</MudText>
+        <MudList T="string">
+            <MudListItem>
                 <strong>Authentication:</strong> To verify your identity and provide you with access to your account.
-            </li>
-            <li>
+            </MudListItem>
+            <MudListItem>
                 <strong>Service Improvement:</strong> To help us improve the Platform and develop new features.
-            </li>
-            <li>
+            </MudListItem>
+            <MudListItem>
                 <strong>Analytics:</strong> To analyze how CodeStash is used and to monitor and improve the performance of the Site.
-            </li>
-        </ul>
+            </MudListItem>
+        </MudList>
 
-        <h2>3. Third-Party Sharing</h2>
-        <p>
+        <MudText Typo="Typo.h2">3. Third-Party Sharing</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
             <strong>No Third-Party Sharing (For Now):</strong> We do not currently share your personal information with third parties. This may be subject to change in the future; if it does, we will update this Privacy Policy accordingly.
-        </p>
-
-        <h2>4. Security</h2>
-        <p>
+        </MudText>
+        
+        <MudText Typo="Typo.h2">4. Security</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
             We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, disclosure, or misuse. While we take reasonable steps to secure your data, no online service is completely secure.
-        </p>
+        </MudText>
 
-        <h2>5. Cookies and Tracking Technologies</h2>
-        <p>
+        <MudText Typo="Typo.h2">5. Cookies and Tracking Technologies</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
             At this time, CodeStash does not collect data via cookies or other tracking technologies. Should this change, we will update our Privacy Policy to reflect those practices.
-        </p>
+        </MudText>
 
-        <h2>6. Your Rights and Choices</h2>
-        <ul>
-            <li>
+        <MudText Typo="Typo.h2">6. Your Rights and Choices</MudText>
+        <MudList T="string">
+            <MudListItem>
                 <strong>Access and Updates:</strong> You can access and update your account information at any time through your account settings.
-            </li>
-            <li>
-                <strong>Data Deletion:</strong> If you wish to delete your account or have any concerns about your personal data, please contact us at <a href="mailto:@Configuration["CodeStash:Email"]">info@codestash.ng</a>. (Note: While we currently do not have a formal process for data deletion requests beyond account deletion, we will consider such requests in accordance with applicable law.)
-            </li>
-        </ul>
+            </MudListItem>
+            <MudListItem>
+                <strong>Data Deletion:</strong> If you wish to delete your account or have any concerns about your personal data, please contact us at <MudLink Href="@($"mailto:{Configuration["CodeStash:Email"]}")" Color="Color.Primary">@Configuration["CodeStash:Email"]</MudLink>. (Note: While we currently do not have a formal process for data deletion requests beyond account deletion, we will consider such requests in accordance with applicable law.)
+            </MudListItem>
+        </MudList>
 
-        <h2>7. Legal Compliance and Changes</h2>
-        <p>
+        <MudText Typo="Typo.h2">7. Legal Compliance and Changes</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
             We reserve the right to modify this Privacy Policy at any time. When we do, we will update the “Last updated” date at the bottom of this document and post the revised policy on the Site. Your continued use of CodeStash after such changes constitutes your acceptance of the updated Privacy Policy.
-        </p>
+        </MudText>
+        
+        <MudText Typo="Typo.body1" GutterBottom="true">
+            We may disclose your personal information if required to do so by law or in response to valid requests by public authorities (e.g., a court or a government agency).
+        </MudText>
 
-        <h2>8. Contact Information</h2>
-        <p>
-            If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <a href="mailto:@Configuration["CodeStash:Email"]">info@codestash.ng</a>.
-        </p>
+        <MudText Typo="Typo.h2">8. Contact Information</MudText>
+        <MudText Typo="Typo.body1" GutterBottom="true">
+            If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <MudLink Href="@($"mailto:{Configuration["CodeStash:Email"]}")" Color="Color.Primary">@Configuration["CodeStash:Email"]</MudLink>.
+        </MudText>
 
-        <p><strong>Last updated:</strong> 9th February, 2025</p>
+        <MudText Typo="Typo.body1"><em><strong>Last updated:</strong> 9th February, 2025</em></MudText>
     </article>
 </div>
-
-@code{
-
-}
 
 <style>
     .full-card {

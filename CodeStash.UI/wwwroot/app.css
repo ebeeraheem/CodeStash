@@ -36,6 +36,10 @@
     font-size: 3rem;
     margin-bottom: 1.5rem;
 }
+.full-card em{
+    display: block;
+    padding-top: 3rem;
+}
 .full-card .mud-list-item-clickable:hover{
     cursor: default;
     background-color: inherit;
