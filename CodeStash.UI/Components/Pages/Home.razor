@@ -13,36 +13,46 @@
     </MudText>
 </MudContainer>
 
-@*
+
+<MudContainer MaxWidth="MaxWidth.Medium" >
+    @*
     @bind-Value="searchQuery"
     OnKeyUp="@HandleKeyUp"
     TextChanged="@(async (string s) => await OnSearchChanged(s))"
-*@
-<MudTextField T="string"
-              Label="Search snippets..."
-                Variant="Variant.Outlined"
-                Adornment="Adornment.End"
-                AdornmentIcon="@Icons.Material.Filled.Search"
-                Class="ma-4"
-                Style="@($"background-color:{CodeStashColors.Background}")" />
-
-@* Popular Languages *@
-<MudText Typo="Typo.h3" Style="font-weight:600">
-    Popular Languages
-</MudText>
-
-<MudContainer Class="d-flex justify-content-start ms-0 flex-grow-1 my-3 gap-4" MaxWidth="MaxWidth.Medium">
-    @foreach (var language in PopularLanguages)
-    {
-        <MudLink Href="@($"snippets/{language}")"
-                 Class="d-flex py-2 align-center mud-border-primary rounded-pill popular-languages flex-1 cursor-pointer justify-center border"
-                Underline="Underline.None"
-                Color="Color.Primary">
-            @language
-        </MudLink>
-    }
+    *@
+    <MudTextField T="string"
+                  Label="Search snippets..."
+                  Variant="Variant.Filled"
+                  Adornment="Adornment.End"
+                  AdornmentIcon="@Icons.Material.Filled.Search"
+                  Class="ma-md-4"
+                  Style="@($"background-color:{CodeStashColors.Background}")" />
 </MudContainer>
 
+<MudGrid>
+    <MudItem xs="12" Class="my-4">
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Title="Popular Languages" />
+            Popular Languages
+        </MudText>
+        <MudChipSet T="string">
+            @foreach (var language in Trending)
+            {
+                <MudLink Href="@($"snippets/{language}")"
+                         Class="mud-border-primary rounded-pill px-3 py-1 ma-1 popular-languages d-inline-flex cursor-pointer border"
+                         Underline="Underline.None"
+                         Typo="Typo.subtitle2"
+                         Color="Color.Primary">
+                    @language
+                </MudLink>
+            }
+        </MudChipSet>
+    </MudItem>
+</MudGrid>
+
 @code{
-    private string[] PopularLanguages = { "JavaScript", "Python", "Java", "TypeScript", "C#", "PHP" };
+    private string[] Trending =
+    {
+        "JavaScript", "Python", "C#", "PHP", "Java", "TypeScript", "Rust", "C++", "Go", "CSS"
+    };
 }
