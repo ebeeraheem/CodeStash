@@ -1,0 +1,78 @@
+﻿@page "/{*route:nonfile}"
+
+<PageTitle>404 Not Found</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex flex-column align-center justify-center" Style="min-height: 80vh;">
+    <MudPaper Elevation="0" Class="pa-8 d-flex flex-column align-center" Style="background-color: #02182B;">
+        <MudText Typo="Typo.h1" Color="Color.Primary" Style="font-family: monospace; color: #00FFFF; font-size: 6rem; margin-bottom: 1rem;">
+            404
+        </MudText>
+
+        <div class="code-container pa-4 mb-6" Style="background-color: rgba(0, 129, 175, 0.1); border-radius: 8px; width: 100%; max-width: 600px;">
+            <MudText Style="color: #34D399; font-family: monospace; white-space: pre-line;">
+                try {
+                findCodeSnippet(request.path);
+                } catch (SnippetNotFoundException) {
+                return Error(404, "Snippet not found");
+                }
+            </MudText>
+        </div>
+
+        <MudText Typo="Typo.h5" Class="mb-4" Style="color: #00FFFF; text-align: center;">
+            Oops! This code snippet seems to be missing!
+        </MudText>
+
+        <MudText Class="mb-6" Style="color: #0081AF; text-align: center;">
+            Don't worry! There are plenty of other awesome snippets to discover.
+        </MudText>
+
+        <div class="d-flex gap-4">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Href="/"
+                       StartIcon="@Icons.Material.Filled.Home"
+                       Style="background-color: #00FFFF; color: #02182B;">
+                Go Home
+            </MudButton>
+
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       OnClick="@(() => NavigateToSearch())"
+                       StartIcon="@Icons.Material.Filled.Search"
+                       Style="border-color: #00FFFF; color: #00FFFF;">
+                Search Snippets
+            </MudButton>
+        </div>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string? Route { get; set; }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private void NavigateToSearch()
+    {
+        NavigationManager.NavigateTo("/search");
+    }
+}
+
+<style>
+    .code-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(52, 211, 153, 0.1));
+            pointer-events: none;
+        }
+</style>

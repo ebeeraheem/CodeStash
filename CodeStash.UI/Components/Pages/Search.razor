@@ -1,0 +1,221 @@
+﻿@page "/search"
+@using System.Timers
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    <MudText Typo="Typo.h3" Style="color: #00FFFF" Class="mb-4">Search Code Snippets</MudText>
+    
+    <MudPaper Elevation="0" Class="pa-4" Style="background-color: #02182B;">
+        <MudTextField T="string"
+                     @bind-Value="searchQuery"
+                     Label="Search snippets..."
+                     Variant="Variant.Outlined"
+                     Adornment="Adornment.Start"
+                     AdornmentIcon="@Icons.Material.Filled.Search"
+                     OnKeyUp="@HandleKeyUp"
+                     Class="mb-4"
+                     Style="background-color: rgba(0, 129, 175, 0.1);"
+                     TextChanged="@(async (string s) => await OnSearchChanged(s))" />
+
+        <div class="d-flex gap-2 mb-6 flex-wrap">
+            @foreach (var tag in selectedTags)
+            {
+                <MudChip Color="Color.Primary"
+                         T="string"
+                         OnClose="@(() => RemoveTag(tag))"
+                         Style="background-color: rgba(0, 255, 255, 0.1); color: #00FFFF;">
+                    @tag
+                </MudChip>
+            }
+        </div>
+
+        <MudDivider Class="mb-4" />
+
+        @if (isLoading)
+        {
+            <div class="d-flex justify-center">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(searchQuery) || selectedTags.Any())
+        {
+            @if (searchResults.Any())
+            {
+                <MudGrid>
+                    @foreach (var snippet in searchResults)
+                    {
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudCard Style="background-color: rgba(0, 129, 175, 0.05);">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.h6" Style="color: #00FFFF">@snippet.Title</MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    <MudText Style="color: #0081AF">@snippet.Description</MudText>
+                                    <div class="mt-2">
+                                        @foreach (var tag in snippet.Tags)
+                                        {
+                                            <MudChip Size="Size.Small" 
+                                                     OnClick="@(() => AddTag(tag))"
+                                                     T="string"
+                                                     Style="background-color: rgba(52, 211, 153, 0.1); color: #34D399; margin: 2px;">
+                                                @tag
+                                            </MudChip>
+                                        }
+                                    </div>
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudButton Variant="Variant.Text" 
+                                             Color="Color.Primary" 
+                                             OnClick="@(() => ViewSnippet(snippet.Id))">
+                                        View Snippet
+                                    </MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                        </MudItem>
+                    }
+                </MudGrid>
+            }
+            else
+            {
+                <MudAlert Severity="Severity.Info" Style="background-color: rgba(0, 129, 175, 0.1); color: #00FFFF">
+                    No snippets found matching your search criteria.
+                </MudAlert>
+            }
+        }
+        else
+        {
+            <MudText Style="color: #0081AF" Class="text-center">
+                Start typing to search for code snippets or click on tags to filter.
+            </MudText>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string searchQuery = "";
+    private List<string> selectedTags = new();
+    private List<CodeSnippet> searchResults = new();
+    private bool isLoading = false;
+    private Timer? debounceTimer;
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        debounceTimer = new Timer(300);
+        debounceTimer.Elapsed += async (sender, e) => await DebounceTimerElapsed();
+        debounceTimer.AutoReset = false;
+    }
+
+    private async Task OnSearchChanged(string value)
+    {
+        await Task.Run(() =>
+        {
+            searchQuery = value;
+            debounceTimer?.Stop();
+            debounceTimer?.Start();
+        });
+    }
+
+    private async Task DebounceTimerElapsed()
+    {
+        await InvokeAsync(async () =>
+        {
+            await PerformSearch();
+            StateHasChanged();
+        });
+    }
+
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await PerformSearch();
+        }
+    }
+
+    private void AddTag(string tag)
+    {
+        if (!selectedTags.Contains(tag))
+        {
+            selectedTags.Add(tag);
+            _ = PerformSearch();
+        }
+    }
+
+    private void RemoveTag(string tag)
+    {
+        if (selectedTags.Contains(tag))
+        {
+            selectedTags.Remove(tag);
+            _ = PerformSearch();
+        }
+    }
+
+    private async Task PerformSearch()
+    {
+        isLoading = true;
+        await Task.Delay(500); // Simulate API call
+
+        // TODO: Replace with actual API call
+        searchResults = GetMockSearchResults()
+            .Where(s => 
+                (string.IsNullOrEmpty(searchQuery) || 
+                 s.Title.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                 s.Description.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) &&
+                (selectedTags.Count == 0 || selectedTags.All(t => s.Tags.Contains(t)))
+            )
+            .ToList();
+
+        isLoading = false;
+    }
+
+    private void ViewSnippet(string id)
+    {
+        NavigationManager.NavigateTo($"/snippet/{id}");
+    }
+
+    private List<CodeSnippet> GetMockSearchResults()
+    {
+        // TODO: Replace with actual data from backend
+        return new List<CodeSnippet>
+        {
+            new CodeSnippet 
+            { 
+                Id = "1", 
+                Title = "Quick Sort Implementation", 
+                Description = "Efficient implementation of the QuickSort algorithm in C#",
+                Tags = new[] { "C#", "Algorithms", "Sorting" }
+            },
+            new CodeSnippet 
+            { 
+                Id = "2", 
+                Title = "React useEffect Hook", 
+                Description = "Common patterns for using the useEffect hook in React",
+                Tags = new[] { "React", "JavaScript", "Hooks" }
+            },
+            new CodeSnippet 
+            { 
+                Id = "3", 
+                Title = "JWT Authentication", 
+                Description = "JWT token authentication implementation in ASP.NET Core",
+                Tags = new[] { "C#", "Authentication", "ASP.NET" }
+            }
+        };
+    }
+
+    public class CodeSnippet
+    {
+        public string Id { get; set; } = "";
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string[] Tags { get; set; } = Array.Empty<string>();
+    }
+
+    public void Dispose()
+    {
+        debounceTimer?.Dispose();
+    }
+}
