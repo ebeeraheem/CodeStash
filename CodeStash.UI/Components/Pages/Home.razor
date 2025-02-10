@@ -13,6 +13,19 @@
     </MudText>
 </MudContainer>
 
+@*
+    @bind-Value="searchQuery"
+    OnKeyUp="@HandleKeyUp"
+    TextChanged="@(async (string s) => await OnSearchChanged(s))"
+*@
+<MudTextField T="string"
+              Label="Search snippets..."
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Filled.Search"
+                Class="ma-4"
+                Style="@($"background-color:{CodeStashColors.Background}")" />
+
 @* Popular Languages *@
 <MudText Typo="Typo.h3" Style="font-weight:600">
     Popular Languages

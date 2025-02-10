@@ -19,16 +19,6 @@
 
         <MudSpacer />
 
-        @* Search input *@
-        <MudAutocomplete
-                @bind-Value="_searchTerm" 
-                SearchFunc="@FindSnippets"
-                Placeholder="Find snippets"
-                AdornmentIcon="@Icons.Material.Filled.Search"
-                AdornmentColor="Color.Primary" />
-
-        <MudSpacer />
-
         @* Sign in link *@
         <MudLink Href="/login" 
                 Underline="Underline.None"
