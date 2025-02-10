@@ -1,0 +1,151 @@
+﻿@page "/claude"
+@using MudBlazor
+
+@* 5 Corrections *@
+
+<MudLayout>
+    <MudAppBar Color="Color.Transparent" Class="appbar">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">CodeSnippets.io</MudText>
+        <MudSpacer />
+        <MudButton Color="Color.Inherit">Login</MudButton>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="1" Color="Color.Dark">
+        <MudNavMenu>
+            <MudNavLink Href="/">Home</MudNavLink>
+            <MudNavLink Href="/browse">Browse Snippets</MudNavLink>
+            <MudNavLink Href="/create">Create Snippet</MudNavLink>
+            <MudNavLink Href="/profile">My Profile</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+            <MudPaper Elevation="0" Class="search-container mb-6">
+                <MudTextField 
+                    @bind-Value="_searchTerm" 
+                    Placeholder="Search snippets..." 
+                    Variant="Variant.Outlined" 
+                    FullWidth="true" 
+                    Adornment="Adornment.End" 
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    OnAdornmentClick="SearchSnippets" />
+            </MudPaper>
+
+            <MudGrid>
+                <MudItem xs="12" Class="mb-4">
+                    <MudText Typo="Typo.h6">Popular Languages</MudText>
+                    <MudChipSet T="string">
+                        @foreach (var language in _popularLanguages)
+                        {
+                            <MudChip Color="Color.Secondary" Link="@($"/language/{language}")">@language</MudChip>
+                        }
+                    </MudChipSet>
+                </MudItem>
+
+                <MudItem xs="12" Class="mb-4">
+                    <MudText Typo="Typo.h6">Trending Tags</MudText>
+                    <MudChipSet T="string">
+                        @foreach (var tag in _trendingTags)
+                        {
+                            <MudChip Color="Color.Tertiary" Link="@($"/tag/{tag}")">@tag</MudChip>
+                        }
+                    </MudChipSet>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudText Typo="Typo.h6">Trending Snippets</MudText>
+                    <MudGrid>
+                        @foreach (var snippet in _trendingSnippets)
+                        {
+                            <MudItem xs="12" sm="6" md="4">
+                                <MudCard>
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Typo="Typo.body1">@snippet.Title</MudText>
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Primary">@snippet.Language</MudChip>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <MudText Typo="Typo.body2">@snippet.Description</MudText>
+                                    </MudCardContent>
+                                    <MudCardActions>
+                                        <MudButton Color="Color.Secondary">View</MudButton>
+                                        <MudButton Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ContentCopy">Copy</MudButton>
+                                    </MudCardActions>
+                                </MudCard>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = false;
+    private string _searchTerm = string.Empty;
+
+    private string[] _popularLanguages = { "JavaScript", "Python", "C#", "TypeScript", "Rust" };
+    private string[] _trendingTags = { "WebDev", "Backend", "Frontend", "AI", "Security" };
+
+    private List<SnippetViewModel> _trendingSnippets = new()
+    {
+        new SnippetViewModel 
+        { 
+            Title = "JWT Authentication", 
+            Language = "C#", 
+            Description = "Secure token-based authentication middleware" 
+        },
+        new SnippetViewModel 
+        { 
+            Title = "Async File Handler", 
+            Language = "Python", 
+            Description = "Efficient asynchronous file operations" 
+        },
+        new SnippetViewModel 
+        { 
+            Title = "React State Management", 
+            Language = "TypeScript", 
+            Description = "Modern context-based state management" 
+        }
+    };
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void SearchSnippets()
+    {
+        // Implement search logic
+    }
+
+    public class SnippetViewModel
+    {
+        public string Title { get; set; }
+        public string Language { get; set; }
+        public string Description { get; set; }
+    }
+    public const string Primary = "#00FFFF";
+    public const string Secondary = "#0081AF";
+    public const string Tertiary = "#34D399";
+    public const string Background = "#02182B";
+}
+
+<style>
+    .appbar {
+        background-color: @Background !important;
+        color: @Primary !important;
+    }
+    .mud-drawer {
+        background-color: @Secondary !important;
+    }
+    body {
+        background-color: @Background !important;
+        color: @Primary !important;
+    }
+</style>
+

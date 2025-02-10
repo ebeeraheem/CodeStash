@@ -1,0 +1,151 @@
+﻿@page "/snippets"
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Elevation="0" Class="pa-4 mb-6" Style="background-color: #02182B;">
+                <MudTextField T="string"
+                             Variant="Variant.Outlined"
+                             Label="Search snippets..."
+                             Adornment="Adornment.Start"
+                             AdornmentIcon="@Icons.Material.Filled.Search"
+                             Style="background-color: rgba(0, 129, 175, 0.1);"
+                             OnKeyUp="@HandleSearch" />
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" md="8">
+            <MudText Typo="Typo.h5" Style="color: #00FFFF" Class="mb-4">
+                Recently Added Snippets
+            </MudText>
+            
+            <MudGrid>
+                @foreach (var snippet in recentSnippets)
+                {
+                    <MudItem xs="12" sm="6">
+                        <MudCard Style="background-color: rgba(0, 129, 175, 0.05);">
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6" Style="color: #00FFFF">
+                                        @snippet.Title
+                                    </MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText Style="color: #0081AF">
+                                    @snippet.Description
+                                </MudText>
+                                <div class="mt-2">
+                                    @foreach (var tag in snippet.Tags)
+                                    {
+                                        <MudChip Size="Size.Small" 
+                                        T="string"
+                                                 Style="background-color: rgba(52, 211, 153, 0.1); color: #34D399; margin: 2px;">
+                                            @tag
+                                        </MudChip>
+                                    }
+                                </div>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Variant="Variant.Text" Color="Color.Primary">
+                                    View Snippet
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+
+            <div class="d-flex mt-4 justify-center">
+                <MudPagination 
+                    Color="Color.Primary"
+                    Count="@totalRecentPages"
+                    SelectedChanged="@OnRecentPageChanged" />
+            </div>
+        </MudItem>
+
+        <MudItem xs="12" md="4">
+            <MudText Typo="Typo.h5" Style="color: #00FFFF" Class="mb-4">
+                Popular Categories
+            </MudText>
+            
+            <MudPaper Elevation="0" Class="pa-4" Style="background-color: rgba(0, 129, 175, 0.05);">
+                <MudList T="string">
+                    @foreach (var category in popularCategories)
+                    {
+                        <MudListItem>
+                            <MudText Style="color: #34D399">@category</MudText>
+                        </MudListItem>
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private List<CodeSnippet> recentSnippets = new();
+    private List<string> popularCategories = new() 
+    { 
+        "C# Algorithms", 
+        "JavaScript Patterns", 
+        "React Hooks", 
+        "ASP.NET Core", 
+        "Python Data Science" 
+    };
+    
+    private int totalRecentPages = 5;
+    private int currentRecentPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRecentSnippets();
+    }
+
+    private async Task LoadRecentSnippets()
+    {
+        // TODO: Replace with actual API call
+        recentSnippets = GetMockRecentSnippets();
+    }
+
+    private List<CodeSnippet> GetMockRecentSnippets()
+    {
+        return new List<CodeSnippet>
+        {
+            new CodeSnippet 
+            { 
+                Title = "QuickSort in C#", 
+                Description = "Efficient sorting algorithm implementation",
+                Tags = new[] { "C#", "Algorithms", "Sorting" }
+            },
+            new CodeSnippet 
+            { 
+                Title = "React Custom Hook", 
+                Description = "Creating reusable logic in React",
+                Tags = new[] { "React", "Hooks", "JavaScript" }
+            }
+        };
+    }
+
+    private void HandleSearch(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            // TODO: Implement search navigation
+        }
+    }
+
+    private async Task OnRecentPageChanged(int page)
+    {
+        currentRecentPage = page;
+        await LoadRecentSnippets();
+    }
+
+    public class CodeSnippet
+    {
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string[] Tags { get; set; } = Array.Empty<string>();
+    }
+}
