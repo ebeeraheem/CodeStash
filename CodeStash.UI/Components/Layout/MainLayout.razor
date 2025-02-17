@@ -9,7 +9,9 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <MudAppBar Class="d-flex justify-space-between" Elevation="0">
+    <MudAppBar Class="d-flex justify-space-between cs-appbar border-b"
+        Style="@($"backdrop-filter: blur(5px);border-color:{CodeStashColors.Primary40};background-color:transparent")"
+        Elevation="2">
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
                 Class="d-md-none"
                 Color="Color.Inherit" Edge="Edge.Start"

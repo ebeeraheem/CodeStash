@@ -1,0 +1,57 @@
+﻿
+
+@* Alyaws use this component (SnippetGridItem) inside a MudGrid *@
+
+<MudItem xs="12" sm="6" md="4">
+    <MudCard Style="background-color: rgba(0, 129, 175, 0.05);" Outlined="true">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudLink Typo="Typo.h6"
+                         Href="@($"snippets/{SnippetDto.Id}")"
+                         Style="@($"color:{CodeStashColors.Primary}")">
+                    @SnippetDto.Title
+                </MudLink>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText>@* @snippet.Description *@ Blazor is a .NET frontend web framework that supports both server-side rendering and client interactivity</MudText>
+            <div class="mt-2">
+                @if (SnippetDto.Tags is not null && SnippetDto.Tags.Count > 0)
+                {
+                    @foreach (var tag in SnippetDto.Tags)
+                    {
+                        <MudChip Size="Size.Small"
+                                 Href="@($"/tags/{tag.Id}")"
+                                 T="string"
+                                 Style="@($"background-color:rgba(52, 211, 153, 0.1); color:{CodeStashColors.Primary}; margin: 2px;")">
+                            @tag.Name
+                        </MudChip>
+                    }
+                }
+            </div>
+        </MudCardContent>
+
+        <MudDivider Style="@($"border-color:{CodeStashColors.Primary40}")" />
+
+        <MudCardActions Class="d-flex justify-space-between">
+            <MudLink Style="text-transform:lowercase"
+                     Class="cursor-pointer"
+                     Href="@($"snippets/{SnippetDto.AuthorId}")"
+                Color="Color.Primary">
+                <strong>@@@SnippetDto.AuthorDisplayName</strong>
+            </MudLink>
+
+            <MudText Class="d-flex gap-1 align-center justify-center">
+                <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                @SnippetDto.ViewCount
+            </MudText>
+
+            <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Tertiary">@SnippetDto.Language</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+    [Parameter]
+    public SnippetDto SnippetDto { get; set; } = default!;
+}

@@ -1,4 +1,4 @@
-﻿<MudNavMenu>
+﻿@* <MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
     <MudNavLink Href="/counter" Match="NavLinkMatch.Prefix">Counter</MudNavLink>
     <MudNavGroup Title="Settings" Expanded="true">
@@ -12,4 +12,110 @@
         Href="https://learn.microsoft.com/aspnet/core/"
         Target="_blank"
         Match="NavLinkMatch.All">About</MudNavLink>
+</MudNavMenu> *@
+
+@inject NavigationManager NavigationManager
+
+<MudNavMenu>
+    @* Main Navigation - Always Visible *@
+    <MudNavGroup Title="Browse" Expanded="true">
+        <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
+        <MudNavLink Href="/browse">Browse Snippets</MudNavLink>
+        <MudNavLink Href="/popular">Popular</MudNavLink>
+        <MudNavLink Href="/recent">Recently Added</MudNavLink>
+        <MudNavLink Href="/search">Search</MudNavLink>
+    </MudNavGroup>
+
+    @* Discover Section - Always Visible *@
+    <MudNavGroup Title="Discover" Expanded="false">
+        <MudNavLink Href="/languages">Languages</MudNavLink>
+        <MudNavLink Href="/tags">Tags</MudNavLink>
+        <MudNavLink Href="/collections">Collections</MudNavLink>
+        <MudNavLink Href="/featured">Featured</MudNavLink>
+    </MudNavGroup>
+
+    @if (IsAuthenticated)
+    {
+        @* My Content Section *@
+        <MudNavGroup Title="My Content" Expanded="false">
+            <MudNavLink Href="/my-snippets">My Snippets</MudNavLink>
+            <MudNavLink Href="/saved">Saved Snippets</MudNavLink>
+            <MudNavLink Href="/my-collections">My Collections</MudNavLink>
+            <MudNavLink Href="/drafts">Drafts</MudNavLink>
+            <MudNavLink Href="/create" IconColor="@Color.Tertiary">
+                <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-2" />
+                Create New
+            </MudNavLink>
+        </MudNavGroup>
+
+        @* Personal Section *@
+        <MudNavGroup Title="Personal" Expanded="false">
+            <MudNavLink Href="/profile">Profile</MudNavLink>
+            <MudNavLink Href="/notifications">
+                Notifications
+                @if (UnreadNotifications > 0)
+                {
+                    <MudBadge Color="Color.Error" Content="@UnreadNotifications" />
+                }
+            </MudNavLink>
+            <MudNavLink Href="/settings">Settings</MudNavLink>
+            <MudNavLink Href="/activity">Activity</MudNavLink>
+        </MudNavGroup>
+    }
+
+    @* Help & Community - Always Visible *@
+    <MudNavGroup Title="Help & Community" Expanded="false">
+        <MudNavLink Href="/docs">Documentation</MudNavLink>
+        <MudNavLink Href="/getting-started">Getting Started</MudNavLink>
+        <MudNavLink Href="/guidelines">Community Guidelines</MudNavLink>
+        <MudNavLink Href="/about">About</MudNavLink>
+    </MudNavGroup>
+
+    <MudDivider Class="my-4" />
+
+    @if (IsAuthenticated)
+    {
+        <MudNavLink OnClick="ToggleTheme">
+            <MudIcon Icon="@(IsDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                        Class="mr-2" />
+            Switch Theme
+        </MudNavLink>
+        <MudNavLink OnClick="Logout" IconColor="@Color.Error">
+            <MudIcon Icon="@Icons.Material.Filled.Logout" Class="mr-2" />
+            Logout
+        </MudNavLink>
+    }
+    else
+    {
+        <MudNavLink Href="/login" Color="@Color.Primary">
+            <MudIcon Icon="@Icons.Material.Filled.Login" Class="mr-2" />
+            Login
+        </MudNavLink>
+        <MudNavLink Href="/register" Color="@Color.Secondary">
+            <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Class="mr-2" />
+            Register
+        </MudNavLink>
+    }
 </MudNavMenu>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private bool IsDarkMode { get; set; } = true;
+    private bool IsAuthenticated { get; set; } = true;
+    private int UnreadNotifications { get; set; } = 10;
+
+    private void ToggleTheme()
+    {
+        IsDarkMode = !IsDarkMode;
+    }
+    private void Logout()
+    {
+        NavigationManager.NavigateTo("/logout");
+    }
+}

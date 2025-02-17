@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using CodeStash.Core.Dtos
+@using CodeStash.UI.Components.Pages.Snippets
 @inject IJSRuntime JS
 
 <PageTitle>CodeStash</PageTitle>
@@ -21,12 +23,12 @@
     TextChanged="@(async (string s) => await OnSearchChanged(s))"
     *@
     <MudTextField T="string"
-                  Label="Search snippets..."
-                  Variant="Variant.Filled"
-                  Adornment="Adornment.End"
-                  AdornmentIcon="@Icons.Material.Filled.Search"
-                  Class="ma-md-4"
-                  Style="@($"background-color:{CodeStashColors.Background}")" />
+    Label="Search snippets..."
+    Variant="Variant.Filled"
+    Adornment="Adornment.End"
+    AdornmentIcon="@Icons.Material.Filled.Search"
+    Class="ma-md-4"
+    Style="@($"background-color:{CodeStashColors.Background}")" />
 </MudContainer>
 
 <MudGrid>
@@ -39,10 +41,10 @@
             @foreach (var language in Trending)
             {
                 <MudLink Href="@($"snippets/{language}")"
-                         Class="mud-border-primary rounded-pill px-3 py-1 ma-1 popular-languages d-inline-flex cursor-pointer border"
-                         Underline="Underline.None"
-                         Typo="Typo.subtitle2"
-                         Color="Color.Primary">
+                Class="mud-border-tertiary rounded-pill px-3 py-1 ma-1 popular-languages d-inline-flex cursor-pointer border"
+                Underline="Underline.None"
+                Typo="Typo.subtitle2"
+                Color="Color.Tertiary">
                     @language
                 </MudLink>
             }
@@ -50,9 +52,364 @@
     </MudItem>
 </MudGrid>
 
+@if (!SnippetDtos.Any())
+{
+    <div class="d-flex my-5 justify-center">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    </div>
+}
+else
+{
+    <MudText Typo="Typo.h2" Class="mt-8">
+        <MudIcon Icon="@Icons.Material.Filled.NewReleases" Title="Popular Languages" />
+        Newly added snippets
+    </MudText>
+    <MudGrid>
+        @foreach (var snippetDto in SnippetDtos)
+        {
+            <SnippetGridItem SnippetDto="snippetDto" />
+        }
+    </MudGrid>
+}
+
 @code{
     private string[] Trending =
     {
         "JavaScript", "Python", "C#", "PHP", "Java", "TypeScript", "Rust", "C++", "Go", "CSS"
+    };
+
+    private int PageNumber = 1;
+    private int PageSize = 20;
+    public List<SnippetDto> SnippetDtos { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate a 2s delay
+        await Task.Delay(2000);
+        SnippetDtos = snippetDtos;
+    }
+
+    public List<SnippetDto> snippetDtos = new List<SnippetDto>
+    {
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Blazor project",
+            Content = "This is a sample content for a Blazor project",
+            ViewCount = 100,
+            Language = "C#",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Blazor" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "WebAssembly" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new ASP.NET Core project",
+            Language = "C#",
+            ViewCount = 200,
+            Content = "This is a sample content for an ASP.NET Core project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "ASP.NET Core" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Web API" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Angular project",
+            Language = "TypeScript",
+            ViewCount = 300,
+            Content = "This is a sample content for an Angular project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Angular" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new React project",
+            Language = "JavaScript",
+            ViewCount = 400,
+            Content = "This is a sample content for a React project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "React" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Vue project",
+            Language = "JavaScript",
+            ViewCount = 500,
+            Content = "This is a sample content for a Vue project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Vue" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Blazor project",
+            Content = "This is a sample content for a Blazor project",
+            ViewCount = 100,
+            Language = "C#",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Blazor" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "WebAssembly" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new ASP.NET Core project",
+            Language = "C#",
+            ViewCount = 200,
+            Content = "This is a sample content for an ASP.NET Core project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "ASP.NET Core" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Web API" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Angular project",
+            Language = "TypeScript",
+            ViewCount = 300,
+            Content = "This is a sample content for an Angular project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Angular" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new React project",
+            Language = "JavaScript",
+            ViewCount = 400,
+            Content = "This is a sample content for a React project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "React" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Vue project",
+            Language = "JavaScript",
+            ViewCount = 500,
+            Content = "This is a sample content for a Vue project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Vue" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Blazor project",
+            Content = "This is a sample content for a Blazor project",
+            ViewCount = 100,
+            Language = "C#",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Blazor" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "WebAssembly" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new ASP.NET Core project",
+            Language = "C#",
+            ViewCount = 200,
+            Content = "This is a sample content for an ASP.NET Core project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "ASP.NET Core" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Web API" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Angular project",
+            Language = "TypeScript",
+            ViewCount = 300,
+            Content = "This is a sample content for an Angular project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Angular" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new React project",
+            Language = "JavaScript",
+            ViewCount = 400,
+            Content = "This is a sample content for a React project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "React" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Vue project",
+            Language = "JavaScript",
+            ViewCount = 500,
+            Content = "This is a sample content for a Vue project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Vue" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Blazor project",
+            Content = "This is a sample content for a Blazor project",
+            ViewCount = 100,
+            Language = "C#",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Blazor" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "WebAssembly" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new ASP.NET Core project",
+            Language = "C#",
+            ViewCount = 200,
+            Content = "This is a sample content for an ASP.NET Core project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "ASP.NET Core" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "C#" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Web API" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Angular project",
+            Language = "TypeScript",
+            ViewCount = 300,
+            Content = "This is a sample content for an Angular project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Angular" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JaneDoe",
+            Title = "How to create a new React project",
+            Language = "JavaScript",
+            ViewCount = 400,
+            Content = "This is a sample content for a React project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "React" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
+        new SnippetDto
+        {
+            Id = Guid.NewGuid().ToString(),
+            AuthorId = Guid.NewGuid().ToString(),
+            AuthorDisplayName = "JohnDoe",
+            Title = "How to create a new Vue project",
+            Language = "JavaScript",
+            ViewCount = 500,
+            Content = "This is a sample content for a Vue project",
+            Tags = new List<TagDto>
+            {
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "Vue" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "JavaScript" },
+                new TagDto { Id = Guid.NewGuid().ToString(), Name = "TypeScript" }
+            }
+        },
     };
 }

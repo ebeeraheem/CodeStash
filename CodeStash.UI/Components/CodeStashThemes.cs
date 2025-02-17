@@ -14,6 +14,7 @@ public static class CodeStashThemes
             Background = CodeStashColors.Background,
             AppbarBackground = CodeStashColors.AppbarBackground,
             DrawerBackground = CodeStashColors.DrawerBackground,
+            LinesDefault = CodeStashColors.Primary40
         },
         Typography = new Typography()
         {
