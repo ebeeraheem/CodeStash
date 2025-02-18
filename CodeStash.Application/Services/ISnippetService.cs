@@ -5,6 +5,7 @@ using CodeStash.Core.Dtos;
 namespace CodeStash.Application.Services;
 public interface ISnippetService
 {
+    Task<Result<List<SnippetDto>>> GetSnippetsByAuthorUserName(string authorUserName);
     Task<Result<SnippetDto>> GetSnippetBySlug(string slug);
     Task<Result> AddSnippetAsync(AddSnippetDto request);
     Task<Result> DeleteSnippetAsync(string snippetId);

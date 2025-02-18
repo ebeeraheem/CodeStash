@@ -39,7 +39,7 @@
         <MudCardActions Class="d-flex justify-space-between">
             <MudLink Style="text-transform:lowercase"
             Class="cursor-pointer"
-            Href="@($"snippets/{SnippetDto?.AuthorId}")"
+            Href="@($"snippets/authors/{SnippetDto?.AuthorDisplayName}")"
             Color="Color.Primary">
                 <strong>@@@SnippetDto?.AuthorDisplayName</strong>
             </MudLink>

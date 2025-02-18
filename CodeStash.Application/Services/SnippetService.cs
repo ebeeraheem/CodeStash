@@ -288,6 +288,17 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<SnippetDto>>.Success(snippets);
     }
 
+    public async Task<Result<List<SnippetDto>>> GetSnippetsByAuthorUserName(string authorUserName)
+    {
+        var snippets = await snippetRepository.GetAllSnippets()
+            .Where(s => !s.IsPrivate && s.User.UserName == authorUserName)
+            .OrderByDescending(s => s.ViewCount)
+            .Select(s => s.ToSnippetDto())
+            .ToListAsync();
+
+        return Result<List<SnippetDto>>.Success(snippets);
+    }
+
     public async Task<Result<List<SnippetDto>>> GetSnippetsByTagId(string tagId)
     {
         var snippets = await snippetRepository.GetAllSnippets()
