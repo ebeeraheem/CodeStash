@@ -7,6 +7,9 @@ public class UpdateSnippetDto
     [MaxLength(200)]
     public string? Title { get; set; }
 
+    [MaxLength(200)]
+    public string? Description { get; set; }
+
     [MaxLength(4000)]
     public string? Content { get; set; }
     public string? Language { get; set; }

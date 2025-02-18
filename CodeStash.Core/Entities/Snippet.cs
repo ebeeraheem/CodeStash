@@ -1,5 +1,5 @@
 ﻿using CodeStash.Core.Interfaces;
-using CodeStash.Core.Models;
+using CodeStash.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,12 +7,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CodeStash.Core.Entities;
 
 [Index(nameof(Language))]
+[Index(nameof(Title))]
+[Index(nameof(Slug), IsUnique = true)]
 public class Snippet : IAuditableEntity
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public Snippet(string title)
+    {
+        Id = Guid.NewGuid().ToString();
+        Title = title;
+        Slug = SlugGenerator.GenerateSlug(Title, Id);
+    }
+
+    public string Id { get; set; }
 
     [MaxLength(200)]
     public required string Title { get; set; }
+
+    [MaxLength(64)]
+    public string Slug { get; set; }
+
+    [MaxLength(200)]
+    public required string Description { get; set; }
 
     [MaxLength(4000)]
     public required string Content { get; set; }

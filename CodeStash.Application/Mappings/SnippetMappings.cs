@@ -10,9 +10,11 @@ public static class SnippetMappings
         {
             Id = snippet.Id,
             Title = snippet.Title,
+            Description = snippet.Description,
+            Slug = snippet.Slug,
             Content = snippet.Content,
             Language = snippet.Language,
-            Tags = snippet.Tags?.Select(t => new TagDto { Id=t.Id, Name=t.Name}).ToList(),
+            Tags = snippet.Tags?.Select(t => new TagDto { Id = t.Id, Name = t.Name}).ToList(),
             ViewCount = snippet.ViewCount,
             IsPrivate = snippet.IsPrivate,
             AuthorId = snippet.UserId,

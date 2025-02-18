@@ -1,0 +1,81 @@
+﻿@* @page "/snippets/{slug}"
+@inject ISnippetService SnippetService
+
+
+<h3>Details</h3>
+
+@code {
+    [Parameter] public string Slug { get; set; } = string.Empty;
+
+    private SnippetDto SnippetDto { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await SnippetService.GetSnippetBySlug(Slug);
+
+        if (result.IsSuccess)
+        {
+            SnippetDto = result.Data;
+        }
+        // Possible errors: not found, is private and you're not the owner
+        else
+        {
+            
+        }
+    }
+}
+ *@
+
+ @page "/snippets/{slug}"
+@inject ISnippetService SnippetService
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudPaper Class="pa-4">
+        <MudProgressCircular Indeterminate="true" Color="Color.Primary"
+            Style="@($"margin:auto; display: block;display:{(_isLoading ? "block;" : "none")}")" 
+                             Size="Size.Medium" Thickness="4" />
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <MudAlert Severity="MudBlazor.Severity.Error">
+                @ErrorMessage
+            </MudAlert>
+
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary">
+                Go Back to Home
+            </MudButton>
+        }
+        else if (SnippetDto is not null)
+        {
+            <MudText Typo="Typo.h4">@SnippetDto.Title</MudText>
+            <MudDivider />
+            <MudText Typo="Typo.body1" Class="mt-3">
+                @SnippetDto.Content
+            </MudText>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter] public string Slug { get; set; } = string.Empty;
+
+    private SnippetDto? SnippetDto { get; set; }
+    private string? ErrorMessage { get; set; }
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await SnippetService.GetSnippetBySlug(Slug);
+
+        _isLoading = false;
+
+        if (result.IsSuccess)
+        {
+            SnippetDto = result.Data;
+        }
+        else
+        {
+            ErrorMessage = result.Error.ToString();
+        }
+    }
+}

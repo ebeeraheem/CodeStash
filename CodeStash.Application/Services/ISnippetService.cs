@@ -5,6 +5,7 @@ using CodeStash.Core.Dtos;
 namespace CodeStash.Application.Services;
 public interface ISnippetService
 {
+    Task<Result<SnippetDto>> GetSnippetBySlug(string slug);
     Task<Result> AddSnippetAsync(AddSnippetDto request);
     Task<Result> DeleteSnippetAsync(string snippetId);
     Result<Dictionary<string, List<string?>>> GetAllCategoriesWithLanguages();

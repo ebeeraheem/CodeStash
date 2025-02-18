@@ -79,9 +79,10 @@ public class SnippetService(ISnippetRepository snippetRepository,
             }
         }
 
-        var snippet = new Snippet()
+        var snippet = new Snippet(request.Title)
         {
             Title = request.Title,
+            Description = request.Description,
             Content = Markdown.ToHtml(request.Content),
             Language = request.Language,
             UserId = userId,
@@ -161,6 +162,10 @@ public class SnippetService(ISnippetRepository snippetRepository,
         snippet.Title = !string.IsNullOrWhiteSpace(request.Title)
             ? request.Title
             : snippet.Title;
+
+        snippet.Description = !string.IsNullOrWhiteSpace(request.Description)
+            ? request.Description
+            : snippet.Description;
 
         snippet.Content = !string.IsNullOrWhiteSpace(request.Content)
             ? Markdown.ToHtml(request.Content)
@@ -313,6 +318,32 @@ public class SnippetService(ISnippetRepository snippetRepository,
             if (snippet.UserId != userId)
             {
                 return Result.Failure(SnippetErrors.ViewRestricted);
+            }
+        }
+
+        snippet.ViewCount++;
+        await snippetRepository.UpdateAsync(snippet);
+
+        return Result<SnippetDto>.Success(snippet.ToSnippetDto());
+    }
+
+    public async Task<Result<SnippetDto>> GetSnippetBySlug(string slug)
+    {
+        var snippet = await snippetRepository.GetAllSnippets()
+            .FirstOrDefaultAsync(s => s.Slug == slug);
+
+        if (snippet is null)
+        {
+            return Result<SnippetDto>.Failure(SnippetErrors.SnippetNotFound);
+        }
+
+        if (snippet.IsPrivate)
+        {
+            var userId = userHelper.GetUserId();
+
+            if (snippet.UserId != userId)
+            {
+                return Result<SnippetDto>.Failure(SnippetErrors.ViewRestricted);
             }
         }
 
