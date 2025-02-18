@@ -1,0 +1,69 @@
+﻿@page "/snippets/tags/{tagName}"
+@inject ISnippetService SnippetService
+@inject ITagService TagService
+@inject TagStateService TagStateService
+
+<MudProgressCircular Indeterminate="true" Color="Color.Primary"
+                     Style="@($"margin:auto; display: block;{(_isLoading ? "display:block;" : "display:none")}")"
+                     Size="Size.Medium" StrokeWidth="4" />
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <MudAlert Severity="Severity.Error">
+        @ErrorMessage
+    </MudAlert>
+
+    <MudButton Variant="Variant.Outlined" Color="Color.Primary">
+        Go Back to Home
+    </MudButton>
+}
+else
+{
+    <MudText Typo="Typo.h2" Class="mt-8">
+        <MudIcon Icon="@Icons.Material.Filled.Book" Title="@Tag?.Name" />
+        @Tag?.Name
+    </MudText>
+    <MudGrid>
+        @foreach (var snippetDto in SnippetDtos)
+        {
+            <SnippetGridItem SnippetDto="snippetDto" />
+        }
+    </MudGrid>
+}
+
+@code {
+    [Parameter]
+    public string TagName { get; set; } = string.Empty;
+    public List<SnippetDto> SnippetDtos { get; set; } = [];
+    private Tag? Tag { get; set; }
+    private string? ErrorMessage { get; set; }
+    private bool _isLoading = true;
+
+    // Find snippets by tag name
+    protected override async Task OnInitializedAsync()
+    {
+        var tag = TagStateService.SelectedTag;
+
+        if (tag is not null)
+        {
+            var result = await SnippetService.GetSnippetsByTagId(tag.Id);
+
+            _isLoading = false;
+
+            if (result.IsSuccess)
+            {
+                Tag = tag;
+                SnippetDtos = result.Data;
+            }
+            else
+            {
+                ErrorMessage = result.Error.ToString();
+            }
+        }
+        else
+        {
+            _isLoading = false;
+            ErrorMessage = "An unexpected error occurred. Please try again.";
+        }
+    }
+}

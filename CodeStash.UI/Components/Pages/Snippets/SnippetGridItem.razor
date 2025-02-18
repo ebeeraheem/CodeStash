@@ -1,4 +1,6 @@
 ﻿@using CodeStash.Core.Utilities
+@inject TagStateService TagStateService
+@inject NavigationManager NavigationManager
 
 
 @* Alyaws use this component (SnippetGridItem) inside a MudGrid *@
@@ -8,8 +10,8 @@
         <MudCardHeader>
             <CardHeaderContent>
                 <MudLink Typo="Typo.h6"
-                         Href="@($"snippets/{SnippetDto?.Slug}")"
-                         Style="@($"color:{CodeStashColors.Primary}")">
+                Href="@($"snippets/{SnippetDto?.Slug}")"
+                Style="@($"color:{CodeStashColors.Primary}")">
                     @SnippetDto?.Title
                 </MudLink>
             </CardHeaderContent>
@@ -22,9 +24,9 @@
                     @foreach (var tag in SnippetDto.Tags)
                     {
                         <MudChip Size="Size.Small"
-                                 Href="@($"/tags/{tag.Id}")"
-                                 T="string"
-                                 Style="@($"background-color:rgba(52, 211, 153, 0.1); color:{CodeStashColors.Primary}; margin: 2px;")">
+                        OnClick="@(() => ViewSnippetsByTag(new Tag{Id=tag.Id, Name=tag.Name}))"
+                        T="string"
+                        Style="@($"background-color:rgba(52, 211, 153, 0.1); color:{CodeStashColors.Primary}; margin: 2px;")">
                             @tag.Name
                         </MudChip>
                     }
@@ -36,9 +38,9 @@
 
         <MudCardActions Class="d-flex justify-space-between">
             <MudLink Style="text-transform:lowercase"
-                     Class="cursor-pointer"
-                     Href="@($"snippets/{SnippetDto?.AuthorId}")"
-                Color="Color.Primary">
+            Class="cursor-pointer"
+            Href="@($"snippets/{SnippetDto?.AuthorId}")"
+            Color="Color.Primary">
                 <strong>@@@SnippetDto?.AuthorDisplayName</strong>
             </MudLink>
 
@@ -55,4 +57,10 @@
 @code {
     [Parameter]
     public SnippetDto? SnippetDto { get; set; }
+
+    private void ViewSnippetsByTag(Tag tag)
+    {
+        TagStateService.SetSelectedTag(tag);
+        NavigationManager.NavigateTo($"/snippets/tags/{SlugGenerator.GenerateSlug(tag.Name)}");
+    }
 }

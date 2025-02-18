@@ -13,19 +13,29 @@ public static partial class SlugGenerator
     /// <param name="input">The string to slugify</param>
     /// <param name="id">An ID to make the slug unique</param>
     /// <returns></returns>
-    public static string GenerateSlug(string input, string id)
+    public static string GenerateSlug(string input, string? id = null)
     {
         if (string.IsNullOrWhiteSpace(input))
             return string.Empty;
 
+        // Replace some characters with known equivalents
+        foreach (var replacement in Replacements)
+        {
+            input = input.Replace(replacement.Key, replacement.Value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // Remove accents and convert to lowercase
         var slug = RemoveAccents(input).ToLower();
 
         slug = RemoveInvalidChars().Replace(slug, ""); // Remove invalid characters
         slug = RemoveMultipleSpaces().Replace(slug, " ").Trim(); // Convert multiple spaces into one space
         slug = slug.Substring(0, slug.Length <= 45 ? slug.Length : 45).Trim(); // Trim to maximum 45 characters
         slug = ReplaceSpacesWithDashes().Replace(slug, "-"); // Replace spaces by dashes
+        slug = slug.Trim('-'); // Remove leading/trailing hyphens
 
-        return $"{slug}-{id.Substring(0, 8)}"; // Append first 8 chars of GUID
+        return string.IsNullOrEmpty(id)
+            ? slug
+            : $"{slug}-{id.Substring(0, 8)}"; // Append first 8 chars of GUID
     }
 
     // Generate method to remove accents from a string
@@ -48,6 +58,24 @@ public static partial class SlugGenerator
             .ToString()
             .Normalize(NormalizationForm.FormC);
     }
+
+    // Replace some characters with known equivalents
+    private static Dictionary<string, string> Replacements = new Dictionary<string, string>()
+    {
+        {"#", "sharp"},
+
+        {"+", "plus"},
+
+        {"&", "and"},
+
+        {"%", "percent"},
+
+        {"@", "at"},
+
+        {"$", "dollar"},
+
+        {".", "dot"},
+    };
 
     [GeneratedRegex(@"[^A-Za-z0-9\s-]")]
     private static partial Regex RemoveInvalidChars();

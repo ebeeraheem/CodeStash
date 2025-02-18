@@ -288,7 +288,7 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<SnippetDto>>.Success(snippets);
     }
 
-    public async Task<Result> GetSnippetsByTag(string tagId)
+    public async Task<Result<List<SnippetDto>>> GetSnippetsByTagId(string tagId)
     {
         var snippets = await snippetRepository.GetAllSnippets()
             .Where(s => !s.IsPrivate && s.Tags.Any(t => t.Id == tagId))

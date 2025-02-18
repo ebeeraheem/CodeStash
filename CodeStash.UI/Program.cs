@@ -23,6 +23,7 @@ builder.Services.AddApplicationServices(builder.Configuration, builder.Host);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddMudServices();
+builder.Services.AddScoped<TagStateService>();
 
 var app = builder.Build();
 

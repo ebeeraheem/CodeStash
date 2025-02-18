@@ -33,11 +33,11 @@
     <MudPaper Class="pa-4">
         <MudProgressCircular Indeterminate="true" Color="Color.Primary"
             Style="@($"margin:auto; display: block;display:{(_isLoading ? "block;" : "none")}")" 
-                             Size="Size.Medium" Thickness="4" />
+                             Size="Size.Medium" StrokeWidth="4" />
 
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
-            <MudAlert Severity="MudBlazor.Severity.Error">
+            <MudAlert Severity="Severity.Error">
                 @ErrorMessage
             </MudAlert>
 

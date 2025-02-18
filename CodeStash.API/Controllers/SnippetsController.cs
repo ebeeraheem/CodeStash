@@ -84,9 +84,9 @@ public class SnippetsController(ISnippetService snippetService) : ControllerBase
     [EnableRateLimiting(RateLimitModel.FixedLimit)]
     [AllowAnonymous]
     [HttpGet("tags/{tagId}")]
-    public async Task<IActionResult> GetSnippetsByTag(string tagId)
+    public async Task<IActionResult> GetSnippetsByTagId(string tagId)
     {
-        var result = await snippetService.GetSnippetsByTag(tagId);
+        var result = await snippetService.GetSnippetsByTagId(tagId);
 
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
