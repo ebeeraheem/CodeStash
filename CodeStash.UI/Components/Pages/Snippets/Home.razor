@@ -6,12 +6,12 @@
         <MudItem xs="12">
             <MudPaper Elevation="0" Class="pa-4 mb-6" Style="background-color: #02182B;">
                 <MudTextField T="string"
-                             Variant="Variant.Outlined"
-                             Label="Search snippets..."
-                             Adornment="Adornment.Start"
-                             AdornmentIcon="@Icons.Material.Filled.Search"
-                             Style="background-color: rgba(0, 129, 175, 0.1);"
-                             OnKeyUp="@HandleSearch" />
+                Variant="Variant.Outlined"
+                Label="Search snippets..."
+                Adornment="Adornment.Start"
+                AdornmentIcon="@Icons.Material.Filled.Search"
+                Style="background-color: rgba(0, 129, 175, 0.1);"
+                OnKeyUp="@HandleSearch" />
             </MudPaper>
         </MudItem>
 
@@ -19,7 +19,7 @@
             <MudText Typo="Typo.h5" Style="color: #00FFFF" Class="mb-4">
                 Recently Added Snippets
             </MudText>
-            
+
             <MudGrid>
                 @foreach (var snippet in recentSnippets)
                 {
@@ -41,7 +41,7 @@
                                     {
                                         <MudChip Size="Size.Small" 
                                         T="string"
-                                                 Style="background-color: rgba(52, 211, 153, 0.1); color: #34D399; margin: 2px;">
+                                        Style="background-color: rgba(52, 211, 153, 0.1); color: #34D399; margin: 2px;">
                                             @tag
                                         </MudChip>
                                     }
@@ -59,9 +59,9 @@
 
             <div class="d-flex mt-4 justify-center">
                 <MudPagination 
-                    Color="Color.Primary"
-                    Count="@totalRecentPages"
-                    SelectedChanged="@OnRecentPageChanged" />
+                Color="Color.Primary"
+                Count="@totalRecentPages"
+                SelectedChanged="@OnRecentPageChanged" />
             </div>
         </MudItem>
 
@@ -69,7 +69,7 @@
             <MudText Typo="Typo.h5" Style="color: #00FFFF" Class="mb-4">
                 Popular Categories
             </MudText>
-            
+
             <MudPaper Elevation="0" Class="pa-4" Style="background-color: rgba(0, 129, 175, 0.05);">
                 <MudList T="string">
                     @foreach (var category in popularCategories)
@@ -94,7 +94,7 @@
         "ASP.NET Core", 
         "Python Data Science" 
     };
-    
+
     private int totalRecentPages = 5;
     private int currentRecentPage = 1;
 
@@ -107,6 +107,7 @@
     {
         // TODO: Replace with actual API call
         recentSnippets = GetMockRecentSnippets();
+        await Task.CompletedTask;
     }
 
     private List<CodeSnippet> GetMockRecentSnippets()
