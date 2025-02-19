@@ -24,6 +24,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddMudServices();
 builder.Services.AddScoped<TagStateService>();
+builder.Services.AddScoped<LanguageStateService>();
 
 var app = builder.Build();
 

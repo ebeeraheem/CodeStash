@@ -312,6 +312,19 @@ public class SnippetService(ISnippetRepository snippetRepository,
         return Result<List<SnippetDto>>.Success(snippetDtos);
     }
 
+    public async Task<Result<List<SnippetDto>>> GetSnippetsByLanguage(string language)
+    {
+        var snippets = await snippetRepository.GetAllSnippets()
+            .Where(s => !s.IsPrivate && s.Language == language)
+            .OrderByDescending(s => s.ViewCount)
+            .ToListAsync();
+
+        var snippetDtos = snippets.Select(s => s.ToSnippetDto())
+            .ToList();
+
+        return Result<List<SnippetDto>>.Success(snippetDtos);
+    }
+
     public async Task<Result> GetSnippetById(string snippetId)
     {
         var snippet = await snippetRepository.GetAllSnippets()

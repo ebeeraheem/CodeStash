@@ -1,5 +1,6 @@
 ﻿@using CodeStash.Core.Utilities
 @inject TagStateService TagStateService
+@inject LanguageStateService LanguageStateService
 @inject NavigationManager NavigationManager
 
 
@@ -49,7 +50,13 @@
                 @SnippetDto?.ViewCount
             </MudText>
 
-            <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Tertiary">@SnippetDto?.Language</MudButton>
+            <MudButton
+                Size="Size.Small"
+                OnClick="@(() => ViewSnippetsByLanguage(SnippetDto?.Language ?? string.Empty))"
+                Variant="Variant.Outlined"
+                Color="Color.Tertiary">
+                @SnippetDto?.Language
+            </MudButton>
         </MudCardActions>
     </MudCard>
 </MudItem>
@@ -62,5 +69,11 @@
     {
         TagStateService.SetSelectedTag(tag);
         NavigationManager.NavigateTo($"/snippets/tags/{SlugGenerator.GenerateSlug(tag.Name)}");
+    }
+
+    private void ViewSnippetsByLanguage(string language)
+    {
+        LanguageStateService.SetSelectedLanguage(language);
+        NavigationManager.NavigateTo($"/snippets/languages/{SlugGenerator.GenerateSlug(language)}");
     }
 }

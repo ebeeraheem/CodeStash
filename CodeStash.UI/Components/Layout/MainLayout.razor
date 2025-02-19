@@ -57,10 +57,12 @@
         _drawerOpen = !_drawerOpen;
     }
 }
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
  
+<MudAlert Severity="Severity.Error"
+    id="blazor-error-ui"
+    ContentAlignment="HorizontalAlignment.Center"
+    Square="true">
+    An unhandled error has occurred.
+    <MudLink Href="" Class="reload">Reload</MudLink>
+    <a class="dismiss">🗙</a>
+</MudAlert>
